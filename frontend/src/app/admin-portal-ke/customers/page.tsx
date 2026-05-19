@@ -1,0 +1,199 @@
+"use client";
+
+import { Search, Filter, Download, Users, Zap, Eye, Settings as SettingsIcon } from "lucide-react";
+import { useState } from "react";
+import { useDownload } from "@/components/admin/DownloadToast";
+
+export default function CustomerManagement() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const { startDownload } = useDownload();
+
+  const allCustomers = [
+    {
+      initials: "RM", color: "bg-[#0c1825] text-[#8bceff]",
+      name: "Dr. Rahul Mehta", email: "rahul.mehta@instsci.edu",
+      orders: "14 Orders", lifetime: "₹4,28,000 Lifetime",
+      status: "In Stock / Active", statusColor: "text-[#8bceff]",
+      active: "2 hours ago"
+    },
+    {
+      initials: "AS", color: "bg-[#1f1a11] text-brand-yellow",
+      name: "Ananya Sharma", email: "a.sharma@biolabs.in",
+      orders: "3 Orders", lifetime: "₹82,500 Lifetime",
+      status: "On Hold", statusColor: "text-brand-yellow",
+      active: "3 days ago"
+    },
+    {
+      initials: "VK", color: "bg-[#111122] text-[#8bceff]",
+      name: "Vikram Khanna", email: "v.khanna@qclabs.com",
+      orders: "42 Orders", lifetime: "₹12,40,000 Lifetime",
+      status: "Elite Member", statusColor: "text-[#8bceff]",
+      active: "15 mins ago"
+    },
+    {
+      initials: "PJ", color: "bg-[#1f1111] text-[#ff4d4d]",
+      name: "Priya Jaiswal", email: "priya.j@meditech.org",
+      orders: "0 Orders", lifetime: "₹0 Lifetime",
+      status: "Deactivated", statusColor: "text-[#ff4d4d]",
+      active: "2 months ago"
+    }
+  ];
+
+  const customers = allCustomers.filter(c => 
+    c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    c.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="max-w-6xl mx-auto pb-12">
+      
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-1">Customer Management</h1>
+          <p className="text-gray-400 text-sm">Review detailed user metrics and administrative controls.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input 
+              type="text" 
+              placeholder="Search customers..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-[#111111] border border-white/5 focus:border-white/20 text-xs text-white pl-8 pr-4 py-2.5 rounded w-64 outline-none transition-colors" 
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        
+        {/* Stat 1 */}
+        <div className="bg-[#161616] border border-white/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between h-36">
+          <div className="flex items-start justify-between relative z-10">
+            <div className="w-10 h-10 rounded bg-[#0c1825] border border-[#8bceff]/20 flex items-center justify-center text-[#8bceff]">
+              <Users size={18} />
+            </div>
+            <span className="text-[10px] font-bold text-[#8bceff] tracking-widest">+12% this month</span>
+          </div>
+          <div className="relative z-10">
+            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Customers</div>
+            <div className="text-4xl font-bold text-white">2,840</div>
+          </div>
+        </div>
+
+        {/* Stat 2 */}
+        <div className="bg-[#161616] border border-white/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between h-36">
+          <div className="flex items-start justify-between relative z-10">
+            <div className="w-10 h-10 rounded bg-[#1f1a11] border border-brand-yellow/20 flex items-center justify-center text-brand-yellow">
+              <Zap size={18} />
+            </div>
+            <span className="text-[10px] font-bold text-brand-yellow tracking-widest">Active Now: 432</span>
+          </div>
+          <div className="relative z-10">
+            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Active Accounts</div>
+            <div className="text-4xl font-bold text-white">1,950</div>
+          </div>
+        </div>
+
+        {/* Stat 3 */}
+        <div className="bg-[#161616] border border-white/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between h-36">
+          {/* Map background placeholder */}
+          <div className="absolute inset-0 opacity-10 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-cover bg-center"></div>
+          
+          <div className="relative z-10">
+            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Geographic Reach</div>
+            <div className="text-xl font-bold text-white mb-1">Top Region: Mumbai, IN</div>
+          </div>
+          
+          <div className="relative z-10 flex gap-4 mt-auto">
+            <div className="flex items-center gap-1.5 text-xs text-gray-400">
+               <div className="w-2 h-2 rounded-full bg-[#8bceff]"></div> Domestic (65%)
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-gray-400">
+               <div className="w-2 h-2 rounded-full bg-brand-yellow"></div> International (35%)
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      {/* Customer Registry Table */}
+      <div className="bg-[#161616] border border-white/5 rounded-xl overflow-hidden">
+        <div className="p-6 border-b border-white/5 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-white">Customer Registry</h2>
+          <div className="flex items-center gap-3">
+            <button className="flex items-center gap-2 bg-[#111111] border border-white/5 hover:bg-white/5 text-gray-300 text-xs px-4 py-2 rounded transition-colors font-bold uppercase tracking-widest">
+              <Filter size={14} /> Filter
+            </button>
+            <button 
+              onClick={() => startDownload("Customer_Registry.csv", "5.8 MB", "CSV File")}
+              className="flex items-center gap-2 bg-[#111111] border border-white/5 hover:bg-white/5 text-gray-300 text-xs px-4 py-2 rounded transition-colors font-bold uppercase tracking-widest"
+            >
+              <Download size={14} /> Export CSV
+            </button>
+          </div>
+        </div>
+        
+        <table className="w-full text-left text-sm">
+          <thead className="bg-[#161616] text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-white/5">
+            <tr>
+              <th className="p-5">Customer Profile</th>
+              <th className="p-5">Purchase History</th>
+              <th className="p-5">Account Status</th>
+              <th className="p-5">Last Active</th>
+              <th className="p-5 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {customers.map((c, idx) => (
+              <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                <td className="p-5 flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded font-bold flex items-center justify-center shrink-0 ${c.color}`}>
+                    {c.initials}
+                  </div>
+                  <div>
+                    <div className="text-white font-medium mb-1">{c.name}</div>
+                    <div className="text-xs text-gray-500">{c.email}</div>
+                  </div>
+                </td>
+                <td className="p-5">
+                  <div className="text-gray-300 mb-1">{c.orders}</div>
+                  <div className="text-xs text-[#8bceff]">{c.lifetime}</div>
+                </td>
+                <td className="p-5">
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${c.statusColor}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${c.statusColor.replace('text-', 'bg-')}`}></div> {c.status}
+                  </span>
+                </td>
+                <td className="p-5 text-gray-400 text-xs">
+                  {c.active}
+                </td>
+                <td className="p-5 text-center">
+                  <div className="flex items-center justify-center gap-3">
+                    <button className="text-gray-500 hover:text-white transition-colors"><Eye size={16} /></button>
+                    <button className="text-gray-500 hover:text-white transition-colors"><SettingsIcon size={16} /></button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        
+        <div className="p-4 border-t border-white/5 flex justify-between items-center text-xs text-gray-500">
+          <div>Showing 1 to {customers.length} of 2,840 results</div>
+          <div className="flex gap-1">
+            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">{'<'}</button>
+            <button className="w-6 h-6 flex items-center justify-center bg-[#0c1825] text-[#8bceff] border border-[#8bceff]/20 rounded font-bold">1</button>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors border border-transparent">2</button>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors border border-transparent">3</button>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">{'>'}</button>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  );
+}

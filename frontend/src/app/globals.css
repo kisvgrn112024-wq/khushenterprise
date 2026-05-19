@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-cyan: #00ffff;
+  --color-electric-blue: #2563eb;
+  --color-midnight-navy: #050b14;
+  --color-dark-blue: #0a1930;
+  --color-brand-yellow: #fcd34d; /* Brand yellow from design */
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-bg: rgba(10, 25, 48, 0.6);
+  --color-glass-bg-light: rgba(255, 255, 255, 0.1);
+  
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #f5f5f5;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+@utility glass {
+  background: var(--color-glass-bg-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+}
+
+@utility glass-dark {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+@utility box-glow {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
