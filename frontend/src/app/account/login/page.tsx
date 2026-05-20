@@ -80,14 +80,6 @@ export default function LoginRegisterPage() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // Secret Admin Login Trigger
-    if (email === "admin@khushenterprises.com" && password === "admin123") {
-      setSuccess("Secured sequence initiated. Redirecting to Admin Portal...");
-      setTimeout(() => {
-        router.push("/admin-portal-ke/login");
-      }, 1500);
-      return;
-    }
 
     setSuccess(isLogin ? "Logging in..." : "Creating account...");
     
@@ -332,10 +324,6 @@ export default function LoginRegisterPage() {
           </button>
         </div>
 
-        <div className="px-8 py-3 bg-[#111111] border border-white/5 rounded-lg mt-8 text-center text-[9px] font-mono text-gray-500 leading-normal">
-          SECURE B2B HANDSHAKE ACTIVE | PROMPT PORTAL ACCESS<br/>
-          <span className="text-[#8bceff]/50 font-bold">Admin credentials bypass: admin@khushenterprises.com / admin123</span>
-        </div>
       </div>
     </div>
   );

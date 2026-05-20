@@ -10,24 +10,29 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
   const pathname = usePathname();
 
   useEffect(() => {
+    // B2B subroutes are public-facing and bypass admin master auth
+    if (pathname.startsWith("/admin-portal-ke/b2b")) {
+      setIsAuthenticated(true);
+      return;
+    }
+
     // Basic Client-Side Auth Check
     const authStatus = sessionStorage.getItem("ke_admin_auth");
     if (authStatus === "true") {
-      setTimeout(() => setIsAuthenticated(true), 0);
+      setIsAuthenticated(true);
     } else {
-      setTimeout(() => setIsAuthenticated(false), 0);
-      if (pathname !== "/admin-portal-ke/login") {
-        router.push("/admin-portal-ke/login");
-      }
+      setIsAuthenticated(false);
+      // Stealth redirect: bounce guessing users to public homepage to mask portal existence
+      router.replace("/");
     }
   }, [pathname, router]);
 
-  if (isAuthenticated === null) {
-    return <div className="h-screen bg-[#050b14] flex items-center justify-center text-neon-cyan">Verifying Access...</div>;
+  if (pathname.startsWith("/admin-portal-ke/b2b")) {
+    return <>{children}</>;
   }
 
-  if (pathname === "/admin-portal-ke/login" || pathname.startsWith("/admin-portal-ke/b2b")) {
-    return <>{children}</>;
+  if (isAuthenticated === null) {
+    return <div className="h-screen bg-[#050b14] flex items-center justify-center text-neon-cyan">Verifying Access...</div>;
   }
 
   return isAuthenticated ? <AdminLayout>{children}</AdminLayout> : null;

@@ -234,7 +234,6 @@ export default function Header() {
                     <Link href="/my-orders" className="block p-2 text-sm text-gray-300 hover:bg-[#2a2a2a] hover:text-white rounded font-medium">Consignment Status</Link>
                   </>
                 )}
-                <Link href="/admin-portal-ke/products" className="block p-2 text-sm text-gray-300 hover:bg-[#2a2a2a] hover:text-white rounded font-medium border-t border-white/5 mt-1">Admin Portal</Link>
               </div>
             </div>
           </div>
