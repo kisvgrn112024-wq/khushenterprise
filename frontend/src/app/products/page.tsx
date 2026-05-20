@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Product } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
+import { useStore } from "@/context/StoreContext";
 import { Star, ShoppingCart, Heart, Search, FileText, Download, FileSpreadsheet, File as FilePdf, Microscope, Scale, Pipette, Glasses, FlaskConical, Flame, ShieldCheck, Package } from "lucide-react";
 import { Suspense } from "react";
 import Link from "next/link";
@@ -16,6 +17,7 @@ function ProductsContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const allProducts = useProducts();
+  const { addToCart } = useStore();
   
   const [priceRange, setPriceRange] = useState(50000);
 
@@ -159,85 +161,90 @@ function ProductsContent() {
                  <h3 className="text-xl font-bold text-white mb-2">No Products Found</h3>
                </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <div key={product.id} className="bg-[#161616] border border-white/10 rounded-xl overflow-hidden flex flex-col group relative">
-                    
-                    {/* Tags */}
-                    <div className="absolute top-3 right-3 z-10 flex flex-col gap-1 items-end">
-                      {product.tag && (
-                        <span className="bg-[#1f1a11] text-brand-yellow border border-brand-yellow/20 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full shadow-md">
-                          {product.tag}
-                        </span>
-                      )}
-                      <button onClick={() => generateAIManual(product.title)} title="Download AI Manual" className="bg-[#0c1825] text-[#8bceff] border border-[#8bceff]/20 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full hover:bg-[#8bceff] hover:text-black transition-colors flex items-center gap-1 mt-1 shadow-md">
-                        <FileText size={10} /> AI Manual
-                      </button>
-                    </div>
-
-                    {/* Image Area */}
-                    <div className="h-48 bg-[#0a0a0a] flex items-center justify-center p-6 border-b border-white/5 relative overflow-hidden">
-                       {product.images && product.images.length > 0 ? (
-                         <img 
-                           src={product.images[0]} 
-                           alt={product.title} 
-                           className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 absolute" 
-                         />
-                       ) : (
-                         <>
-                           <img 
-                             src={`/design/images/${product.id}.jpeg`} 
-                             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 absolute" 
-                             alt={product.title} 
-                             onError={(e) => {
-                               const target = e.currentTarget;
-                               if (target.src.endsWith('.jpeg')) {
-                                 target.src = `/design/images/${product.id}.png`;
-                               } else {
-                                 target.style.display = 'none';
-                                 target.nextElementSibling?.classList.remove('hidden');
-                               }
-                             }}
-                           />
-                           {(() => {
-                             const IconComp = IconMap[product.icon] || Package;
-                             return <IconComp size={48} className="text-gray-600 hidden absolute" />;
-                           })()}
-                         </>
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 {filteredProducts.map((product) => (
+                   <div key={product.id} className="bg-[#161616] border border-white/10 rounded-xl overflow-hidden flex flex-col group relative">
+                     
+                     {/* Tags */}
+                     <div className="absolute top-3 right-3 z-10 flex flex-col gap-1 items-end">
+                       {product.tag && (
+                         <span className="bg-[#1f1a11] text-brand-yellow border border-brand-yellow/20 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full shadow-md">
+                           {product.tag}
+                         </span>
                        )}
-                    </div>
+                       <button onClick={() => generateAIManual(product.title)} title="Download AI Manual" className="bg-[#0c1825] text-[#8bceff] border border-[#8bceff]/20 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full hover:bg-[#8bceff] hover:text-black transition-colors flex items-center gap-1 mt-1 shadow-md">
+                         <FileText size={10} /> AI Manual
+                       </button>
+                     </div>
 
-                    {/* Details */}
-                    <div className="p-5 flex-1 flex flex-col">
-                      <div className="flex justify-between items-center mb-1">
-                        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{product.category}</div>
-                        <div className="flex items-center gap-1 bg-[#1a1a1a] px-1.5 py-0.5 rounded border border-white/5">
-                          <span className="text-[8px] font-bold text-gray-400">Brand: </span>
-                          <span className="text-[9px] font-black text-white tracking-widest">KE</span>
-                        </div>
-                      </div>
-                      <h3 className="text-white font-bold text-sm mb-3 flex-1">{product.title}</h3>
-                      
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-lg font-bold text-brand-yellow">₹{product.price.toLocaleString()}</span>
-                        <div className="flex items-center gap-1">
-                          <Star size={12} className="text-brand-yellow fill-brand-yellow" />
-                          <span className="text-xs font-bold text-white">{product.rating}</span>
-                        </div>
-                      </div>
+                     {/* Image Area */}
+                     <Link href={`/products/${product.id}`} className="h-48 bg-[#0a0a0a] flex items-center justify-center p-6 border-b border-white/5 relative overflow-hidden cursor-pointer">
+                        {product.images && product.images.length > 0 ? (
+                          <img 
+                            src={product.images[0]} 
+                            alt={product.title} 
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 absolute" 
+                          />
+                        ) : (
+                          <>
+                            <img 
+                              src={`/design/images/${product.id}.jpeg`} 
+                              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 absolute" 
+                              alt={product.title} 
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                if (target.src.endsWith('.jpeg')) {
+                                  target.src = `/design/images/${product.id}.png`;
+                                } else {
+                                  target.style.display = 'none';
+                                  target.nextElementSibling?.classList.remove('hidden');
+                                }
+                              }}
+                            />
+                            {(() => {
+                              const IconComp = IconMap[product.icon] || Package;
+                              return <IconComp size={48} className="text-gray-600 hidden absolute" />;
+                            })()}
+                          </>
+                        )}
+                     </Link>
 
-                      <div className="grid grid-cols-2 gap-2 mt-auto">
-                        <button className="border border-white/20 hover:bg-white/5 text-white text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors">
-                          Details
-                        </button>
-                        <button className="bg-brand-yellow hover:bg-[#e6a800] text-black text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors flex items-center justify-center gap-2">
-                          <ShoppingCart size={14} /> Add
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                     {/* Details */}
+                     <div className="p-5 flex-1 flex flex-col">
+                       <div className="flex justify-between items-center mb-1">
+                         <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{product.category || "GENERAL LAB"}</div>
+                         <div className="flex items-center gap-1 bg-[#1a1a1a] px-1.5 py-0.5 rounded border border-white/5">
+                           <span className="text-[8px] font-bold text-gray-400">Brand: </span>
+                           <span className="text-[9px] font-black text-white tracking-widest">{product.brand || "KE"}</span>
+                         </div>
+                       </div>
+                       <Link href={`/products/${product.id}`} className="text-white font-bold text-sm mb-3 flex-1 hover:text-electric-blue transition-colors cursor-pointer">
+                         {product.title}
+                       </Link>
+                       
+                       <div className="flex items-center justify-between mb-4">
+                         <span className="text-lg font-bold text-brand-yellow">₹{product.price.toLocaleString()}</span>
+                         <div className="flex items-center gap-1">
+                           <Star size={12} className="text-brand-yellow fill-brand-yellow" />
+                           <span className="text-xs font-bold text-white">{product.rating || "4.8"}</span>
+                         </div>
+                       </div>
+
+                       <div className="grid grid-cols-2 gap-2 mt-auto">
+                         <Link href={`/products/${product.id}`} className="border border-white/20 hover:bg-white/5 text-white text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors text-center cursor-pointer">
+                           Details
+                         </Link>
+                         <button 
+                           onClick={() => addToCart(product, 1)}
+                           className="bg-brand-yellow hover:bg-[#e6a800] text-black text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                         >
+                           <ShoppingCart size={14} /> Add
+                         </button>
+                       </div>
+                     </div>
+                   </div>
+                 ))}
+               </div>
             )}
 
             {/* Pagination Placeholder */}

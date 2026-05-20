@@ -19,16 +19,28 @@ export default function ProductDetailClient() {
   const { id } = useParams();
   const { addToCart, toggleWishlist, wishlist } = useStore();
   const allProducts = useProducts();
+  
+  // Find the current product by ID
   const product = allProducts.length > 0 ? (allProducts.find((p) => p.id === id) || allProducts[0]) : null;
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [mediaView, setMediaView] = useState<"image" | "360" | "video">("image");
-  const [rotationIndex, setRotationIndex] = useState(0);
 
-  if (!product) return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
+  if (!product) {
+    return <div className="min-h-screen flex items-center justify-center text-white bg-[#0a0a0a]">Loading product details...</div>;
+  }
 
   const IconComponent = IconMap[product.icon] || Package;
+
+  // Resolve main image URL with fallback to local design mocks
+  const mainImageUrl = product.images && product.images.length > 0 
+    ? product.images[0] 
+    : `/design/images/${product.id}.jpeg`;
+
+  // Resolve thumbnail images (either from product.images or fallback)
+  const imagesToRender = product.images && product.images.length > 0 
+    ? product.images 
+    : [`/design/images/${product.id}.jpeg`, `/design/images/${product.id}.jpeg`, `/design/images/${product.id}.jpeg`];
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] pb-24">
@@ -38,9 +50,11 @@ export default function ProductDetailClient() {
         <div className="flex items-center gap-2 text-[10px] text-gray-400 uppercase tracking-wider mb-8">
           <Link href="/" className="hover:text-white transition-colors">Home</Link> 
           <span>/</span>
-          <Link href="/products" className="hover:text-white transition-colors">Physics Lab</Link> 
+          <Link href="/products" className="hover:text-white transition-colors">Products</Link> 
           <span>/</span>
-          <span className="text-white">{product.title}</span>
+          <Link href="/products" className="hover:text-white transition-colors">{product.category || "General Lab"}</Link>
+          <span>/</span>
+          <span className="text-white truncate max-w-[200px] inline-block">{product.title}</span>
         </div>
 
         {/* Top Section */}
@@ -50,11 +64,12 @@ export default function ProductDetailClient() {
           <div className="flex flex-col gap-4">
             <div className="bg-[#111111] rounded border border-white/10 aspect-square flex items-center justify-center p-8 relative overflow-hidden">
               <img 
-                src={`/design/images/${product.id}.jpeg`} 
+                src={mainImageUrl} 
                 alt={product.title} 
                 className="w-full h-full object-contain"
                 onError={(e) => {
                   const target = e.currentTarget;
+                  // Attempt fallback to PNG if JPEG failed on original mock assets
                   if (target.src.endsWith('.jpeg')) {
                     target.src = `/design/images/${product.id}.png`;
                   } else {
@@ -68,10 +83,10 @@ export default function ProductDetailClient() {
             
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-4">
-              {[1, 2, 3].map((_, idx) => (
+              {imagesToRender.slice(0, 3).map((img, idx) => (
                 <div key={idx} className="bg-[#111111] rounded border border-white/10 aspect-square flex items-center justify-center overflow-hidden hover:border-electric-blue transition-colors cursor-pointer">
                   <img 
-                    src={`/design/images/${product.id}.jpeg`} 
+                    src={img} 
                     className="w-full h-full object-cover opacity-80 hover:opacity-100" 
                     onError={(e) => {
                       const target = e.currentTarget;
@@ -92,7 +107,7 @@ export default function ProductDetailClient() {
           <div className="flex flex-col">
             <div className="flex items-center gap-4 mb-4">
               <span className="bg-electric-blue/10 text-electric-blue text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
-                PHYSICS LAB
+                {product.category || "GENERAL LAB"}
               </span>
               <div className="flex items-center gap-2">
                 <div className="flex text-brand-yellow">
@@ -102,38 +117,43 @@ export default function ProductDetailClient() {
                   <Star size={12} fill="currentColor" />
                   <Star size={12} fill="currentColor" />
                 </div>
-                <span className="text-[10px] text-gray-400 tracking-wider">(4.8 / 42 reviews)</span>
+                <span className="text-[10px] text-gray-400 tracking-wider">({product.rating || "4.8"} / {product.reviews || "15"} reviews)</span>
               </div>
             </div>
 
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{product.title}</h1>
             
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Professional-grade mass measurement tool designed for extreme accuracy in laboratory, industrial, and educational environments.
+            <p className="text-gray-400 text-sm leading-relaxed mb-6 whitespace-pre-line">
+              {product.description}
             </p>
 
             <div className="mb-8">
               <div className="flex items-end gap-2 mb-1">
-                <span className="text-4xl font-bold text-brand-yellow">₹4,850</span>
+                <span className="text-4xl font-bold text-brand-yellow">₹{product.price.toLocaleString()}</span>
+                {product.originalPrice && (
+                  <span className="text-sm text-gray-500 line-through mb-1">₹{product.originalPrice.toLocaleString()}</span>
+                )}
               </div>
               <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">INCLUSIVE OF ALL TAXES</div>
             </div>
 
             <div className="bg-[#1a1a1a] border border-white/10 rounded p-6 grid grid-cols-2 gap-4 mb-6">
               <div className="text-[10px] text-gray-400 uppercase tracking-wider flex gap-2">
-                SKU: <span className="text-white">KE-TBB-001</span>
+                SKU: <span className="text-white">{product.sku || `KE-${product.id.slice(-6).toUpperCase()}`}</span>
               </div>
               <div className="text-[10px] text-gray-400 uppercase tracking-wider flex gap-2">
-                BRAND: <span className="text-white font-black tracking-widest bg-white/10 px-1 rounded">KE</span>
+                BRAND: <span className="text-white font-black tracking-widest bg-white/10 px-1 rounded">{product.brand || "KE"}</span>
               </div>
               <div className="text-[10px] text-gray-400 uppercase tracking-wider flex gap-2 col-span-2">
-                STATUS: <span className="text-electric-blue">IN STOCK</span>
+                STATUS: <span className={product.stock > 0 ? "text-electric-blue" : "text-red-400"}>{product.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}</span>
               </div>
             </div>
 
-            <p className="text-sm text-gray-500 italic mb-8">
-              Triple beam balance with precision accuracy, ideal for laboratory and educational use.
-            </p>
+            {product.discount && (
+              <p className="text-sm text-brand-yellow font-bold italic mb-8">
+                ★ Special Offer: {product.discount} active on this unit.
+              </p>
+            )}
 
             <div className="flex gap-4 mb-4">
               <div className="flex items-center bg-[#111111] border border-white/10 rounded px-2 w-32 justify-between">
@@ -175,7 +195,7 @@ export default function ProductDetailClient() {
         {/* Tabs Section */}
         <div className="mb-16">
           <div className="flex overflow-x-auto border-b border-white/10 mb-8">
-            {['description', 'specifications', 'ai manual', 'reviews (42)', 'shipping'].map(tab => (
+            {['description', 'specifications', 'ai manual', `reviews (${product.reviews || 15})`, 'shipping'].map(tab => (
               <button 
                 key={tab}
                 onClick={() => setActiveTab(tab.split(' ')[0])}
@@ -189,18 +209,9 @@ export default function ProductDetailClient() {
           <div className="px-4">
             {activeTab === 'description' && (
               <div className="text-gray-400 text-sm space-y-6 max-w-3xl">
-                <p>
-                  This Triple Beam Balance is designed for accurate mass measurement in laboratory, industrial
-                  and educational applications. It features a three-beam system for precise readings and a
-                  durable construction for long lasting use.
+                <p className="whitespace-pre-line leading-relaxed">
+                  {product.description}
                 </p>
-                <ul className="list-disc pl-5 space-y-3">
-                  <li>High precision measurement</li>
-                  <li>Three beam system</li>
-                  <li>Durable and stable design</li>
-                  <li>Easy to use and calibrate</li>
-                  <li>Ideal for laboratory and educational use</li>
-                </ul>
 
                 <div className="mt-12 pt-8 border-t border-white/5">
                   <div className="text-[10px] font-bold text-white uppercase tracking-widest mb-4">
@@ -225,7 +236,7 @@ export default function ProductDetailClient() {
             )}
             {activeTab === 'ai' && (
                <div className="bg-[#111111] border border-white/10 rounded p-8">
-                 <AIManualSystem sku={`SKU-KE-${product.id}`} />
+                 <AIManualSystem sku={product.sku || `SKU-KE-${product.id}`} />
                </div>
             )}
             {(activeTab !== 'description' && activeTab !== 'ai') && (
@@ -242,41 +253,58 @@ export default function ProductDetailClient() {
            </div>
            
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-             {allProducts.slice(0, 4).map(rp => (
-                <div key={rp.id} className="bg-[#111111] border border-white/10 group flex flex-col relative">
-                  <div className="absolute top-4 right-4 z-10">
-                    <Heart size={16} className="text-gray-500 hover:text-white cursor-pointer" />
-                  </div>
-                  <div className="h-48 flex items-center justify-center p-4 bg-gradient-to-b from-[#1a1a1a] to-[#111111] relative overflow-hidden">
-                    <img 
-                      src={`/design/images/${rp.id}.jpeg`} 
-                      alt={rp.title} 
-                      className="max-w-full max-h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-500" 
-                    />
-                  </div>
-                  <div className="p-6 border-t border-white/5 flex flex-col flex-1">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">ELECTRONICS</div>
-                      <div className="flex items-center gap-1 bg-[#1a1a1a] px-1.5 py-0.5 rounded border border-white/5">
-                        <span className="text-[8px] font-bold text-gray-400">Brand: </span>
-                        <span className="text-[9px] font-black text-white tracking-widest">KE</span>
-                      </div>
+             {allProducts.filter(p => p.id !== product.id).slice(0, 4).map(rp => {
+                const rpImageUrl = rp.images && rp.images.length > 0 
+                  ? rp.images[0] 
+                  : `/design/images/${rp.id}.jpeg`;
+
+                return (
+                  <div key={rp.id} className="bg-[#111111] border border-white/10 group flex flex-col relative">
+                    <div className="absolute top-4 right-4 z-10">
+                      <Heart size={16} className="text-gray-500 hover:text-white cursor-pointer" />
                     </div>
-                    <h3 className="text-white text-sm font-bold leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-electric-blue transition-colors">{rp.title}</h3>
-                    
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="text-brand-yellow font-bold">₹{rp.price.toLocaleString()}</div>
-                      <div className="flex items-center gap-1 text-[10px] text-gray-400 font-bold">
-                        <Star size={10} className="text-brand-yellow" fill="currentColor" /> {rp.rating}
+                    <Link href={`/products/${rp.id}`} className="h-48 flex items-center justify-center p-4 bg-gradient-to-b from-[#1a1a1a] to-[#111111] relative overflow-hidden cursor-pointer">
+                      <img 
+                        src={rpImageUrl} 
+                        alt={rp.title} 
+                        className="max-w-full max-h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-500" 
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src.endsWith('.jpeg')) {
+                            target.src = `/design/images/${rp.id}.png`;
+                          }
+                        }}
+                      />
+                    </Link>
+                    <div className="p-6 border-t border-white/5 flex flex-col flex-1">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{rp.category || "EQUIPMENT"}</div>
+                        <div className="flex items-center gap-1 bg-[#1a1a1a] px-1.5 py-0.5 rounded border border-white/5">
+                          <span className="text-[8px] font-bold text-gray-400">Brand: </span>
+                          <span className="text-[9px] font-black text-white tracking-widest">{rp.brand || "KE"}</span>
+                        </div>
                       </div>
+                      <Link href={`/products/${rp.id}`} className="text-white text-sm font-bold leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-electric-blue transition-colors cursor-pointer">
+                        {rp.title}
+                      </Link>
+                      
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="text-brand-yellow font-bold">₹{rp.price.toLocaleString()}</div>
+                        <div className="flex items-center gap-1 text-[10px] text-gray-400 font-bold">
+                          <Star size={10} className="text-brand-yellow" fill="currentColor" /> {rp.rating}
+                        </div>
+                      </div>
+                      
+                      <button 
+                        onClick={() => addToCart(rp, 1)}
+                        className="w-full bg-[#1a1a1a] border border-white/10 hover:border-electric-blue hover:text-electric-blue text-white text-[10px] font-bold py-3 uppercase tracking-wider transition-colors"
+                      >
+                        ADD TO CART
+                      </button>
                     </div>
-                    
-                    <button className="w-full bg-[#1a1a1a] border border-white/10 hover:border-electric-blue hover:text-electric-blue text-white text-[10px] font-bold py-3 uppercase tracking-wider transition-colors">
-                      ADD TO CART
-                    </button>
                   </div>
-                </div>
-             ))}
+                );
+             })}
            </div>
         </div>
       </div>
