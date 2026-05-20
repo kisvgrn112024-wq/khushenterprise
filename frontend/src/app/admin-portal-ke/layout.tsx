@@ -26,7 +26,7 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
     return <div className="h-screen bg-[#050b14] flex items-center justify-center text-neon-cyan">Verifying Access...</div>;
   }
 
-  if (pathname === "/admin-portal-ke/login") {
+  if (pathname === "/admin-portal-ke/login" || pathname.startsWith("/admin-portal-ke/b2b")) {
     return <>{children}</>;
   }
 

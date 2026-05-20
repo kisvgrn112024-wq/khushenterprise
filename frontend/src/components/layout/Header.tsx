@@ -16,6 +16,7 @@ export default function Header() {
   const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [userSession, setUserSession] = useState<any>(null);
+  const [isBulkDropdownOpen, setIsBulkDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -109,6 +110,10 @@ export default function Header() {
       }, 2000);
     }
   };
+
+  if (pathname?.startsWith("/admin-portal-ke")) {
+    return null;
+  }
 
   return (
     <header className="w-full bg-[#0a0a0a] border-b border-white/5 sticky top-0 z-50">
@@ -238,11 +243,73 @@ export default function Header() {
         {/* Navigation Links (Desktop) */}
         <nav className="hidden md:flex items-center justify-center gap-8 text-xs font-semibold text-gray-400 uppercase tracking-wider">
           <Link href="/catalogue" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow text-white pb-1">Catalogue</Link>
-          <Link href="/bulk-orders" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Bulk Orders</Link>
+          
+          {/* Bulk Orders Dropdown */}
+          <div 
+            className="relative group py-1"
+            onMouseEnter={() => setIsBulkDropdownOpen(true)}
+            onMouseLeave={() => setIsBulkDropdownOpen(false)}
+          >
+            <Link 
+              href="/bulk-orders" 
+              className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex items-center gap-1 cursor-pointer uppercase"
+            >
+              Bulk Orders
+              <span className="text-[8px] transition-transform group-hover:rotate-180">▼</span>
+            </Link>
+            <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 bg-[#161616] border border-white/10 rounded shadow-2xl transition-all duration-200 z-50 p-1.5 flex flex-col gap-0.5 text-left normal-case ${
+              isBulkDropdownOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+            }`}>
+              <Link 
+                href="/bulk-orders?sector=b2b" 
+                className="block px-3 py-2 text-[11px] text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors font-medium"
+              >
+                💼 B2B Business
+              </Link>
+              <div className="h-[1px] bg-white/5 my-0.5"></div>
+              <Link 
+                href="/bulk-orders?sector=institutional&sub=schools" 
+                className="block px-3 py-2 text-[11px] text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors font-medium"
+              >
+                🏫 School Lab Solutions
+              </Link>
+              <Link 
+                href="/bulk-orders?sector=institutional&sub=colleges" 
+                className="block px-3 py-2 text-[11px] text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors font-medium"
+              >
+                🎓 College Lab Packages
+              </Link>
+              <Link 
+                href="/bulk-orders?sector=institutional&sub=research" 
+                className="block px-3 py-2 text-[11px] text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors font-medium"
+              >
+                🔬 Advanced Research Labs
+              </Link>
+              <div className="h-[1px] bg-white/5 my-0.5"></div>
+              <Link 
+                href="/bulk-orders?sector=commercial" 
+                className="block px-3 py-2 text-[11px] text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors font-medium"
+              >
+                🏭 Commercial Labs
+              </Link>
+            </div>
+          </div>
+
           <Link href="/products" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Products</Link>
           <Link href="/reviews" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Reviews</Link>
           <Link href="/certifications" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Certifications</Link>
           <Link href="/contact-us" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Contact Us</Link>
+          <Link
+            href="/export"
+            className={`relative hover:text-brand-yellow transition-colors border-b-2 pb-1 font-black tracking-wider ${
+              pathname.startsWith("/export")
+                ? "text-brand-yellow border-brand-yellow"
+                : "text-brand-yellow/80 border-brand-yellow/40 hover:border-brand-yellow"
+            }`}
+          >
+            Export Centre
+            <span className="absolute -top-2 -right-3 bg-brand-yellow text-black text-[7px] font-black px-1 py-0.5 rounded-sm leading-none uppercase">New</span>
+          </Link>
         </nav>
       </div>
     </header>

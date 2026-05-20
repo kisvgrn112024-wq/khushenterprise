@@ -1,8 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function ChatWidget() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin-portal-ke")) {
+    return null;
+  }
   const handleWhatsAppClick = () => {
     // Official WhatsApp link
     window.open("https://wa.me/919890011762?text=Hello%20Khush%20Enterprises,%20I%20have%20an%20inquiry.", "_blank");

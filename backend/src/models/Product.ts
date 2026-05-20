@@ -25,6 +25,8 @@ export interface IProduct extends Document {
   aiManualEnabled?: boolean;
   bulkPrice?: number;
   moq?: number;
+  isB2BVisible?: boolean;
+  b2bCategory?: string;
   // Admin-storefront sync validation fields
   product_status?: string;
   edited_by_admin?: boolean;
@@ -57,6 +59,8 @@ const productSchema = new Schema<IProduct>(
     aiManualEnabled: { type: Boolean, default: false },
     bulkPrice: { type: Number },
     moq: { type: Number, default: 1 },
+    isB2BVisible: { type: Boolean, default: false },
+    b2bCategory: { type: String, default: 'Uncategorized' },
     product_status: { type: String, default: 'active' },
     edited_by_admin: { type: Boolean, default: false },
     is_placeholder: { type: Boolean, default: false },

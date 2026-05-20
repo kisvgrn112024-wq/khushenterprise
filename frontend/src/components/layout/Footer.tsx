@@ -1,75 +1,97 @@
 "use client";
 
 import Link from "next/link";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin-portal-ke")) {
+    return null;
+  }
   return (
-    <footer className="bg-[#111111] pt-16 pb-8 border-t border-white/5">
+    <footer className="bg-[#0b0c10] pt-16 pb-8 border-t border-white/5 text-gray-400 text-xs">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
           {/* Column 1: Brand & Contact Info */}
           <div className="space-y-6">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <img src="/logo.png" alt="KE" className="w-9 h-9 object-contain" />
-              <span className="text-2xl font-black text-white tracking-wider block">KHUSH</span>
-            </Link>
-            <div className="text-gray-400 text-xs leading-relaxed space-y-4">
-              <p>5299, Science Square, Science Market<br/>Ambala Cantt-133001, Haryana (INDIA)</p>
-              <p className="flex items-center gap-2"><Phone size={14} className="text-white"/> +91 9890011762</p>
-              <p className="flex items-center gap-2"><Mail size={14} className="text-white"/> khushenterprisesupppy@gmail.com</p>
+            <div className="inline-flex flex-col">
+              <span className="text-xl font-bold tracking-tight text-white uppercase">
+                KHUSHI <span className="font-light text-gray-400">ENTERPRISES</span>
+              </span>
+            </div>
+            <div className="leading-relaxed space-y-4 text-gray-400">
+              <p className="flex items-start gap-2.5">
+                <MapPin size={16} className="text-[#8bceff] shrink-0 mt-0.5" />
+                <span>105, Starling Square, 10-Starling Road,<br />Vile Parle West - 400056, Mumbai (INDIA)</span>
+              </p>
+              <p className="flex items-start gap-2.5">
+                <Phone size={16} className="text-[#8bceff] shrink-0 mt-0.5" />
+                <span className="flex flex-col">
+                  <span>+91 98900 11762</span>
+                  <span>+91 97294 57762</span>
+                </span>
+              </p>
+              <p className="flex items-center gap-2.5">
+                <Mail size={16} className="text-[#8bceff]" />
+                <span>PLMuchiagnsvrate@gmail.com</span>
+              </p>
             </div>
           </div>
 
-          {/* Column 2: Navigation */}
+          {/* Column 2: TEGPLINKS */}
           <div>
-            <h3 className="text-electric-blue font-bold text-[10px] tracking-widest uppercase mb-6">NAVIGATION</h3>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li><Link href="/catalogue" className="hover:text-white transition-colors">Catalogue</Link></li>
+            <h3 className="text-white font-bold text-xs uppercase mb-6 tracking-wider">TEGPLINKS</h3>
+            <ul className="space-y-4">
+              <li><Link href="/catalogue" className="hover:text-white transition-colors">Catalog in</Link></li>
               <li><Link href="/products" className="hover:text-white transition-colors">Products</Link></li>
-              <li><Link href="/bulk-orders" className="hover:text-white transition-colors">Bulk Orders</Link></li>
-              <li><Link href="/about-us" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/products?category=electronics" className="hover:text-white transition-colors">ELEctronics</Link></li>
+              <li><Link href="/contact-us" className="hover:text-white transition-colors">eContact</Link></li>
             </ul>
           </div>
 
-          {/* Column 3: Support */}
+          {/* Column 3: SUPPORT */}
           <div>
-            <h3 className="text-electric-blue font-bold text-[10px] tracking-widest uppercase mb-6">SUPPORT</h3>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li><Link href="/shipping" className="hover:text-white transition-colors">Shipping Policy</Link></li>
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
-              <li><Link href="/contact-us" className="hover:text-white transition-colors">Contact Us</Link></li>
+            <h3 className="text-white font-bold text-xs uppercase mb-6 tracking-wider">SUPPORT</h3>
+            <ul className="space-y-4">
+              <li><Link href="/about-us" className="hover:text-white transition-colors">ABOUT US</Link></li>
+              <li><Link href="/shipping" className="hover:text-white transition-colors">Product Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-white transition-colors">Termsk conditions</Link></li>
+              <li><Link href="/help" className="hover:text-white transition-colors">Chhathhar</Link></li>
             </ul>
           </div>
 
           {/* Column 4: Newsletter */}
           <div>
-            <h3 className="text-electric-blue font-bold text-[10px] tracking-widest uppercase mb-6">TECHNICAL UPDATES</h3>
-            <p className="text-gray-400 text-xs leading-relaxed mb-6">
-              Stay informed about new equipment and scientific supplies.
+            <h3 className="text-white font-bold text-xs uppercase mb-6 tracking-wider">USEFUL LINKS</h3>
+            <p className="leading-relaxed mb-6 text-gray-400">
+              Stay informed about low equipment and scientificstrafilts.
             </p>
-            <form className="flex" onSubmit={(e) => e.preventDefault()}>
+            <div className="flex relative items-center">
               <input 
                 type="email" 
-                placeholder="Email Address" 
-                className="bg-[#1a1a1a] border border-white/10 text-white text-xs px-4 py-2 w-full outline-none focus:border-white/30 transition-colors"
-                required
+                placeholder="Email address" 
+                className="bg-[#111111] border border-white/10 text-white text-xs px-4 py-3 w-full outline-none focus:border-[#8bceff] transition-colors rounded-l"
               />
               <button 
-                type="submit" 
-                className="bg-electric-blue hover:bg-blue-600 text-white px-4 py-2 transition-colors flex items-center justify-center"
+                type="button" 
+                className="bg-[#8bceff] hover:bg-[#72bde6] text-black h-[40px] px-4 transition-colors flex items-center justify-center rounded-r cursor-pointer"
+                aria-label="Subscribe"
               >
-                <span className="transform rotate-0">▹</span>
+                <Send size={14} />
               </button>
-            </form>
+            </div>
           </div>
           
         </div>
 
-        <div className="border-t border-white/5 pt-8 text-center md:text-left">
-          <p className="text-[#666666] text-[10px] uppercase tracking-wider">&copy; 2024 Khush Enterprises. Laboratory Equipment & General Supplies. All Rights Reserved.</p>
+        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-gray-500 uppercase tracking-wider">
+          <p>© 2024 Khushi Enterprise Laboratory Aspected in Moderm Explorer. All Rights Reserved.</p>
+          <div className="flex gap-2">
+            <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors cursor-pointer">★</span>
+          </div>
         </div>
       </div>
     </footer>

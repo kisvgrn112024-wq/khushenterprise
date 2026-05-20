@@ -1,0 +1,4 @@
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+Frontend build found at: C:\web\backend\public
+Server running in development mode on port 5000

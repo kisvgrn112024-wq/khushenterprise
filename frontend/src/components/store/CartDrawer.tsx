@@ -6,12 +6,19 @@ import { X, Trash2, Plus, Minus, Package, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Microscope, Scale, Pipette, Glasses, FlaskConical, Flame } from "lucide-react";
 
+import { usePathname } from "next/navigation";
+
 const IconMap: Record<string, React.ElementType> = {
   Microscope, Scale, Pipette, Glasses, FlaskConical, Flame,
 };
 
 export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, cart, cartTotal, removeFromCart, updateQuantity } = useStore();
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin-portal-ke")) {
+    return null;
+  }
 
   return (
     <AnimatePresence>

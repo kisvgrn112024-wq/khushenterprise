@@ -11,26 +11,30 @@ export function useProducts() {
     setIsMounted(true);
 
     const fetchDBProducts = async () => {
+      // Always load from localStorage immediately for instant render
+      setProducts(getProducts());
+
       try {
-        const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-          ? 'http://localhost:5000/api/products' 
+        const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+          ? 'http://localhost:5000/api/products'
           : '/api/products';
-          
-        const res = await fetch(API_URL);
-        if (!res.ok) throw new Error("Failed to fetch products");
+
+        // 3-second timeout so we don't hang when backend is offline
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 3000);
+
+        const res = await fetch(API_URL, { signal: controller.signal });
+        clearTimeout(timer);
+
+        if (!res.ok) throw new Error("API not OK");
         const data = await res.json();
-        
+
         if (Array.isArray(data) && data.length > 0) {
           setProducts(data);
-          // Sync backend data to local cache for instant loading next time
           localStorage.setItem('ke_products', JSON.stringify(data));
-        } else {
-          // Fallback to local cache if db is empty
-          setProducts(getProducts());
         }
-      } catch (err) {
-        console.error("Using offline local mode:", err);
-        setProducts(getProducts());
+      } catch {
+        // Backend offline or unreachable — already loaded from localStorage above, no action needed
       }
     };
 

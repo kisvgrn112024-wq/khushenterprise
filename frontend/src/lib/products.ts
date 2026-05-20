@@ -7,8 +7,8 @@ export type Product = {
   rating: number;
   reviews: number;
   icon: string;
-  tag: string | null;
-  discount: string | null;
+  tag?: string | null;
+  discount?: string | null;
   stock: number;
   // Advanced fields
   images?: string[];
@@ -25,6 +25,8 @@ export type Product = {
   product_status?: string;
   edited_by_admin?: boolean;
   is_placeholder?: boolean;
+  isB2BVisible?: boolean;
+  b2bCategory?: string;
   createdAt?: string;
 };
 

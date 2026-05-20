@@ -32,6 +32,9 @@ export default function ContactUsPage() {
                     <Phone size={16} className="text-brand-yellow" /> +91 98900 11762
                   </div>
                   <div className="flex items-center gap-3 text-gray-300 text-sm">
+                    <Phone size={16} className="text-brand-yellow" /> +91 97294 57762
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-300 text-sm">
                     <Mail size={16} className="text-brand-yellow" /> khushenterprises@gmail.com
                   </div>
                 </div>
