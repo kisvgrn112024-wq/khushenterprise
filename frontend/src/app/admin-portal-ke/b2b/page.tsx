@@ -3,26 +3,16 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
   LayoutDashboard, 
   FlaskConical, 
   Shapes, 
-  Archive, 
   Users, 
   FileSpreadsheet, 
   BookOpen, 
   Settings, 
   LogOut, 
   Search, 
-  Bell, 
-  Globe, 
-  HelpCircle, 
-  TrendingUp, 
-  ShieldCheck, 
-  ChevronRight, 
-  FileText, 
-  AlertTriangle, 
   Plus, 
   DollarSign, 
   Layers, 
@@ -34,1562 +24,1802 @@ import {
   Package,
   Check,
   Download,
-  Percent
+  Activity,
+  AlertTriangle,
+  Clock,
+  Filter,
+  MoreVertical,
+  HelpCircle,
+  TrendingUp,
+  FileText,
+  X,
+  MapPin,
+  Calendar,
+  Layers3,
+  ShieldAlert,
+  ChevronRight
 } from "lucide-react";
-import { getProducts, updateProduct, Product } from "@/lib/products";
+import { getProducts, addProduct, Product } from "@/lib/products";
 
-// Define Types for B2B Inquiry CRM
-interface B2BInquiry {
-  id: string;
-  clientName: string;
-  location: string;
-  category: string;
-  targetDelivery: string;
-  quantity: string;
-  value: number;
-  originalText: string;
-  specs: {
-    productCategory: string;
-    orderVol: string;
-    requestedSpecs: string;
-  };
-  status: "Pending" | "Under Review" | "Closed";
-  notes?: string;
-  clientTier: string;
-  daysAgo: number;
+// Define Interfaces
+interface CustomQuotation {
+  institution: string;
+  department: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  requirements: string;
+  submittedAt: string;
+  status?: string;
+  id?: string;
 }
 
-export default function B2BAdminSuite() {
+interface GeneralInquiry {
+  id: string;
+  clientName: string;
+  sector: "B2B" | "School" | "College" | "Research" | "Commercial";
+  subSector?: string;
+  items: string;
+  value: number;
+  status: "Pending" | "Under Review" | "Approved" | "Closed";
+  submittedAt: string;
+  contactEmail: string;
+  contactPhone: string;
+  message: string;
+  location?: string;
+}
+
+interface ResearchAsset {
+  id: string;
+  name: string;
+  sku: string;
+  calibration: "OPTIMIZED" | "CALIBRATION REQUIRED" | "CRITICAL";
+  stockLevel: number;
+  location: string;
+  department: string;
+}
+
+interface CommercialTest {
+  id: string;
+  serviceName: string;
+  code: string;
+  price: number;
+  category: string;
+  turnaround: string;
+  popularity: number;
+}
+
+export default function UnifiedAdminPortal() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"hub" | "catalog" | "inquiries">("hub");
-  const [searchQuery, setSearchQuery] = useState("");
   
-  // Products from local store
+  // Navigation active sector/tab: 
+  // "hub", "b2b", "school", "colleges", "research", "commercial", "enquiries"
+  const [activeSector, setActiveSector] = useState<string>("hub");
+  
+  // School Sub-Sectors: "biology", "chemistry", "physics", "general"
+  const [activeSchoolTab, setActiveSchoolTab] = useState<string>("biology");
+
+  // Global reach details state
+  const [systemLoad, setSystemLoad] = useState<number>(42);
+  const [activeAdmins, setActiveAdmins] = useState<number>(3);
+
+  // Unified lists
   const [products, setProducts] = useState<Product[]>([]);
-  const [globalB2BEnabled, setGlobalB2BEnabled] = useState(true);
+  const [inquiries, setInquiries] = useState<GeneralInquiry[]>([]);
+  const [assets, setAssets] = useState<ResearchAsset[]>([]);
+  const [commercialTests, setCommercialTests] = useState<CommercialTest[]>([]);
+  const [categories, setCategories] = useState<{ [key: string]: string[] }>({
+    b2b: ["Heavy Equipment", "Lab Glassware", "Chemical Reagents", "Safety Gear"],
+    school: ["Biochemistry Kits", "Mechanics Sets", "Optical Glass", "General STEM"],
+    college: ["Spectroscopy", "Thermal Baths", "Centrifuges", "Distillation units"],
+  });
 
-  // Notification Feed State
-  const [apiLoad, setApiLoad] = useState(42);
-  const [activeSessions, setActiveSessions] = useState(815);
+  // Active Selected Inquiry for detail popup/drawer
+  const [selectedInquiry, setSelectedInquiry] = useState<GeneralInquiry | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("All");
 
-  // CRM Inquiries State
-  const [inquiries, setInquiries] = useState<B2BInquiry[]>([]);
-  const [selectedInquiryId, setSelectedInquiryId] = useState<string>("B2B-RFQ-102");
-  const [inquirySearch, setInquirySearch] = useState("");
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<"All" | "Pending" | "Under Review" | "Closed">("All");
+  // Forms state
+  const [newProdName, setNewProdName] = useState("");
+  const [newProdSKU, setNewProdSKU] = useState("");
+  const [newProdPrice, setNewProdPrice] = useState("");
+  const [newProdCategory, setNewProdCategory] = useState("");
+  const [newProdMOQ, setNewProdMOQ] = useState("5");
 
-  // Operational notes temp storage
-  const [currentNotes, setCurrentNotes] = useState("");
+  const [newCatName, setNewCatName] = useState("");
 
-  // Quote Builder Modal State
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  const [customMargin, setCustomMargin] = useState(12);
-  const [additionalTerms, setAdditionalTerms] = useState("");
-  const [quoteExporting, setQuoteExporting] = useState(false);
-  const [quoteExportDone, setQuoteExportDone] = useState(false);
+  // Research asset registration form state
+  const [newAssetName, setNewAssetName] = useState("");
+  const [newAssetSKU, setNewAssetSKU] = useState("");
+  const [newAssetDept, setNewAssetDept] = useState("Biotech");
+  const [newAssetStock, setNewAssetStock] = useState("10");
 
-  // Categorization workbench state
-  const [uncategorizedItems, setUncategorizedItems] = useState<{ id: string; title: string; sku: string }[]>([]);
-  const [lifeSciencesModule, setLifeSciencesModule] = useState<{ id: string; title: string; sku: string }[]>([]);
-  const [chemistryBasicsModule, setChemistryBasicsModule] = useState<{ id: string; title: string; sku: string }[]>([]);
+  // Commercial Lab Service Form
+  const [newServiceName, setNewServiceName] = useState("");
+  const [newServiceCode, setNewServiceCode] = useState("");
+  const [newServicePrice, setNewServicePrice] = useState("");
+  const [newServiceTime, setNewServiceTime] = useState("3-5 Days");
 
-  // Package builder state
-  const [packageActive, setPackageActive] = useState(true);
-
-  // Simulated telemetry variation
+  // Telemetry fluctuation effect
   useEffect(() => {
     const interval = setInterval(() => {
-      setApiLoad(prev => Math.min(Math.max(prev + Math.floor(Math.random() * 7) - 3, 30), 85));
-      setActiveSessions(prev => prev + Math.floor(Math.random() * 11) - 5);
+      setSystemLoad(prev => Math.min(Math.max(prev + Math.floor(Math.random() * 5) - 2, 30), 85));
     }, 4000);
     return () => clearInterval(interval);
   }, []);
 
-  // Initialize data
+  // Hydrate lists
   useEffect(() => {
-    // 0. Set active tab from query parameter
     if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const tab = params.get("tab");
-      if (tab === "hub" || tab === "catalog" || tab === "inquiries") {
-        setActiveTab(tab);
+      // 1. Fetch & Initialize Products
+      const storedProds = getProducts();
+      setProducts(storedProds);
+
+      // 2. Fetch Inquiries from various localStorage schemas and merge into general list
+      const b2bInquiries = JSON.parse(localStorage.getItem("ke_b2b_inquiries") || "[]");
+      const customInquiries = JSON.parse(localStorage.getItem("ke_custom_quotations") || "[]");
+      const bulkOrders = JSON.parse(localStorage.getItem("ke_bulk_orders") || "[]");
+
+      const merged: GeneralInquiry[] = [];
+
+      // Hydrate B2B Inquiries
+      b2bInquiries.forEach((item: any, index: number) => {
+        merged.push({
+          id: item.id || `RFQ-B2B-${100 + index}`,
+          clientName: item.contactName || item.legalName || "B2B Client",
+          sector: "B2B",
+          items: item.requestedItems ? item.requestedItems.map((i: any) => `${i.sku} (x${i.qty})`).join(", ") : item.categories?.join(", ") || "General Inquiry",
+          value: item.requestedItems ? item.requestedItems.reduce((acc: number, curr: any) => acc + (curr.price || 500) * curr.qty, 0) : 45200,
+          status: item.status?.includes("Approved") ? "Approved" : item.status?.includes("Closed") ? "Closed" : "Pending",
+          submittedAt: item.submittedAt || new Date().toISOString(),
+          contactEmail: item.email || "client@company.com",
+          contactPhone: item.phone || "+91 99999 99999",
+          location: item.deliveryLocation || "India",
+          message: item.message || `Procurement Request for B2B. Tax ID: ${item.taxId || "N/A"}.`
+        });
+      });
+
+      // Hydrate Custom Quotations
+      customInquiries.forEach((item: any, index: number) => {
+        merged.push({
+          id: item.id || `RFQ-INST-${500 + index}`,
+          clientName: item.contactName || "Academic Client",
+          sector: item.department?.toLowerCase().includes("school") ? "School" : "College",
+          subSector: item.department || "Lab Department",
+          items: `Custom Sourcing: ${item.requirements?.substring(0, 40)}...`,
+          value: 75000,
+          status: item.status || "Pending",
+          submittedAt: item.submittedAt || new Date().toISOString(),
+          contactEmail: item.email || "academic@inst.edu",
+          contactPhone: item.phone || "+91 88888 88888",
+          location: item.institution || "Educational Institution",
+          message: item.requirements || "Custom lab setup required."
+        });
+      });
+
+      // Add static dummy fallback inquiries if list is empty
+      if (merged.length === 0) {
+        const dummy: GeneralInquiry[] = [
+          {
+            id: "RFQ-SCH-902",
+            clientName: "Dr. Arpan Mehta",
+            sector: "School",
+            subSector: "Chemistry Lab",
+            items: "15x Spectrometer V4, 50x Glassware Sets",
+            value: 84200,
+            status: "Pending",
+            submittedAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+            contactEmail: "a.mehta@xavier.edu",
+            contactPhone: "+91 97294 57762",
+            location: "St. Xavier Research Wing",
+            message: "Require high-grade chemical glassware and digital testing models."
+          },
+          {
+            id: "RFQ-COL-905",
+            clientName: "Dean Sarah Jenkins",
+            sector: "College",
+            subSector: "Biochemistry",
+            items: "5x Cryo-Storage Units, 2x Autoclaves",
+            value: 142500,
+            status: "Under Review",
+            submittedAt: new Date(Date.now() - 3600000 * 26).toISOString(),
+            contactEmail: "jenkins.s@biogen-solutions.org",
+            contactPhone: "+91 98900 11762",
+            location: "BioGen Solutions Ltd",
+            message: "Sourcing temperature control laboratory chambers."
+          },
+          {
+            id: "RFQ-RES-401",
+            clientName: "Dr. Rajesh Kumar",
+            sector: "Research",
+            items: "1x High-Resolution Electron Microscope X-9",
+            value: 285000,
+            status: "Approved",
+            submittedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
+            contactEmail: "r.kumar@aiims.gov.in",
+            contactPhone: "+91 97294 57762",
+            location: "National AIIMS Hospital",
+            message: "Procuring microscope assembly setup."
+          },
+          {
+            id: "RFQ-COM-101",
+            clientName: "Pooja Hegde (Lab Director)",
+            sector: "Commercial",
+            items: "Commercial soil and nutrient profile evaluation",
+            value: 12000,
+            status: "Pending",
+            submittedAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+            contactEmail: "pooja.h@soiltestinglabs.co.in",
+            contactPhone: "+91 96541 23654",
+            location: "Agro Soil Care Labs",
+            message: "Need regular heavy metal testing kits."
+          }
+        ];
+        localStorage.setItem("ke_b2b_inquiries", JSON.stringify(dummy));
+        setInquiries(dummy);
+      } else {
+        setInquiries(merged);
+      }
+
+      // Initialize Research Assets
+      const storedAssets = JSON.parse(localStorage.getItem("ke_research_assets") || "[]");
+      if (storedAssets.length === 0) {
+        const defaultAssets: ResearchAsset[] = [
+          { id: "AST-821", name: "Electron Microscope X-9", sku: "KE-EM-X9", calibration: "OPTIMIZED", stockLevel: 94, location: "Bldg-A4 / SP1", department: "Biotech" },
+          { id: "AST-842", name: "Nano Spectrometer V2", sku: "KE-NS-V2", calibration: "CALIBRATION REQUIRED", stockLevel: 25, location: "Bldg-C1 / RM3", department: "Chemical" },
+          { id: "AST-905", name: "Centrifuge ProSpin S", sku: "KE-CEN-PS", calibration: "OPTIMIZED", stockLevel: 89, location: "Bldg-B2 / SP14", department: "Physics" },
+          { id: "AST-104", name: "Liquid Chromatograph Pro", sku: "KE-LC-PRO", calibration: "CRITICAL", stockLevel: 12, location: "Bldg-D4 / LAB2", department: "Biotech" }
+        ];
+        localStorage.setItem("ke_research_assets", JSON.stringify(defaultAssets));
+        setAssets(defaultAssets);
+      } else {
+        setAssets(storedAssets);
+      }
+
+      // Initialize Commercial Services Catalog
+      const storedServices = JSON.parse(localStorage.getItem("ke_commercial_services") || "[]");
+      if (storedServices.length === 0) {
+        const defaultServices: CommercialTest[] = [
+          { id: "SVC-001", serviceName: "Water Quality & Heavy Metals Test", code: "KE-TST-H2O", price: 4500, category: "Environmental Analysis", turnaround: "3-5 Days", popularity: 94 },
+          { id: "SVC-002", serviceName: "Soil Chemical Composition Analysis", code: "KE-TST-SOIL", price: 6200, category: "Agriculture Testing", turnaround: "5-7 Days", popularity: 82 },
+          { id: "SVC-003", serviceName: "Unknown Compound Gas Chromatography", code: "KE-TST-GCMS", price: 12500, category: "Chemical Identification", turnaround: "2-3 Days", popularity: 75 },
+          { id: "SVC-004", serviceName: "Biological Micro-Pathogen Screening", code: "KE-TST-PATH", price: 8900, category: "Biotech Bio-Safety", turnaround: "24-48 Hours", popularity: 61 }
+        ];
+        localStorage.setItem("ke_commercial_services", JSON.stringify(defaultServices));
+        setCommercialTests(defaultServices);
+      } else {
+        setCommercialTests(storedServices);
       }
     }
+  }, [activeSector]);
 
-    // 1. Fetch & Initialize Products
-    const items = getProducts();
-    // Add custom scientific items for B2B demo if not already populated
-    const hasCentrifuge = items.some(p => p.title.includes("Centrifuge"));
-    let finalItems = [...items];
-
-    if (!hasCentrifuge) {
-      const extraItems: Product[] = [
-        {
-          id: "b2b-1",
-          title: "High-Speed Centrifuge 15000RPM",
-          description: "High-efficiency brush-less motor scientific centrifuge with digital acceleration controls. Perfect for cell biology separation.",
-          price: 95000,
-          originalPrice: 110000,
-          rating: 4.9,
-          reviews: 14,
-          icon: "FlaskConical",
-          tag: "B2B EXCLUSIVE",
-          discount: "13% OFF",
-          stock: 45,
-          category: "Lab Equipment",
-          sku: "KE-CEN-15K",
-          moq: 2,
-          bulkPrice: 82000,
-          product_status: "active"
-        },
-        {
-          id: "b2b-2",
-          title: "Biocular Compound Microscope V4",
-          description: "Infinity corrected optical microscope system with 1000x oil immersion objective lens and high-definition smart camera mount.",
-          price: 36000,
-          originalPrice: 42000,
-          rating: 4.8,
-          reviews: 28,
-          icon: "Microscope",
-          tag: "POPULAR",
-          discount: "14% OFF",
-          stock: 120,
-          category: "Optics",
-          sku: "KE-MIC-B10",
-          moq: 5,
-          bulkPrice: 31000,
-          product_status: "active"
-        },
-        {
-          id: "b2b-3",
-          title: "Borosilicate Glass Beakers 500ml (Pack of 12)",
-          description: "Premium heavy-wall borosilicate 3.3 glass beakers with graduated markings and dual pouring spouts.",
-          price: 3200,
-          originalPrice: 4000,
-          rating: 4.7,
-          reviews: 94,
-          icon: "FlaskConical",
-          tag: "ESSENTIAL",
-          discount: "20% OFF",
-          stock: 0,
-          category: "Glassware",
-          sku: "KE-BEK-500",
-          moq: 10,
-          bulkPrice: 2400,
-          product_status: "active"
-        },
-        {
-          id: "b2b-4",
-          title: "Programmable Robotic Arm Kit (Educational)",
-          description: "5-Axis robotic arm trainer kit with servo drives, microcontroller deck and drag-and-drop block coding manual.",
-          price: 48000,
-          originalPrice: 55000,
-          rating: 4.9,
-          reviews: 9,
-          icon: "Shapes",
-          tag: "NEW",
-          discount: "12% OFF",
-          stock: 15,
-          category: "Robotics",
-          sku: "KE-ROB-ARM",
-          moq: 1,
-          bulkPrice: 43000,
-          product_status: "active"
-        }
-      ];
-      finalItems = [...extraItems, ...items];
-      
-      // Update local storage so they appear elsewhere too
-      if (typeof window !== "undefined") {
-        localStorage.setItem("ke_products", JSON.stringify(finalItems));
-      }
+  // Product addition handler
+  const handleAddProduct = (sector: string, subSec?: string) => {
+    if (!newProdName || !newProdPrice || !newProdSKU) {
+      alert("Please fill in Product Name, SKU, and Price.");
+      return;
     }
 
-    // Set initial B2B visibility state on objects if undefined
-    const initializedItems = finalItems.map((item, idx) => ({
-      ...item,
-      // First 4 items are B2B visible in mockup, others are off by default
-      isB2BVisible: item.isB2BVisible !== undefined ? item.isB2BVisible : (idx < 4)
-    }));
-    setProducts(initializedItems);
-
-    // 2. Initialize CRM inquiries
-    const initialInquiries: B2BInquiry[] = [
-      {
-        id: "B2B-RFQ-102",
-        clientName: "Global Tech Solutions Ltd.",
-        location: "Frankfurt, Germany",
-        category: "Structural Components",
-        targetDelivery: "Q4 2026",
-        quantity: "900 Metric Tons",
-        value: 65000,
-        clientTier: "Tier 1 Client",
-        daysAgo: 3,
-        status: "Pending",
-        originalText: "We are expanding our secondary facility in Frankfurt and require a bulk supply of structural steel components. Quality must meet strict European standards (S355JR minimum).\n\nPlease provide a preliminary quote for 900 MT including logistics and delivery schedules to our hub. We are looking to establish a long-term contract if initial fulfillment is satisfactory.",
-        specs: {
-          productCategory: "Structural Steel",
-          orderVol: "900 Metric Tons",
-          requestedSpecs: "S355JR / EN10025"
-        },
-        notes: "Awaiting final clearance from the Hamburg port authority. Margin set at 12% for long term partnership potential."
-      },
-      {
-        id: "B2B-RFQ-098",
-        clientName: "Apex Manufacturing",
-        location: "Bengaluru, India",
-        category: "Precision Lab Equipment",
-        targetDelivery: "Immediate (July 2026)",
-        quantity: "15x High-Speed Centrifuges",
-        value: 22000,
-        clientTier: "Tier 2 Client",
-        daysAgo: 8,
-        status: "Under Review",
-        originalText: "We urgently require 15 units of High-Speed Centrifuges (15000RPM) for our R&D Lab division expansion. Standard warranty terms must be extended to 3 years.\n\nPlease confirm availability and volume discount. Crucial: delivery must occur before the end of the current financial quarter.",
-        specs: {
-          productCategory: "Laboratory Equipment",
-          orderVol: "15 Units",
-          requestedSpecs: "15,000 RPM / Digital controls"
-        },
-        notes: "Dr. Arpan is the lead technical reviewer. Need to confirm if we can dispatch from the Pune warehouse within 48 hours."
-      },
-      {
-        id: "B2B-RFQ-085",
-        clientName: "Mesa Logistics Corp",
-        location: "Austin, Texas",
-        category: "Safety Wear Bulk",
-        targetDelivery: "Q3 2026",
-        quantity: "500 Units Safety Goggles",
-        value: 850,
-        clientTier: "Tier 3 Client",
-        daysAgo: 14,
-        status: "Closed",
-        originalText: "Requesting quotation for 500 units of wrap-around clear protective eyewear (chemical splash resistant) for warehouse safety compliance training.\n\nQuote must include shipping costs to our Austin depot.",
-        specs: {
-          productCategory: "Personal Protective Equipment",
-          orderVol: "500 Units",
-          requestedSpecs: "ANSI Z87.1 / Anti-fog"
-        },
-        notes: "Completed. Invoice issued. Client fully satisfied, potential repeat buyer for winter safety items."
-      }
-    ];
-
-    // Load persisted notes/inquiries from localStorage if they exist
-    const savedInquiries = localStorage.getItem("ke_b2b_inquiries");
-    if (savedInquiries) {
-      try {
-        setInquiries(JSON.parse(savedInquiries));
-      } catch (e) {
-        setInquiries(initialInquiries);
-      }
-    } else {
-      setInquiries(initialInquiries);
-      localStorage.setItem("ke_b2b_inquiries", JSON.stringify(initialInquiries));
+    const priceNum = parseFloat(newProdPrice);
+    if (isNaN(priceNum)) {
+      alert("Please provide a valid price number.");
+      return;
     }
 
-    // Set uncategorized items for the workbench
-    setUncategorizedItems([
-      { id: "unc-1", title: "Hydrochloric Acid (Molarity 12)", sku: "100-MCH-01" },
-      { id: "unc-2", title: "Neoprene Lab Protective Apron", sku: "555-APR-03" },
-      { id: "unc-3", title: "Prepared Slides Set (Botany)", sku: "313-SLD-99" },
-      { id: "unc-4", title: "Safety Goggles (Anti-Fog Pack 10)", sku: "822-GGL-02" }
-    ]);
-  }, []);
+    // Determine category key
+    const targetCat = newProdCategory || (sector === "school" ? "Biochemistry Kits" : sector === "college" ? "Spectroscopy" : "Lab Equipment");
 
-  // Update selected inquiry notes when clicking on another card
-  useEffect(() => {
-    const selected = inquiries.find(inq => inq.id === selectedInquiryId);
-    if (selected) {
-      setCurrentNotes(selected.notes || "");
+    const newProd: Product = {
+      id: `prod_${Date.now()}`,
+      title: newProdName,
+      description: `Premium lab selection tailored for ${sector} ${subSec || ""} laboratories. High-durability component structure.`,
+      price: priceNum,
+      originalPrice: priceNum * 1.2,
+      rating: 4.8,
+      reviews: 5,
+      icon: sector === "school" ? "FlaskConical" : "Scale",
+      tag: "NEW",
+      discount: "15% OFF",
+      stock: 50,
+      moq: parseInt(newProdMOQ) || 5,
+      bulkPrice: priceNum * 0.85,
+      product_status: "active",
+      edited_by_admin: true,
+      isB2BVisible: true,
+      b2bCategory: targetCat
+    };
+
+    // Save using standard product update script
+    addProduct(newProd);
+
+    // Refresh state
+    setProducts(getProducts());
+
+    // Reset fields
+    setNewProdName("");
+    setNewProdSKU("");
+    setNewProdPrice("");
+    setNewProdCategory("");
+    alert(`Successfully added "${newProdName}" to the active catalog!`);
+  };
+
+  // Add Category Handler
+  const handleAddCategory = (sector: string) => {
+    if (!newCatName) return;
+    setCategories(prev => {
+      const current = prev[sector] || [];
+      if (current.includes(newCatName)) return prev;
+      return {
+        ...prev,
+        [sector]: [...current, newCatName]
+      };
+    });
+    setNewCatName("");
+    alert(`Category "${newCatName}" added successfully.`);
+  };
+
+  // Register Research Asset Handler
+  const handleRegisterAsset = () => {
+    if (!newAssetName || !newAssetSKU) {
+      alert("Please fill in Asset Name and SKU ID.");
+      return;
     }
-  }, [selectedInquiryId, inquiries]);
 
-  // Sync Notes to LocalState
-  const handleSaveNotes = () => {
+    const newAst: ResearchAsset = {
+      id: `AST-${Math.floor(Math.random() * 900) + 100}`,
+      name: newAssetName,
+      sku: newAssetSKU,
+      calibration: "OPTIMIZED",
+      stockLevel: parseInt(newAssetStock) || 10,
+      location: `Bldg-${newAssetDept === "Biotech" ? "A4" : newAssetDept === "Chemical" ? "C1" : "B2"} / LAB`,
+      department: newAssetDept
+    };
+
+    const updated = [newAst, ...assets];
+    setAssets(updated);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ke_research_assets", JSON.stringify(updated));
+    }
+
+    setNewAssetName("");
+    setNewAssetSKU("");
+    alert(`Asset "${newAssetName}" registered successfully!`);
+  };
+
+  // Add Commercial Test Handler
+  const handleAddCommercialTest = () => {
+    if (!newServiceName || !newServicePrice || !newServiceCode) {
+      alert("Please provide Service Name, Code, and Price.");
+      return;
+    }
+
+    const priceNum = parseFloat(newServicePrice);
+    if (isNaN(priceNum)) {
+      alert("Invalid price.");
+      return;
+    }
+
+    const newSvc: CommercialTest = {
+      id: `SVC-${Math.floor(Math.random() * 900) + 100}`,
+      serviceName: newServiceName,
+      code: newServiceCode,
+      price: priceNum,
+      category: "Custom Analysis",
+      turnaround: newServiceTime,
+      popularity: 50
+    };
+
+    const updated = [newSvc, ...commercialTests];
+    setCommercialTests(updated);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ke_commercial_services", JSON.stringify(updated));
+    }
+
+    setNewServiceName("");
+    setNewServiceCode("");
+    setNewServicePrice("");
+    alert(`Commercial test service "${newServiceName}" created!`);
+  };
+
+  // Update enquiry status
+  const handleInquiryStatusChange = (id: string, newStatus: "Pending" | "Under Review" | "Approved" | "Closed") => {
     const updated = inquiries.map(inq => {
-      if (inq.id === selectedInquiryId) {
-        return { ...inq, notes: currentNotes };
+      if (inq.id === id) {
+        return { ...inq, status: newStatus };
       }
       return inq;
     });
     setInquiries(updated);
-    localStorage.setItem("ke_b2b_inquiries", JSON.stringify(updated));
-  };
 
-  // Toggle individual B2B visibility
-  const toggleVisibility = (productId: string) => {
-    const updated = products.map(p => {
-      if (p.id === productId) {
-        const nextVal = !p.isB2BVisible;
-        // Also update standard products database
-        updateProduct(productId, { isB2BVisible: nextVal } as any);
-        return { ...p, isB2BVisible: nextVal };
+    // Save back to localStorage
+    if (typeof window !== "undefined") {
+      // Find which store it belongs to
+      if (id.startsWith("RFQ-B2B-") || id.startsWith("B2B-RFQ-")) {
+        const stored = JSON.parse(localStorage.getItem("ke_b2b_inquiries") || "[]");
+        const idx = stored.findIndex((x: any, i: number) => (x.id === id || `RFQ-B2B-${100 + i}` === id));
+        if (idx !== -1) {
+          stored[idx].status = newStatus === "Approved" ? "Approved Bid Quote" : newStatus;
+          localStorage.setItem("ke_b2b_inquiries", JSON.stringify(stored));
+        }
+      } else {
+        const storedCustom = JSON.parse(localStorage.getItem("ke_custom_quotations") || "[]");
+        const idx = storedCustom.findIndex((x: any, i: number) => (x.id === id || `RFQ-INST-${500 + i}` === id));
+        if (idx !== -1) {
+          storedCustom[idx].status = newStatus;
+          localStorage.setItem("ke_custom_quotations", JSON.stringify(storedCustom));
+        }
       }
-      return p;
-    });
-    setProducts(updated);
-  };
 
-  // Sort/Categorization Workbench action
-  const moveToModule = (itemId: string, destination: "science" | "chemistry" | "uncategorized") => {
-    let itemToMove: { id: string; title: string; sku: string } | undefined;
-
-    // Find and remove from source
-    const searchUnc = uncategorizedItems.find(i => i.id === itemId);
-    const searchSci = lifeSciencesModule.find(i => i.id === itemId);
-    const searchChem = chemistryBasicsModule.find(i => i.id === itemId);
-
-    if (searchUnc) {
-      itemToMove = searchUnc;
-      setUncategorizedItems(prev => prev.filter(i => i.id !== itemId));
-    } else if (searchSci) {
-      itemToMove = searchSci;
-      setLifeSciencesModule(prev => prev.filter(i => i.id !== itemId));
-    } else if (searchChem) {
-      itemToMove = searchChem;
-      setChemistryBasicsModule(prev => prev.filter(i => i.id !== itemId));
+      // Sync into bulk orders
+      const bulk = JSON.parse(localStorage.getItem("ke_bulk_orders") || "[]");
+      const bIdx = bulk.findIndex((x: any) => x.id === id);
+      if (bIdx !== -1) {
+        bulk[bIdx].status = newStatus;
+        localStorage.setItem("ke_bulk_orders", JSON.stringify(bulk));
+      }
     }
 
-    if (!itemToMove) return;
-
-    // Add to destination
-    if (destination === "science") {
-      setLifeSciencesModule(prev => [...prev, itemToMove!]);
-    } else if (destination === "chemistry") {
-      setChemistryBasicsModule(prev => [...prev, itemToMove!]);
-    } else {
-      setUncategorizedItems(prev => [...prev, itemToMove!]);
+    // Update details modal if open
+    if (selectedInquiry && selectedInquiry.id === id) {
+      setSelectedInquiry(prev => prev ? { ...prev, status: newStatus } : null);
     }
   };
 
-  // Generate Quote execution
-  const triggerQuoteGeneration = () => {
-    setQuoteExporting(true);
-    setQuoteExportDone(false);
-    setTimeout(() => {
-      setQuoteExporting(false);
-      setQuoteExportDone(true);
-      // Simulate file download notice
-      setTimeout(() => {
-        setIsQuoteModalOpen(false);
-        setQuoteExportDone(false);
-        // Switch status to Under Review
-        const updated = inquiries.map(inq => {
-          if (inq.id === selectedInquiryId) {
-            return { ...inq, status: "Under Review" as const };
-          }
-          return inq;
-        });
-        setInquiries(updated);
-        localStorage.setItem("ke_b2b_inquiries", JSON.stringify(updated));
-      }, 1500);
-    }, 2000);
+  // Construct WhatsApp Follow-up message
+  const triggerWhatsAppFollowUp = (inq: GeneralInquiry) => {
+    const text = `Hello ${inq.clientName},\n\nThis is Khush Enterprises following up on your procurement request (${inq.id}) submitted on our portal:\n- Sourcing requirements: ${inq.items}\n- Current Status: ${inq.status}\n\nOur team is drafting the formal quotation. Do you have any specific regulatory or shipping requests?`;
+    const url = `https://wa.me/919729457762?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
   };
 
-  // Selected Inquiry Data
-  const selectedInq = inquiries.find(inq => inq.id === selectedInquiryId);
-
-  // CRM Filter logic
+  // Filtered inquiries list for the general Enquiry page
   const filteredInquiries = inquiries.filter(inq => {
-    const matchesSearch = 
-      inq.clientName.toLowerCase().includes(inquirySearch.toLowerCase()) ||
-      inq.id.toLowerCase().includes(inquirySearch.toLowerCase()) ||
-      inq.location.toLowerCase().includes(inquirySearch.toLowerCase());
-    
-    const matchesStatus = selectedStatusFilter === "All" || inq.status === selectedStatusFilter;
-
+    const matchesSearch = inq.clientName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          inq.id.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (inq.location && inq.location.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesStatus = statusFilter === "All" || inq.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className="min-h-screen bg-[#050506] text-gray-300 font-sans flex overflow-hidden select-none antialiased">
+    <div className="flex h-screen bg-[#050b14] text-gray-300 font-sans overflow-hidden">
       
-      {/* Sidebar - Dark industrial charcoal with gold accents */}
-      <aside className="w-64 bg-[#0c0c0e] border-r border-[#1e1e24] flex flex-col shrink-0">
+      {/* 1. SIDEBAR NAVIGATION */}
+      <aside className="w-64 bg-[#0a121e] border-r border-[#1a273b]/60 flex flex-col z-20 shrink-0">
         
-        {/* KHUSH B2B ADMIN Branding */}
-        <div className="p-6 border-b border-[#1e1e24]">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-[#e5a93b] flex items-center justify-center text-black font-black text-lg shadow-[0_0_15px_rgba(229,169,59,0.4)]">
-              K
-            </div>
-            <div>
-              <h1 className="text-sm font-black tracking-widest text-[#e5a93b] uppercase">KHUSH B2B</h1>
-              <div className="text-[9px] font-mono text-gray-500 uppercase tracking-widest mt-0.5">ADMIN SUITE</div>
-            </div>
+        {/* Brand Profile Banner */}
+        <div className="p-6 border-b border-[#1a273b]/40 flex items-center gap-3">
+          <div className="w-10 h-10 rounded bg-[#e5a93b]/10 border border-[#e5a93b]/30 flex items-center justify-center text-[#e5a93b] font-black text-lg">
+            KE
+          </div>
+          <div>
+            <div className="text-white font-extrabold text-xs uppercase tracking-wider">Industrial Suite</div>
+            <div className="text-[#e5a93b] text-[9px] font-mono tracking-widest font-black uppercase mt-0.5">Admin Control</div>
           </div>
         </div>
 
-        {/* Sidebar Info Card */}
-        <div className="px-6 py-4 border-b border-[#1e1e24] bg-[#09090b]/50">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#1b1b1f] border border-[#e5a93b]/30 flex items-center justify-center text-[#e5a93b] font-mono text-xs font-bold shadow-[0_0_10px_rgba(229,169,59,0.1)]">
-              OP
-            </div>
-            <div>
-              <div className="text-white font-bold text-xs">B2B Sourcing</div>
-              <div className="text-[9px] font-mono text-[#e5a93b] uppercase tracking-wider mt-0.5 font-bold">Industrial Precision</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Items */}
+        {/* Sidebar Nav Items */}
         <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
-          <button
-            onClick={() => setActiveTab("hub")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative group ${
-              activeTab === "hub"
-                ? "text-black bg-[#e5a93b] shadow-[0_4px_15px_rgba(229,169,59,0.25)] font-extrabold"
-                : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            <LayoutDashboard size={16} strokeWidth={activeTab === "hub" ? 2.5 : 1.5} />
-            <span>Hub</span>
-            {activeTab === "hub" && (
-              <span className="absolute right-3 w-1.5 h-1.5 bg-black rounded-full"></span>
-            )}
-          </button>
-
-          <button
-            onClick={() => setActiveTab("catalog")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative group ${
-              activeTab === "catalog"
-                ? "text-black bg-[#e5a93b] shadow-[0_4px_15px_rgba(229,169,59,0.25)] font-extrabold"
-                : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            <FlaskConical size={16} strokeWidth={activeTab === "catalog" ? 2.5 : 1.5} />
-            <span>Catalog</span>
-            {activeTab === "catalog" && (
-              <span className="absolute right-3 w-1.5 h-1.5 bg-black rounded-full"></span>
-            )}
-          </button>
-
-          <button
-            onClick={() => setActiveTab("inquiries")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative group ${
-              activeTab === "inquiries"
-                ? "text-black bg-[#e5a93b] shadow-[0_4px_15px_rgba(229,169,59,0.25)] font-extrabold"
-                : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            <FileSpreadsheet size={16} strokeWidth={activeTab === "inquiries" ? 2.5 : 1.5} />
-            <span>Inquiries</span>
-            {activeTab === "inquiries" && (
-              <span className="absolute right-3 w-1.5 h-1.5 bg-black rounded-full"></span>
-            )}
-          </button>
-
-          <div className="pt-4 pb-2">
-            <span className="px-4 text-[9px] font-mono text-gray-500 uppercase tracking-widest">Pricing & Stocks</span>
+          
+          <div className="px-3 pb-2">
+            <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">Enterprise Hub</span>
           </div>
 
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded text-xs text-gray-500 hover:text-gray-300 transition-colors cursor-not-allowed">
-            <TrendingUp size={15} strokeWidth={1.5} />
-            <span className="font-semibold">Pricing Control</span>
+          <button
+            onClick={() => setActiveSector("hub")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "hub"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <LayoutDashboard size={15} strokeWidth={2.5} />
+              <span>Procurement Hub</span>
+            </div>
+            {activeSector === "hub" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
           </button>
 
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded text-xs text-gray-500 hover:text-gray-300 transition-colors cursor-not-allowed">
-            <Shapes size={15} strokeWidth={1.5} />
-            <span className="font-semibold">Inventory</span>
+          <button
+            onClick={() => setActiveSector("b2b")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "b2b"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Package size={15} strokeWidth={2.5} />
+              <span>B2B Suite</span>
+            </div>
+            {activeSector === "b2b" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
           </button>
 
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded text-xs text-gray-500 hover:text-gray-300 transition-colors cursor-not-allowed">
-            <Users size={15} strokeWidth={1.5} />
-            <span className="font-semibold">Institutions</span>
+          <div className="px-3 pt-5 pb-2">
+            <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">Institutional</span>
+          </div>
+
+          <button
+            onClick={() => setActiveSector("school")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "school"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <FlaskConical size={15} strokeWidth={2.5} />
+              <span>School Center</span>
+            </div>
+            {activeSector === "school" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
           </button>
+
+          <button
+            onClick={() => setActiveSector("colleges")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "colleges"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <BookOpen size={15} strokeWidth={2.5} />
+              <span>Colleges Sector</span>
+            </div>
+            {activeSector === "colleges" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
+          </button>
+
+          <button
+            onClick={() => setActiveSector("research")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "research"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Sliders size={15} strokeWidth={2.5} />
+              <span>Research Labs</span>
+            </div>
+            {activeSector === "research" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
+          </button>
+
+          <div className="px-3 pt-5 pb-2">
+            <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">Commercial & Leads</span>
+          </div>
+
+          <button
+            onClick={() => setActiveSector("commercial")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "commercial"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <DollarSign size={15} strokeWidth={2.5} />
+              <span>Commercial Labs</span>
+            </div>
+            {activeSector === "commercial" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
+          </button>
+
+          <button
+            onClick={() => setActiveSector("enquiries")}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded text-xs font-bold uppercase tracking-wider transition-all relative ${
+              activeSector === "enquiries"
+                ? "text-black bg-[#e5a93b] font-extrabold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <FileSpreadsheet size={15} strokeWidth={2.5} />
+              <span>Enquiry Center</span>
+            </div>
+            {activeSector === "enquiries" && <div className="w-1.5 h-1.5 rounded-full bg-black"></div>}
+          </button>
+
         </nav>
 
-        {/* Sidebar Footer Buttons */}
-        <div className="p-4 border-t border-[#1e1e24] space-y-1">
-          {/* Custom Action Trigger */}
-          <button 
-            onClick={() => {
-              setActiveTab("inquiries");
-              setSelectedInquiryId("B2B-RFQ-102");
-              setIsQuoteModalOpen(true);
-            }} 
-            className="w-full mb-3 py-2 bg-[#e5a93b]/10 hover:bg-[#e5a93b]/20 border border-[#e5a93b]/30 hover:border-[#e5a93b]/60 text-[#e5a93b] rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-2"
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-[#1a273b]/40 space-y-2">
+          <Link
+            href="/admin-portal-ke"
+            className="w-full py-2.5 bg-[#101c2e] hover:bg-[#15253d] border border-[#1a273b] hover:border-[#e5a93b]/40 text-gray-300 hover:text-[#e5a93b] rounded text-[11px] font-bold tracking-wider uppercase flex items-center justify-center gap-2 transition-all"
           >
-            <Plus size={14} strokeWidth={2.5} />
-            <span>New Procurement</span>
-          </button>
-
-          <button className="w-full flex items-center gap-3 px-3 py-2 rounded text-xs text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-            <HelpCircle size={16} strokeWidth={1.5} />
-            <span className="font-semibold">Support Desk</span>
-          </button>
-          
-          <button 
-            onClick={() => router.push("/")}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded text-xs text-red-400 hover:bg-red-500/10 transition-colors"
-          >
-            <LogOut size={16} strokeWidth={1.5} />
-            <span className="font-semibold">Exit Admin Suite</span>
-          </button>
+            <ArrowRight size={13} />
+            <span>Main Dashboard</span>
+          </Link>
         </div>
       </aside>
 
-      {/* Main Panel Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      {/* 2. MAIN CONTENT WRAPPER */}
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#050b14] relative">
         
-        {/* Top Header */}
-        <header className="h-16 bg-[#0c0c0e] border-b border-[#1e1e24] flex items-center justify-between px-8 z-10 shrink-0">
-          
-          {/* Breadcrumbs or Search */}
+        {/* Top Header Bar */}
+        <header className="h-16 border-b border-[#1a273b]/40 flex items-center justify-between px-8 bg-[#0a121e] shrink-0">
           <div className="flex items-center gap-3">
-            <span className="text-[10px] font-mono bg-[#161619] border border-[#1e1e24] text-gray-400 px-2.5 py-1 rounded tracking-widest uppercase">
-              KHUSH ENTERPRISES
-            </span>
-            <ChevronRight size={14} className="text-gray-600" />
-            <span className="text-xs font-bold text-white uppercase tracking-wider">
-              {activeTab === "hub" && "Central Procurement Hub"}
-              {activeTab === "catalog" && "B2B Catalog Management"}
-              {activeTab === "inquiries" && "Procurement RFQs & Inquiries"}
+            <h1 className="text-lg font-black text-white uppercase tracking-wider">
+              {activeSector === "hub" && "Institutional Procurement Hub"}
+              {activeSector === "b2b" && "B2B Procurement Suite"}
+              {activeSector === "school" && `School Solutions Manager - ${activeSchoolTab.toUpperCase()} DIVISION`}
+              {activeSector === "colleges" && "Colleges & Academic Suite"}
+              {activeSector === "research" && "Advanced Research Inventory"}
+              {activeSector === "commercial" && "Commercial Labs Sourcing Dashboard"}
+              {activeSector === "enquiries" && "Unified Sourcing Inquiry Center"}
+            </h1>
+            <span className="text-[10px] bg-[#1a273b] border border-[#e5a93b]/20 px-2 py-0.5 rounded text-gray-400 font-mono">
+              SYSTEM STATUS: OPTIMIZED
             </span>
           </div>
 
-          {/* Quick Metrics / Active Settings */}
-          <div className="flex items-center gap-6">
-            
-            {/* Live Gateway Telemetry */}
-            <div className="hidden lg:flex items-center gap-4 border-r border-[#1e1e24] pr-6">
-              <div className="flex flex-col items-end">
-                <span className="text-[9px] font-mono text-gray-500 uppercase">API GATEWAY LOAD</span>
-                <span className="text-xs font-mono font-bold text-[#e5a93b]">{apiLoad}%</span>
-              </div>
-              <div className="w-12 h-1.5 bg-[#1b1b1f] rounded overflow-hidden">
-                <div 
-                  className="h-full bg-[#e5a93b] transition-all duration-1000" 
-                  style={{ width: `${apiLoad}%` }}
-                ></div>
-              </div>
+          <div className="flex items-center gap-6 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+              <span className="text-gray-400 font-mono">Telemetry Active: {systemLoad}% Load</span>
             </div>
-
-            {/* Support icons */}
-            <button className="relative text-gray-400 hover:text-white transition-colors">
-              <Bell size={18} />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-[#e5a93b] rounded-full border-2 border-[#0c0c0e]"></span>
-            </button>
-
-            <button className="text-gray-400 hover:text-white transition-colors cursor-not-allowed">
-              <Globe size={18} />
-            </button>
-
-            <div className="w-[1px] h-6 bg-[#1e1e24]"></div>
-
-            {/* Profiles */}
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-[#e5a93b] text-black font-black text-xs flex items-center justify-center">
-                M
-              </div>
-              <span className="text-xs text-white font-semibold hidden md:block">Manager (Mumbai Depot)</span>
+            <div className="w-px h-4 bg-[#1a273b]"></div>
+            <div className="text-gray-400 font-mono">
+              HELPLINE CONTACT: <span className="text-white font-bold">+91 97294 57762</span>
             </div>
-
           </div>
         </header>
 
-        {/* Outer Dashboard Scroll Frame */}
-        <main className="flex-1 overflow-y-auto p-8 bg-[#050506]">
+        {/* Content Body */}
+        <div className="flex-1 p-8">
           
-          <AnimatePresence mode="wait">
-            
-            {/* 1. CENTRAL PROCUREMENT HUB (DASHBOARD) */}
-            {activeTab === "hub" && (
-              <motion.div
-                key="hub"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-8 text-left"
-              >
-                {/* Hero Banner Grid */}
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          {/* ==================== A. PROCUREMENT HUB OVERVIEW ==================== */}
+          {activeSector === "hub" && (
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Central Map / Telemetry Graph Banner */}
+              <div className="bg-[#0a121e] border border-[#1a273b]/50 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#e5a93b]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+                <div className="space-y-4 max-w-xl relative z-10">
+                  <span className="text-[10px] font-mono text-[#e5a93b] font-black uppercase tracking-widest border border-[#e5a93b]/20 px-2.5 py-1 rounded">
+                    Global Sourcing Registry
+                  </span>
+                  <h2 className="text-3xl font-black text-white tracking-wide">
+                    Operational Procurement Network
+                  </h2>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Khush Enterprises bridges STEM educational laboratories, colleges, and enterprise-grade advanced research laboratories. Manage custom quotes, product inventory, and active tenders locally.
+                  </p>
                   
-                  {/* Central Procurement Hub Title Panel */}
-                  <div className="xl:col-span-2 bg-gradient-to-r from-[#0c0c0e] to-[#121217] border border-[#1e1e24] p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[220px]">
-                    <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-5 pointer-events-none">
-                      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-white">
-                        <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="1" />
-                        <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" strokeWidth="1" />
-                        <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" strokeWidth="1" />
-                      </svg>
-                    </div>
-                    
+                  <div className="grid grid-cols-3 gap-6 pt-4">
                     <div>
-                      <span className="text-[9px] font-mono text-[#e5a93b] border border-[#e5a93b]/30 px-2.5 py-1 rounded bg-[#e5a93b]/5 uppercase tracking-widest font-black">
-                        SYSTEM ONLINE
-                      </span>
-                      <h2 className="text-2xl font-black text-white mt-4 tracking-tight">Central Procurement Hub</h2>
-                      <p className="text-gray-400 text-xs mt-2 max-w-lg leading-relaxed">
-                        Manage global B2B operations, institutional scientific inventory allocations, and corporate partnership contracts with industrial precision.
-                      </p>
+                      <div className="text-2xl font-black text-white">5,400+</div>
+                      <div className="text-[10px] text-gray-500 uppercase font-mono tracking-wider mt-1">Catalog SKUs</div>
                     </div>
-
-                    <div className="flex gap-3 mt-6">
-                      <button 
-                        onClick={() => setActiveTab("catalog")}
-                        className="px-5 py-2.5 bg-[#e5a93b] hover:bg-[#c9922f] text-black font-bold text-xs uppercase tracking-wider rounded transition-colors flex items-center gap-2"
-                      >
-                        <FlaskConical size={14} />
-                        <span>Manage B2B Catalog</span>
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setActiveTab("inquiries");
-                          setSelectedInquiryId("B2B-RFQ-102");
-                        }}
-                        className="px-5 py-2.5 bg-transparent hover:bg-white/5 border border-gray-600 hover:border-white text-white font-bold text-xs uppercase tracking-wider rounded transition-colors flex items-center gap-2"
-                      >
-                        <FileText size={14} />
-                        <span>Process RFQs</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Top Metric Cards */}
-                  <div className="flex flex-col gap-6">
-                    
-                    {/* Active Orders Card */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-6 rounded-xl flex items-center justify-between relative overflow-hidden group">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#e5a93b]"></div>
-                      <div>
-                        <div className="text-[10px] font-mono text-gray-500 uppercase tracking-wider mb-1">Active Orders</div>
-                        <div className="text-3xl font-black font-mono text-white tracking-tight">1,204</div>
-                        <div className="text-[9px] text-[#e5a93b] font-mono mt-1 font-bold">● LIVE FROM DEPOTS</div>
-                      </div>
-                      <div className="p-3.5 bg-[#161619] rounded-lg text-[#e5a93b]">
-                        <Archive size={20} />
-                      </div>
-                    </div>
-
-                    {/* Revenue YTD Card */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-6 rounded-xl flex items-center justify-between relative overflow-hidden group">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#e5a93b]"></div>
-                      <div>
-                        <div className="text-[10px] font-mono text-gray-500 uppercase tracking-wider mb-1">Revenue YTD</div>
-                        <div className="text-3xl font-black font-mono text-white tracking-tight">$4.2M</div>
-                        <div className="text-[9px] text-green-400 font-mono mt-1 font-bold">+18.4% VS LAST YEAR</div>
-                      </div>
-                      <div className="p-3.5 bg-[#161619] rounded-lg text-[#e5a93b]">
-                        <DollarSign size={20} />
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-
-                {/* Control Center Modules Quick Access */}
-                <div className="space-y-4">
-                  <div className="flex items-baseline justify-between border-b border-[#1e1e24] pb-2">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Control Center Modules</h3>
-                    <span className="text-[10px] font-mono text-gray-500 uppercase tracking-wider">QUICK ACCESS</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    
-                    {/* Module 1: Pricing */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-5 rounded-xl hover:border-[#e5a93b]/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between h-[150px]">
-                      <div>
-                        <div className="w-8 h-8 rounded bg-[#161619] border border-[#1e1e24] flex items-center justify-center text-[#e5a93b] mb-3">
-                          <Percent size={15} />
-                        </div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">Wholesale Pricing Tiers</h4>
-                        <p className="text-[10px] text-gray-500 mt-1.5 leading-relaxed">
-                          Manage volume-based discount margins, MOQ targets & contract rates.
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end text-[#e5a93b] text-xs font-bold font-mono tracking-wider">
-                        <span>OPEN</span>
-                        <ChevronRight size={14} />
-                      </div>
-                    </div>
-
-                    {/* Module 2: Inventory */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-5 rounded-xl hover:border-[#e5a93b]/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between h-[150px]">
-                      <div>
-                        <div className="w-8 h-8 rounded bg-[#161619] border border-[#1e1e24] flex items-center justify-center text-[#e5a93b] mb-3">
-                          <Layers size={15} />
-                        </div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">Institutional Inventory</h4>
-                        <p className="text-[10px] text-gray-500 mt-1.5 leading-relaxed">
-                          Bulk stock allocations, safety buffer thresholds and depot reserves.
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end text-[#e5a93b] text-xs font-bold font-mono tracking-wider">
-                        <span>OPEN</span>
-                        <ChevronRight size={14} />
-                      </div>
-                    </div>
-
-                    {/* Module 3: Corporate Partnerships */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-5 rounded-xl hover:border-[#e5a93b]/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between h-[150px]">
-                      <div>
-                        <div className="w-8 h-8 rounded bg-[#161619] border border-[#1e1e24] flex items-center justify-center text-[#e5a93b] mb-3">
-                          <Users size={15} />
-                        </div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">Corporate Partnerships</h4>
-                        <p className="text-[10px] text-gray-500 mt-1.5 leading-relaxed">
-                          Client custom portals, procurement agreements and tracking credentials.
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end text-[#e5a93b] text-xs font-bold font-mono tracking-wider">
-                        <span>OPEN</span>
-                        <ChevronRight size={14} />
-                      </div>
-                    </div>
-
-                    {/* Module 4: Tax Compliance */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-5 rounded-xl hover:border-[#e5a93b]/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between h-[150px]">
-                      <div>
-                        <div className="w-8 h-8 rounded bg-[#161619] border border-[#1e1e24] flex items-center justify-center text-[#e5a93b] mb-3">
-                          <ShieldCheck size={15} />
-                        </div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">Tax Compliance</h4>
-                        <p className="text-[10px] text-gray-500 mt-1.5 leading-relaxed">
-                          GST/ITC input credit logging, international B2B custom codes & tax rules.
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end text-[#e5a93b] text-xs font-bold font-mono tracking-wider">
-                        <span>OPEN</span>
-                        <ChevronRight size={14} />
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* Bottom Section: Recent B2B Interactions & System Telemetry */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
-                  
-                  {/* Recent B2B Interactions Feed (Left Column) */}
-                  <div className="lg:col-span-2 bg-[#0c0c0e] border border-[#1e1e24] rounded-xl p-6 text-left">
-                    <div className="flex items-center justify-between border-b border-[#1e1e24] pb-4 mb-4">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-2.5 h-2.5 bg-[#e5a93b] rounded-full animate-pulse"></div>
-                        <h3 className="text-xs font-bold uppercase tracking-wider text-white">Recent B2B Interactions</h3>
-                      </div>
-                      <span className="text-[10px] font-mono text-gray-500">TODAY</span>
-                    </div>
-
-                    <div className="space-y-4">
-                      
-                      {/* Interaction 1 */}
-                      <div className="bg-[#050506] border border-[#161619] p-4 rounded-lg flex items-start gap-4 hover:border-gray-800 transition-colors">
-                        <div className="p-2 bg-[#1b1b1f] border border-[#e5a93b]/20 rounded text-[#e5a93b] shrink-0 font-mono text-[10px] font-bold">
-                          PO
-                        </div>
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-white">Purchase Order #PO-0021 Approved</span>
-                            <span className="text-[10px] font-mono text-gray-500">2 hrs ago</span>
-                          </div>
-                          <p className="text-[10.5px] text-gray-400 leading-relaxed">
-                            Client: <span className="text-[#e5a93b] font-semibold">Apex Manufacturing Ltd.</span> Value: <span className="font-mono text-white font-bold">₹48,050.00</span>
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Interaction 2 */}
-                      <div className="bg-[#050506] border border-[#161619] p-4 rounded-lg flex items-start gap-4 hover:border-gray-800 transition-colors">
-                        <div className="p-2 bg-red-950/20 border border-red-500/20 rounded text-red-400 shrink-0">
-                          <AlertTriangle size={14} />
-                        </div>
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-white">Inventory Alert: Heavy Machinery Parts</span>
-                            <span className="text-[10px] font-mono text-gray-500">5 hrs ago</span>
-                          </div>
-                          <p className="text-[10.5px] text-gray-400 leading-relaxed">
-                            Stock level dropped below institutional reserve threshold. Action required for buffer clearance.
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Interaction 3 */}
-                      <div className="bg-[#050506] border border-[#161619] p-4 rounded-lg flex items-start gap-4 hover:border-gray-800 transition-colors">
-                        <div className="p-2 bg-[#1b1b1f] border border-[#e5a93b]/20 rounded text-[#e5a93b] shrink-0">
-                          <Zap size={14} />
-                        </div>
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-white">New Partner Onboarded</span>
-                            <span className="text-[10px] font-mono text-gray-500">1 day ago</span>
-                          </div>
-                          <p className="text-[10.5px] text-gray-400 leading-relaxed">
-                            Global Logistics Corp requested API access for active catalog sync configurations.
-                          </p>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* System Telemetry Panel (Right Column) */}
-                  <div className="bg-[#0c0c0e] border border-[#1e1e24] rounded-xl p-6 flex flex-col justify-between text-left">
-                    
                     <div>
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-white border-b border-[#1e1e24] pb-4 mb-4">
-                        System Snapshot
-                      </h3>
-                      
-                      <div className="space-y-6">
-                        
-                        {/* Gateway load */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-[11px] font-mono font-bold">
-                            <span className="text-gray-400">API GATEWAY LOAD</span>
-                            <span className="text-[#e5a93b]">{apiLoad}%</span>
-                          </div>
-                          <div className="w-full h-2 bg-[#050506] border border-[#1e1e24] rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-gradient-to-r from-[#e5a93b]/70 to-[#e5a93b] transition-all duration-1000" 
-                              style={{ width: `${apiLoad}%` }}
-                            ></div>
-                          </div>
-                          <div className="text-[9px] font-mono text-gray-500">Active Node Cluster: IND-WEST-1</div>
-                        </div>
-
-                        {/* Active B2B Sessions */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-[11px] font-mono font-bold">
-                            <span className="text-gray-400">ACTIVE B2B SESSIONS</span>
-                            <span className="text-white font-mono font-black">{activeSessions}</span>
-                          </div>
-                          <div className="w-full h-2 bg-[#050506] border border-[#1e1e24] rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-white transition-all duration-500" 
-                              style={{ width: `${(activeSessions / 1200) * 100}%` }}
-                            ></div>
-                          </div>
-                          <div className="text-[9px] font-mono text-gray-500">Peak Connection Tolerance: 2,500/m</div>
-                        </div>
-
-                      </div>
+                      <div className="text-2xl font-black text-[#e5a93b]">248</div>
+                      <div className="text-[10px] text-gray-500 uppercase font-mono tracking-wider mt-1">Pending Inquiries</div>
                     </div>
-
-                    {/* Consignment Tracking ID quick look */}
-                    <div className="mt-8 pt-4 border-t border-[#1e1e24]">
-                      <div className="text-[10px] font-mono text-gray-500 uppercase mb-2">QUICK SEARCH (SKU/PO)</div>
-                      <div className="flex items-center bg-[#050506] border border-[#1e1e24] rounded px-3 py-1.5 focus-within:border-[#e5a93b]/40">
-                        <Search size={14} className="text-gray-500 mr-2" />
-                        <input 
-                          type="text" 
-                          placeholder="Enter tracking ID..." 
-                          className="bg-transparent text-xs text-white outline-none w-full placeholder-gray-600 font-mono"
-                        />
-                      </div>
+                    <div>
+                      <div className="text-2xl font-black text-white">42</div>
+                      <div className="text-[10px] text-gray-500 uppercase font-mono tracking-wider mt-1">Global Tenders</div>
                     </div>
-
-                  </div>
-
-                </div>
-              </motion.div>
-            )}
-
-            {/* 2. B2B CATALOG MANAGEMENT (INVENTORY & PACKAGES) */}
-            {activeTab === "catalog" && (
-              <motion.div
-                key="catalog"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-8 text-left"
-              >
-                {/* Catalog Header Banner */}
-                <div className="bg-gradient-to-r from-[#0c0c0e] to-[#121217] border border-[#1e1e24] p-6 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                  <div>
-                    <span className="text-[9px] font-mono text-[#e5a93b] uppercase tracking-widest font-black">MODULE: CATALOG_OP</span>
-                    <h2 className="text-xl font-black text-white mt-1">B2B Catalog Management</h2>
-                    <p className="text-xs text-gray-400 mt-1 max-w-xl">
-                      Control institutional visibility, categorize bulk inventory modules, and configure pre-packaged secondary lab bundles.
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <button className="px-4 py-2 border border-gray-600 hover:border-white hover:bg-white/5 text-white font-bold text-xs uppercase tracking-wider rounded transition-colors flex items-center gap-2">
-                      <Download size={14} />
-                      <span>Export Catalog</span>
-                    </button>
-                    <button className="px-4 py-2 bg-[#e5a93b] hover:bg-[#c9922f] text-black font-bold text-xs uppercase tracking-wider rounded transition-colors flex items-center gap-2">
-                      <CheckCircle size={14} />
-                      <span>Publish Changes</span>
-                    </button>
                   </div>
                 </div>
 
-                {/* Global Catalog Visibility Controller Toggle */}
-                <div className="bg-[#0c0c0e] border border-[#1e1e24] p-5 rounded-xl flex items-center justify-between">
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider">Global Inventory Visibility</h3>
-                    <p className="text-xs text-gray-500">
-                      Toggle product availability master control for all B2B institutional client accounts.
-                    </p>
-                  </div>
+                <div className="w-full md:w-80 bg-[#0f1b2c] border border-[#1a273b] p-6 rounded-lg relative z-10 shrink-0 space-y-4">
+                  <div className="text-xs font-bold text-white uppercase tracking-wider">Procurement Quick Actions</div>
                   
                   <button 
-                    onClick={() => setGlobalB2BEnabled(!globalB2BEnabled)}
-                    className={`w-14 h-7 rounded-full p-1 transition-all duration-300 ${
-                      globalB2BEnabled ? "bg-[#e5a93b]" : "bg-[#1b1b1f] border border-gray-800"
-                    }`}
+                    onClick={() => setActiveSector("enquiries")}
+                    className="w-full flex items-center justify-between p-3 bg-[#132238] hover:bg-[#1a2e4a] border border-[#1a273b] hover:border-[#e5a93b]/30 rounded text-xs transition-all"
                   >
-                    <div className={`w-5 h-5 rounded-full bg-white transition-all shadow ${
-                      globalB2BEnabled ? "translate-x-7" : "translate-x-0"
-                    }`}></div>
+                    <span>Inspect Received Tenders</span>
+                    <ChevronRight size={14} className="text-[#e5a93b]" />
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveSector("research")}
+                    className="w-full flex items-center justify-between p-3 bg-[#132238] hover:bg-[#1a2e4a] border border-[#1a273b] hover:border-[#e5a93b]/30 rounded text-xs transition-all"
+                  >
+                    <span>Access Research Inventory</span>
+                    <ChevronRight size={14} className="text-[#e5a93b]" />
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveSector("commercial")}
+                    className="w-full flex items-center justify-between p-3 bg-[#132238] hover:bg-[#1a2e4a] border border-[#1a273b] hover:border-[#e5a93b]/30 rounded text-xs transition-all"
+                  >
+                    <span>Launch Test Monetizer</span>
+                    <ChevronRight size={14} className="text-[#e5a93b]" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Sector Quick Shortcuts Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-6 rounded-xl space-y-4 hover:border-[#e5a93b]/30 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 rounded bg-[#e5a93b]/10 flex items-center justify-center text-[#e5a93b]"><FlaskConical size={18} /></div>
+                    <h3 className="text-lg font-bold text-white">School Laboratory Solutions</h3>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      STEM Starter kits, Biology dissection utilities, chemical reactants, and basic mechanics kits optimized for secondary educational standards.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => { setActiveSector("school"); setActiveSchoolTab("biology"); }}
+                    className="text-xs font-bold text-[#e5a93b] flex items-center gap-1.5 pt-4 hover:underline"
+                  >
+                    <span>EXPLORE SECTOR</span> <ArrowRight size={12} />
                   </button>
                 </div>
 
-                {/* Product Inventory Table List */}
-                <div className="bg-[#0c0c0e] border border-[#1e1e24] rounded-xl overflow-hidden">
-                  <div className="p-5 border-b border-[#1e1e24] flex items-center justify-between">
-                    <h3 className="text-xs font-bold text-white uppercase tracking-widest">B2B Core Inventory</h3>
-                    <div className="relative">
-                      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                      <input 
-                        type="text" 
-                        placeholder="Filter scientific products..." 
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-[#050506] border border-[#1e1e24] rounded pl-8 pr-4 py-1.5 text-xs text-white outline-none focus:border-[#e5a93b]/40 w-64"
-                      />
-                    </div>
-                  </div>
-
-                  <table className="w-full text-left text-xs text-gray-300">
-                    <thead className="bg-[#08080a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-[#1e1e24]">
-                      <tr>
-                        <th className="p-4 pl-6">SKU</th>
-                        <th className="p-4">Item Description</th>
-                        <th className="p-4">Category</th>
-                        <th className="p-4">Base Price (B2B)</th>
-                        <th className="p-4">Stock Level</th>
-                        <th className="p-4 text-center pr-6">Institutional Vis.</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#1e1e24]">
-                      {products
-                        .filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()))
-                        .map((p) => (
-                          <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
-                            <td className="p-4 pl-6 font-mono font-bold text-[#e5a93b]">{p.sku || `KE-SKU-${p.id.toUpperCase()}`}</td>
-                            <td className="p-4">
-                              <div>
-                                <span className="font-bold text-white">{p.title}</span>
-                                <div className="text-[10px] text-gray-500 line-clamp-1 mt-0.5">{p.description}</div>
-                              </div>
-                            </td>
-                            <td className="p-4 font-mono font-semibold uppercase">{p.category || "Unassigned"}</td>
-                            <td className="p-4 font-mono font-bold text-white">
-                              ₹{(p.bulkPrice || p.price * 0.85).toLocaleString("en-IN")}
-                            </td>
-                            <td className="p-4">
-                              {p.stock > 0 ? (
-                                <div className="flex items-center gap-1.5 text-green-400 font-bold">
-                                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
-                                  <span>{p.stock} units</span>
-                                </div>
-                              ) : (
-                                <div className="flex items-center gap-1.5 text-red-400 font-bold">
-                                  <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-ping"></span>
-                                  <span>0 units</span>
-                                </div>
-                              )}
-                            </td>
-                            <td className="p-4 text-center pr-6">
-                              <button 
-                                onClick={() => toggleVisibility(p.id)}
-                                className={`w-9 h-5 rounded-full p-0.5 inline-flex transition-all duration-300 ${
-                                  p.isB2BVisible ? "bg-[#e5a93b]" : "bg-[#1b1b1f] border border-gray-800"
-                                }`}
-                              >
-                                <div className={`w-4 h-4 rounded-full bg-white transition-all shadow ${
-                                  p.isB2BVisible ? "translate-x-4" : "translate-x-0"
-                                }`}></div>
-                              </button>
-                            </td>
-                          </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Custom Categorization workbench & package builder */}
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                  
-                  {/* Categorization tool workbench */}
-                  <div className="xl:col-span-2 bg-[#0c0c0e] border border-[#1e1e24] rounded-xl p-6">
-                    <div className="border-b border-[#1e1e24] pb-4 mb-4">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-white">Categorization Workbench</h3>
-                      <p className="text-[10px] text-gray-500 mt-1">Assign uncategorized lab materials to specific course modules with single-click precision.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      
-                      {/* Uncategorized items bucket */}
-                      <div className="bg-[#050506] border border-[#1e1e24] rounded-lg p-3 flex flex-col">
-                        <div className="text-[9px] font-mono text-[#e5a93b] font-bold uppercase tracking-widest border-b border-[#1e1e24] pb-2 mb-3">
-                          Uncategorized Items ({uncategorizedItems.length})
-                        </div>
-
-                        <div className="space-y-2 flex-1 overflow-y-auto max-h-[220px] scrollbar-hide">
-                          {uncategorizedItems.length === 0 ? (
-                            <div className="text-[10px] text-gray-600 text-center py-10">All items assigned.</div>
-                          ) : (
-                            uncategorizedItems.map(item => (
-                              <div key={item.id} className="bg-[#0c0c0e] border border-white/5 p-2.5 rounded hover:border-[#e5a93b]/30 transition-all flex flex-col justify-between gap-2">
-                                <div>
-                                  <div className="text-[10.5px] font-bold text-white line-clamp-1">{item.title}</div>
-                                  <div className="text-[8.5px] font-mono text-gray-500 mt-0.5">SKU: {item.sku}</div>
-                                </div>
-                                <div className="flex gap-1 justify-end border-t border-white/5 pt-1.5">
-                                  <button 
-                                    onClick={() => moveToModule(item.id, "science")}
-                                    className="p-1 bg-[#1b1b1f] border border-gray-800 hover:border-[#e5a93b] rounded text-[8.5px] text-[#e5a93b] hover:text-[#e5a93b] transition-all flex items-center gap-0.5 font-mono"
-                                    title="Move to Life Sciences"
-                                  >
-                                    <span>SCI</span>
-                                    <ArrowRight size={10} />
-                                  </button>
-                                  <button 
-                                    onClick={() => moveToModule(item.id, "chemistry")}
-                                    className="p-1 bg-[#1b1b1f] border border-gray-800 hover:border-[#e5a93b] rounded text-[8.5px] text-[#e5a93b] hover:text-[#e5a93b] transition-all flex items-center gap-0.5 font-mono"
-                                    title="Move to Chemistry Basics"
-                                  >
-                                    <span>CHEM</span>
-                                    <ArrowRight size={10} />
-                                  </button>
-                                </div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Destination 1: Life Sciences */}
-                      <div className="bg-[#050506] border border-[#1e1e24] rounded-lg p-3 flex flex-col relative">
-                        <div className="text-[9px] font-mono text-gray-400 font-bold uppercase tracking-widest border-b border-[#1e1e24] pb-2 mb-3 flex items-center justify-between">
-                          <span>Life Sciences Module</span>
-                          <span className="px-1.5 py-0.5 bg-[#1b1b1f] rounded text-[7px] text-[#e5a93b] font-mono font-bold">COURSE DECK</span>
-                        </div>
-
-                        <div className="space-y-2 flex-1 overflow-y-auto max-h-[220px] scrollbar-hide">
-                          {lifeSciencesModule.length === 0 ? (
-                            <div className="text-[9.5px] text-gray-700 text-center py-12 italic border border-dashed border-[#1e1e24] rounded">
-                              Click items on the left to assign
-                            </div>
-                          ) : (
-                            lifeSciencesModule.map(item => (
-                              <div key={item.id} className="bg-[#0c0c0e] border border-[#e5a93b]/20 p-2.5 rounded flex justify-between items-center group">
-                                <div className="max-w-[70%]">
-                                  <div className="text-[10px] font-bold text-[#e5a93b] truncate">{item.title}</div>
-                                  <div className="text-[8px] font-mono text-gray-500">{item.sku}</div>
-                                </div>
-                                <button 
-                                  onClick={() => moveToModule(item.id, "uncategorized")}
-                                  className="p-1 bg-red-950/20 hover:bg-red-900/30 text-red-400 rounded text-[9px] border border-red-500/10 transition-all font-mono"
-                                  title="Unassign"
-                                >
-                                  REMOVE
-                                </button>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Destination 2: Chemistry Basics */}
-                      <div className="bg-[#050506] border border-[#1e1e24] rounded-lg p-3 flex flex-col relative">
-                        <div className="text-[9px] font-mono text-gray-400 font-bold uppercase tracking-widest border-b border-[#1e1e24] pb-2 mb-3 flex items-center justify-between">
-                          <span>Chemistry Basics</span>
-                          <span className="px-1.5 py-0.5 bg-[#1b1b1f] rounded text-[7px] text-[#e5a93b] font-mono font-bold font-black">LAB ASSORTED</span>
-                        </div>
-
-                        <div className="space-y-2 flex-1 overflow-y-auto max-h-[220px] scrollbar-hide">
-                          {chemistryBasicsModule.length === 0 ? (
-                            <div className="text-[9.5px] text-gray-700 text-center py-12 italic border border-dashed border-[#1e1e24] rounded">
-                              Click items on the left to assign
-                            </div>
-                          ) : (
-                            chemistryBasicsModule.map(item => (
-                              <div key={item.id} className="bg-[#0c0c0e] border border-[#e5a93b]/20 p-2.5 rounded flex justify-between items-center group">
-                                <div className="max-w-[70%]">
-                                  <div className="text-[10px] font-bold text-[#e5a93b] truncate">{item.title}</div>
-                                  <div className="text-[8px] font-mono text-gray-500">{item.sku}</div>
-                                </div>
-                                <button 
-                                  onClick={() => moveToModule(item.id, "uncategorized")}
-                                  className="p-1 bg-red-950/20 hover:bg-red-900/30 text-red-400 rounded text-[9px] border border-red-500/10 transition-all font-mono"
-                                  title="Unassign"
-                                >
-                                  REMOVE
-                                </button>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* Package Builder Widget */}
-                  <div className="bg-[#0c0c0e] border border-[#1e1e24] rounded-xl p-6 flex flex-col justify-between">
-                    <div>
-                      <div className="border-b border-[#1e1e24] pb-4 mb-4">
-                        <span className="text-[8px] font-mono text-[#e5a93b] uppercase">PRE-CONFIGURED BUNDLE</span>
-                        <h3 className="text-xs font-bold uppercase tracking-wider text-white mt-0.5">Package Builder</h3>
-                        <p className="text-[9.5px] text-gray-500 mt-1 leading-relaxed">
-                          Assemble multiple pieces of scientific equipment into unified course kits with dedicated pricing profiles.
-                        </p>
-                      </div>
-
-                      {/* Package Card Details */}
-                      <div className="bg-[#050506] border border-[#1e1e24] p-4 rounded-lg space-y-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <span className="text-[8px] font-mono bg-[#161619] border border-[#1e1e24] text-gray-400 px-2 py-0.5 rounded tracking-wide uppercase">
-                              CATALOG SKU: KE-PKG-SEC2
-                            </span>
-                            <h4 className="text-xs font-bold text-white mt-1.5 uppercase">Secondary School Lab Package</h4>
-                          </div>
-                          <button className="px-2 py-1 border border-[#e5a93b]/30 hover:border-[#e5a93b] text-[#e5a93b] rounded text-[8px] font-bold tracking-widest font-mono">
-                            EDIT COMPONENTS
-                          </button>
-                        </div>
-
-                        {/* Components count & Pricing details */}
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="bg-[#0c0c0e] p-2.5 rounded border border-white/5">
-                            <div className="text-[7.5px] font-mono text-gray-500 uppercase">COMPONENTS</div>
-                            <div className="text-xs font-black font-mono text-white mt-0.5">42 ITEMS</div>
-                          </div>
-                          <div className="bg-[#0c0c0e] p-2.5 rounded border border-white/5">
-                            <div className="text-[7.5px] font-mono text-gray-500 uppercase">BASE PRICE</div>
-                            <div className="text-xs font-black font-mono text-white mt-0.5">₹3.7 Lakh</div>
-                          </div>
-                          <div className="bg-[#0c0c0e] p-2.5 rounded border border-white/5">
-                            <div className="text-[7.5px] font-mono text-gray-500 uppercase">STOCK STATUS</div>
-                            <div className="text-[10px] font-mono font-bold text-green-400 mt-0.5 tracking-wide">● READY</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Active toggle */}
-                    <div className="flex items-center justify-between border-t border-[#1e1e24] pt-4 mt-6">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold text-gray-400">PACKAGE ACTIVE STATUS</span>
-                      </div>
-                      
-                      <button 
-                        onClick={() => setPackageActive(!packageActive)}
-                        className={`w-10 h-6 rounded-full p-0.5 transition-all duration-300 ${
-                          packageActive ? "bg-[#e5a93b]" : "bg-[#1b1b1f] border border-gray-800"
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full bg-white transition-all shadow ${
-                          packageActive ? "translate-x-4" : "translate-x-0"
-                        }`}></div>
-                      </button>
-                    </div>
-
-                  </div>
-
-                </div>
-              </motion.div>
-            )}
-
-            {/* 3. PROCUREMENT INQUIRIES (CRM / LEAD MANAGEMENT VIEW) */}
-            {activeTab === "inquiries" && (
-              <motion.div
-                key="inquiries"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-6 text-left"
-              >
-                {/* RFQ Banner Header */}
-                <div className="bg-gradient-to-r from-[#0c0c0e] to-[#121217] border border-[#1e1e24] p-6 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                  <div>
-                    <span className="text-[9px] font-mono text-[#e5a93b] uppercase tracking-widest font-black font-bold">MODULE: CRM_LEADS</span>
-                    <h2 className="text-xl font-black text-white mt-1">Procurement Inquiries</h2>
-                    <p className="text-xs text-gray-400 mt-1 max-w-xl">
-                      Manage and route incoming high-volume institutional requests. Secure quoting and margin calculation pipeline active.
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-6 rounded-xl space-y-4 hover:border-[#e5a93b]/30 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 rounded bg-[#8bceff]/10 flex items-center justify-center text-[#8bceff]"><BookOpen size={18} /></div>
+                    <h3 className="text-lg font-bold text-white">Academic & University Packages</h3>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      High-precision instrumentation and modular lab suites tailored for tertiary institutions, chemistry labs, and advanced physics setups.
                     </p>
                   </div>
-                  
-                  {/* Status counts */}
-                  <div className="flex items-center gap-3">
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] px-4 py-2 rounded flex flex-col items-center">
-                      <span className="text-[7.5px] font-mono text-gray-500 uppercase">PENDING RFQS</span>
-                      <span className="text-sm font-mono font-black text-[#e5a93b] mt-0.5">14</span>
-                    </div>
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] px-4 py-2 rounded flex flex-col items-center">
-                      <span className="text-[7.5px] font-mono text-gray-500 uppercase">UNDER REVIEW</span>
-                      <span className="text-sm font-mono font-black text-white mt-0.5">08</span>
-                    </div>
+                  <button 
+                    onClick={() => setActiveSector("colleges")}
+                    className="text-xs font-bold text-[#8bceff] flex items-center gap-1.5 pt-4 hover:underline"
+                  >
+                    <span>VIEW MODULES</span> <ArrowRight size={12} />
+                  </button>
+                </div>
+
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-6 rounded-xl space-y-4 hover:border-[#e5a93b]/30 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 rounded bg-green-500/10 flex items-center justify-center text-green-400"><Sliders size={18} /></div>
+                    <h3 className="text-lg font-bold text-white">Advanced Research Centers</h3>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      Highly specialized testing equipment, environmental measurement systems, and analytics machinery for commercial labs and research foundations.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => setActiveSector("research")}
+                    className="text-xs font-bold text-green-400 flex items-center gap-1.5 pt-4 hover:underline"
+                  >
+                    <span>INSPECT REGISTRY</span> <ArrowRight size={12} />
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================== B. B2B SUITE ==================== */}
+          {activeSector === "b2b" && (
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Stat Telemetry cards */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Active B2B Products</div>
+                  <div className="text-2xl font-black text-white mt-1">
+                    {products.filter(p => p.isB2BVisible).length}
+                  </div>
+                </div>
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">B2B Sourcing Requests</div>
+                  <div className="text-2xl font-black text-[#e5a93b] mt-1">
+                    {inquiries.filter(i => i.sector === "B2B").length}
+                  </div>
+                </div>
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Global Tenders</div>
+                  <div className="text-2xl font-black text-white mt-1">14 Tenders</div>
+                </div>
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Helpline Sync</div>
+                  <div className="text-xs text-green-400 font-bold mt-2">WhatsApp Verified</div>
+                </div>
+              </div>
+
+              {/* Main Panel Content - Split Left Catalog and Right Form */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Catalog Grid */}
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="flex justify-between items-center bg-[#0a121e] border border-[#1a273b]/40 px-6 py-4 rounded-lg">
+                    <h3 className="font-bold text-white text-sm">Active B2B Procurement Catalog</h3>
+                    <span className="text-xs text-gray-400">{products.length} Products Found</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products.slice(0, 6).map(prod => (
+                      <div key={prod.id} className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg space-y-3 hover:border-[#e5a93b]/20 transition-all">
+                        <div className="flex justify-between items-start">
+                          <span className="text-[10px] font-mono bg-[#1d1b11] border border-[#e5a93b]/20 text-[#e5a93b] px-2 py-0.5 rounded font-black">
+                            {prod.sku || "KE-GEN-SKU"}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-gray-400">MOQ: {prod.moq || 5} Units</span>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-white">{prod.title}</h4>
+                          <p className="text-xs text-gray-500 line-clamp-2 mt-1">{prod.description}</p>
+                        </div>
+                        <div className="flex justify-between items-center pt-2 border-t border-[#1a273b]/30">
+                          <div>
+                            <div className="text-[9px] text-gray-500 uppercase">Unit Price</div>
+                            <div className="text-sm font-black text-white">₹{prod.price?.toLocaleString()}</div>
+                          </div>
+                          <div>
+                            <div className="text-[9px] text-gray-500 uppercase text-right">Bulk Sourcing</div>
+                            <div className="text-xs font-bold text-[#e5a93b]">₹{prod.bulkPrice?.toLocaleString() || "Quote req."}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* CRM Dual-Pane Grid Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-                  
-                  {/* Left Side: Scrollable incoming inquiry lists */}
-                  <div className="space-y-4 flex flex-col">
-                    
-                    {/* Inquiry Search & Filters */}
-                    <div className="bg-[#0c0c0e] border border-[#1e1e24] p-4 rounded-xl space-y-3">
-                      <div className="flex items-center bg-[#050506] border border-[#1e1e24] rounded px-3 py-2">
-                        <Search size={13} className="text-gray-500 mr-2" />
+                {/* Right Form: B2B Sourcing Config */}
+                <div className="bg-[#0a121e] border border-[#1a273b]/40 p-6 rounded-lg space-y-6 h-max">
+                  <div className="border-b border-[#1a273b]/40 pb-4">
+                    <h3 className="font-bold text-white text-sm">Create New Product Sourcing</h3>
+                    <p className="text-xs text-gray-500 mt-1">Configure price tiers and publish details dynamically.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Product Title</label>
+                      <input 
+                        type="text" 
+                        value={newProdName}
+                        onChange={(e) => setNewProdName(e.target.value)}
+                        placeholder="e.g. Borosilicate Distillation Kit" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] focus:border-[#e5a93b] rounded px-4 py-2.5 text-white text-xs outline-none" 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Catalog SKU</label>
                         <input 
                           type="text" 
-                          placeholder="Search inquiries..." 
-                          value={inquirySearch}
-                          onChange={(e) => setInquirySearch(e.target.value)}
-                          className="bg-transparent text-xs text-white outline-none w-full placeholder-gray-600 font-mono"
+                          value={newProdSKU}
+                          onChange={(e) => setNewProdSKU(e.target.value)}
+                          placeholder="KE-BD-01" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] focus:border-[#e5a93b] rounded px-4 py-2.5 text-white text-xs outline-none" 
                         />
                       </div>
-                      
-                      {/* Filter pills */}
-                      <div className="flex bg-[#050506] border border-[#1e1e24] rounded p-0.5">
-                        {["All", "Pending", "Under Review", "Closed"].map((st) => (
-                          <button
-                            key={st}
-                            onClick={() => setSelectedStatusFilter(st as any)}
-                            className={`flex-1 text-[9px] font-mono font-black py-1.5 rounded transition-colors uppercase ${
-                              selectedStatusFilter === st
-                                ? "bg-[#e5a93b] text-black"
-                                : "text-gray-400 hover:text-white"
-                            }`}
-                          >
-                            {st}
-                          </button>
-                        ))}
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Unit Price (INR)</label>
+                        <input 
+                          type="number" 
+                          value={newProdPrice}
+                          onChange={(e) => setNewProdPrice(e.target.value)}
+                          placeholder="12500" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] focus:border-[#e5a93b] rounded px-4 py-2.5 text-white text-xs outline-none" 
+                        />
                       </div>
                     </div>
 
-                    {/* Inquiry Lists Container */}
-                    <div className="flex-1 overflow-y-auto max-h-[480px] space-y-3 pr-1 scrollbar-thin">
-                      {filteredInquiries.length === 0 ? (
-                        <div className="bg-[#0c0c0e] border border-[#1e1e24] rounded-xl p-8 text-center text-gray-500 font-mono text-xs">
-                          No matching RFQs found.
-                        </div>
-                      ) : (
-                        filteredInquiries.map((inq) => (
-                          <div 
-                            key={inq.id}
-                            onClick={() => setSelectedInquiryId(inq.id)}
-                            className={`p-4 rounded-xl border transition-all cursor-pointer text-left relative overflow-hidden ${
-                              selectedInquiryId === inq.id
-                                ? "bg-[#0c0c0e] border-[#e5a93b] shadow-[0_4px_15px_rgba(229,169,59,0.1)]"
-                                : "bg-[#0c0c0e] border-[#1e1e24] hover:border-gray-800"
-                            }`}
-                          >
-                            {/* Selected tag border */}
-                            {selectedInquiryId === inq.id && (
-                              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#e5a93b]"></div>
-                            )}
-
-                            {/* RFQ header details */}
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-[9px] font-mono text-gray-500">{inq.id}</span>
-                              <span className={`px-2 py-0.5 rounded text-[8px] font-mono font-black uppercase ${
-                                inq.status === "Pending" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
-                                inq.status === "Under Review" ? "bg-blue-500/10 text-[#8bceff] border border-blue-500/20" :
-                                "bg-gray-500/10 text-gray-400 border border-gray-500/20"
-                              }`}>
-                                {inq.status}
-                              </span>
-                            </div>
-
-                            {/* Client Name & Category */}
-                            <h4 className="text-xs font-black text-white uppercase tracking-wider">{inq.clientName}</h4>
-                            <div className="text-[10px] text-[#e5a93b] font-semibold mt-0.5">{inq.category}</div>
-                            
-                            {/* Pricing value and days ago */}
-                            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1e1e24] text-[9.5px] font-mono text-gray-500">
-                              <span className="text-white font-bold font-mono">₹{inq.value.toLocaleString("en-IN")}</span>
-                              <span>{inq.daysAgo}d ago</span>
-                            </div>
-                          </div>
-                        ))
-                      )}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">MOQ Limit</label>
+                        <input 
+                          type="number" 
+                          value={newProdMOQ}
+                          onChange={(e) => setNewProdMOQ(e.target.value)}
+                          placeholder="5" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] focus:border-[#e5a93b] rounded px-4 py-2.5 text-white text-xs outline-none" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Category Segment</label>
+                        <select 
+                          value={newProdCategory}
+                          onChange={(e) => setNewProdCategory(e.target.value)}
+                          className="w-full bg-[#050b14] border border-[#1a273b] focus:border-[#e5a93b] rounded px-4 py-2.5 text-gray-400 text-xs outline-none"
+                        >
+                          {categories.b2b.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                      </div>
                     </div>
 
+                    <button 
+                      onClick={() => handleAddProduct("b2b")}
+                      className="w-full py-3 bg-[#e5a93b] hover:bg-[#c9922e] text-black font-extrabold text-xs uppercase tracking-wider rounded transition-all mt-4"
+                    >
+                      ADD TO CATALOG
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================== C. SCHOOL SECTOR ==================== */}
+          {activeSector === "school" && (
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Secondary Navigation System */}
+              <div className="flex border-b border-[#1a273b]/40 gap-1 bg-[#0a121e] p-1.5 rounded-lg w-max">
+                {["biology", "chemistry", "physics", "general"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveSchoolTab(tab)}
+                    className={`px-5 py-2 rounded text-xs font-bold uppercase tracking-wider transition-all ${
+                      activeSchoolTab === tab 
+                        ? "bg-[#e5a93b] text-black shadow-lg" 
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {tab} Lab
+                  </button>
+                ))}
+              </div>
+
+              {/* Main School Content Panel */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Left Listing */}
+                <div className="lg:col-span-2 space-y-6">
+                  
+                  {/* Category Filter Title */}
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 px-6 py-4 rounded-lg flex justify-between items-center">
+                    <h3 className="font-bold text-white text-sm">
+                      {activeSchoolTab.toUpperCase()} LAB SEGMENT INVENTORY
+                    </h3>
+                    <span className="text-xs text-gray-400">
+                      {products.filter(p => p.b2bCategory?.toLowerCase().includes(activeSchoolTab)).length} Active SKUs
+                    </span>
                   </div>
 
-                  {/* Right Side: Detailed View panel of the selected inquiry */}
-                  <div className="lg:col-span-2 bg-[#0c0c0e] border border-[#1e1e24] rounded-xl flex flex-col justify-between">
-                    
-                    {selectedInq ? (
-                      <>
-                        {/* Detail Header */}
-                        <div className="p-6 border-b border-[#1e1e24] flex flex-wrap items-center justify-between gap-4 bg-[#09090b]/50">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-[9.5px] font-mono text-gray-500">{selectedInq.id}</span>
-                              <span className="text-[9px] font-mono font-bold text-gray-400 border border-gray-800 px-2 py-0.5 rounded">
-                                {selectedInq.clientTier}
-                              </span>
-                            </div>
-                            <h3 className="text-base font-black text-white mt-1.5 uppercase tracking-wider">
-                              {selectedInq.clientName}
-                            </h3>
-                            <div className="text-xs text-gray-400 font-medium flex items-center gap-1.5 mt-0.5">
-                              <Globe size={12} className="text-gray-500" />
-                              <span>{selectedInq.location}</span>
-                            </div>
+                  {/* Lab Specific Items list */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products
+                      .filter(p => p.b2bCategory?.toLowerCase().includes(activeSchoolTab) || p.title.toLowerCase().includes(activeSchoolTab))
+                      .map(prod => (
+                        <div key={prod.id} className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg space-y-3">
+                          <div className="flex justify-between items-start">
+                            <span className="text-[10px] font-mono bg-white/5 border border-white/10 text-white px-2 py-0.5 rounded font-bold">
+                              {prod.sku || "KE-SCH-SKU"}
+                            </span>
+                            <span className="text-xs text-gray-500 font-mono">MOQ: {prod.moq || 10}</span>
                           </div>
-
-                          <div className="flex items-center gap-2.5">
-                            <button className="px-4 py-2 border border-gray-600 hover:border-white text-white font-bold text-xs uppercase tracking-wider rounded transition-colors">
-                              Assign Rep
-                            </button>
-                            
-                            {selectedInq.status !== "Closed" && (
-                              <button 
-                                onClick={() => setIsQuoteModalOpen(true)}
-                                className="px-4 py-2 bg-[#e5a93b] hover:bg-[#c9922f] text-black font-bold text-xs uppercase tracking-wider rounded transition-all shadow-[0_4px_10px_rgba(229,169,59,0.15)] flex items-center gap-1.5"
-                              >
-                                <DollarSign size={14} strokeWidth={2.5} />
-                                <span>Generate Quote</span>
-                              </button>
-                            )}
+                          <div>
+                            <h4 className="text-sm font-bold text-white">{prod.title}</h4>
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-2">{prod.description}</p>
+                          </div>
+                          <div className="flex justify-between items-center pt-2 border-t border-[#1a273b]/30">
+                            <div>
+                              <div className="text-[9px] text-gray-500">Unit Sourcing Cost</div>
+                              <div className="text-sm font-bold text-[#e5a93b]">₹{prod.price}</div>
+                            </div>
+                            <span className="text-[10px] bg-green-500/10 border border-green-500/20 text-green-400 px-2 py-0.5 rounded font-mono font-bold">
+                              IN STOCK
+                            </span>
                           </div>
                         </div>
-
-                        {/* Detail Specifications & Text Scrollable Area */}
-                        <div className="p-6 space-y-6 flex-1 overflow-y-auto max-h-[350px] scrollbar-thin">
-                          
-                          {/* Grid procurement spec cards */}
-                          <div>
-                            <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest block mb-3">PROCUREMENT SPECS</span>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                              <div className="bg-[#050506] border border-[#1e1e24] p-3 rounded-lg">
-                                <div className="text-[8px] font-mono text-gray-500 uppercase">CATEGORY</div>
-                                <div className="text-[10.5px] font-bold text-white mt-1 line-clamp-1">{selectedInq.specs.productCategory}</div>
-                              </div>
-                              <div className="bg-[#050506] border border-[#1e1e24] p-3 rounded-lg">
-                                <div className="text-[8px] font-mono text-gray-500 uppercase">ORDER VOLUME</div>
-                                <div className="text-[10.5px] font-bold text-white mt-1 line-clamp-1">{selectedInq.specs.orderVol}</div>
-                              </div>
-                              <div className="bg-[#050506] border border-[#1e1e24] p-3 rounded-lg">
-                                <div className="text-[8px] font-mono text-gray-500 uppercase">SPECS DETAILS</div>
-                                <div className="text-[10.5px] font-bold text-white mt-1 line-clamp-1">{selectedInq.specs.requestedSpecs}</div>
-                              </div>
-                              <div className="bg-[#050506] border border-[#1e1e24] p-3 rounded-lg">
-                                <div className="text-[8px] font-mono text-gray-500 uppercase">TARGET DELIVERY</div>
-                                <div className="text-[10.5px] font-bold text-white mt-1 line-clamp-1 font-mono text-[#e5a93b]">{selectedInq.targetDelivery}</div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Original RFP Inquiry text */}
-                          <div>
-                            <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest block mb-3">ORIGINAL INQUIRY TEXT</span>
-                            <div className="bg-[#050506] border border-[#1e1e24] rounded-lg p-5 relative">
-                              <span className="absolute right-4 top-3 text-[#e5a93b]/20 font-black text-6xl pointer-events-none select-none font-serif">“</span>
-                              <p className="text-[11.5px] text-gray-300 font-mono leading-relaxed whitespace-pre-line text-left">
-                                {selectedInq.originalText}
-                              </p>
-                            </div>
-                          </div>
-
+                      ))}
+                      
+                      {products.filter(p => p.b2bCategory?.toLowerCase().includes(activeSchoolTab) || p.title.toLowerCase().includes(activeSchoolTab)).length === 0 && (
+                        <div className="col-span-2 text-center py-12 border border-dashed border-[#1a273b]/30 bg-[#0a121e]/30 rounded-lg text-gray-500 text-xs">
+                          No specific products loaded. Use the config panel to add new lab items.
                         </div>
+                      )}
+                  </div>
+                </div>
 
-                        {/* Interactive internal operational notes log */}
-                        <div className="p-6 border-t border-[#1e1e24] bg-[#09090b]/30 space-y-3">
-                          <div className="flex items-center justify-between">
-                            <label className="block text-[9.5px] font-mono text-gray-400 uppercase tracking-wider">
-                              Internal Operational Notes
-                            </label>
-                            <button 
-                              onClick={handleSaveNotes}
-                              className="px-3 py-1 bg-[#161619] border border-gray-800 hover:border-[#e5a93b] text-gray-300 hover:text-white rounded text-[9.5px] font-bold uppercase tracking-wider transition-all"
-                            >
-                              Save Notes
-                            </button>
-                          </div>
-                          <textarea
-                            rows={2}
-                            placeholder="Add operational notes here..."
-                            value={currentNotes}
-                            onChange={(e) => setCurrentNotes(e.target.value)}
-                            className="w-full bg-[#050506] border border-[#1e1e24] focus:border-[#e5a93b]/30 rounded p-3 text-xs text-white outline-none resize-none placeholder-gray-700"
-                          ></textarea>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-20 text-gray-600 font-mono text-xs">
-                        Select an institutional inquiry from the list.
+                {/* Right Category and Form Config */}
+                <div className="space-y-6">
+                  
+                  {/* Form 1: Add Lab Product */}
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 p-6 rounded-lg space-y-4">
+                    <div>
+                      <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-1">Add School Lab Product</h4>
+                      <p className="text-[11px] text-gray-500">Append items directly to {activeSchoolTab} categories.</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <input 
+                        type="text" 
+                        value={newProdName}
+                        onChange={(e) => setNewProdName(e.target.value)}
+                        placeholder="Product Name" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <input 
+                          type="text" 
+                          value={newProdSKU}
+                          onChange={(e) => setNewProdSKU(e.target.value)}
+                          placeholder="SKU Code" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                        />
+                        <input 
+                          type="number" 
+                          value={newProdPrice}
+                          onChange={(e) => setNewProdPrice(e.target.value)}
+                          placeholder="Price (INR)" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                        />
                       </div>
-                    )}
+                      <input 
+                        type="text" 
+                        value={newProdCategory}
+                        onChange={(e) => setNewProdCategory(e.target.value)}
+                        placeholder={`Category (Default: ${activeSchoolTab.toUpperCase()})`} 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
 
+                      <button 
+                        onClick={() => handleAddProduct("school", activeSchoolTab)}
+                        className="w-full py-2.5 bg-[#e5a93b] hover:bg-[#c9922e] text-black font-extrabold text-xs rounded transition-all mt-2"
+                      >
+                        CONFIRM ADDITION
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Form 2: Category Builder */}
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 p-6 rounded-lg space-y-4">
+                    <div>
+                      <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-1">Add School Category</h4>
+                      <p className="text-[11px] text-gray-500">Insert custom organizational nodes.</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <input 
+                        type="text" 
+                        value={newCatName}
+                        onChange={(e) => setNewCatName(e.target.value)}
+                        placeholder="e.g. Microbiology deck" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                      <button 
+                        onClick={() => handleAddCategory("school")}
+                        className="w-full py-2 bg-white/5 hover:bg-white/10 text-white font-bold text-xs rounded border border-white/10 transition-all"
+                      >
+                        ADD NODE
+                      </button>
+
+                      <div className="pt-2">
+                        <div className="text-[10px] text-gray-500 font-mono uppercase mb-2">Existing categories:</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {categories.school.map(cat => (
+                            <span key={cat} className="text-[10px] bg-[#101c2e] border border-[#1a273b] text-gray-400 px-2 py-0.5 rounded">
+                              {cat}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                 </div>
-              </motion.div>
-            )}
 
-          </AnimatePresence>
+              </div>
 
-        </main>
-      </div>
+            </div>
+          )}
 
-      {/* 4. MARGIN CALCULATION QUOTE BUILDER MODAL */}
-      <AnimatePresence>
-        {isQuoteModalOpen && selectedInq && (
-          <div className="fixed inset-0 bg-black/85 flex items-center justify-center z-50 p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0c0c0e] border border-[#1e1e24] rounded-xl p-6 w-full max-w-[550px] shadow-2xl relative text-left"
-            >
+          {/* ==================== D. COLLEGES SECTOR ==================== */}
+          {activeSector === "colleges" && (
+            <div className="space-y-8 animate-fadeIn">
               
-              {/* Close Button */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Left side colleges catalog */}
+                <div className="lg:col-span-2 space-y-6">
+                  
+                  {/* Category Filter Title */}
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 px-6 py-4 rounded-lg flex justify-between items-center">
+                    <h3 className="font-bold text-white text-sm">
+                      UNIVERSITY LABS SUITES & HIGH-PRECISION CATALOG
+                    </h3>
+                    <span className="text-xs text-gray-400">
+                      {products.filter(p => p.sku?.includes("COL") || p.title.includes("Analytical") || p.title.includes("Arm")).length} Items Found
+                    </span>
+                  </div>
+
+                  {/* Listings Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products.slice(0, 8).map(prod => (
+                      <div key={prod.id} className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg space-y-3">
+                        <div className="flex justify-between items-start">
+                          <span className="text-[10px] font-mono bg-white/5 border border-white/10 text-white px-2 py-0.5 rounded font-bold">
+                            {prod.sku || "KE-COL-SKU"}
+                          </span>
+                          <span className="text-xs text-gray-500 font-mono">MOQ: {prod.moq || 2}</span>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-white">{prod.title}</h4>
+                          <p className="text-xs text-gray-400 mt-1 line-clamp-2">{prod.description}</p>
+                        </div>
+                        <div className="flex justify-between items-center pt-2 border-t border-[#1a273b]/30">
+                          <div>
+                            <div className="text-[9px] text-gray-500">University Contract Cost</div>
+                            <div className="text-sm font-bold text-[#8bceff]">₹{prod.price}</div>
+                          </div>
+                          <span className="text-[10px] bg-[#8bceff]/10 border border-[#8bceff]/20 text-[#8bceff] px-2 py-0.5 rounded font-mono font-bold">
+                            ACTIVE SUPPLY
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right side form block */}
+                <div className="space-y-6">
+                  
+                  {/* College Sourcing Form */}
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 p-6 rounded-lg space-y-4">
+                    <div>
+                      <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-1">Add College Product</h4>
+                      <p className="text-[11px] text-gray-500">Add heavy-grade university laboratory appliances.</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <input 
+                        type="text" 
+                        value={newProdName}
+                        onChange={(e) => setNewProdName(e.target.value)}
+                        placeholder="Product Name" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <input 
+                          type="text" 
+                          value={newProdSKU}
+                          onChange={(e) => setNewProdSKU(e.target.value)}
+                          placeholder="SKU Code" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                        />
+                        <input 
+                          type="number" 
+                          value={newProdPrice}
+                          onChange={(e) => setNewProdPrice(e.target.value)}
+                          placeholder="Price (INR)" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                        />
+                      </div>
+                      <select 
+                        value={newProdCategory}
+                        onChange={(e) => setNewProdCategory(e.target.value)}
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-gray-400 text-xs outline-none"
+                      >
+                        {categories.college.map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+
+                      <button 
+                        onClick={() => handleAddProduct("college")}
+                        className="w-full py-2.5 bg-[#e5a93b] hover:bg-[#c9922e] text-black font-extrabold text-xs rounded transition-all mt-2"
+                      >
+                        CREATE ENTRY
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* College Categories List */}
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 p-6 rounded-lg space-y-4">
+                    <div>
+                      <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-1">Add College Category</h4>
+                      <p className="text-[11px] text-gray-500">Insert custom organizational nodes.</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <input 
+                        type="text" 
+                        value={newCatName}
+                        onChange={(e) => setNewCatName(e.target.value)}
+                        placeholder="e.g. Laser optics deck" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                      <button 
+                        onClick={() => handleAddCategory("college")}
+                        className="w-full py-2 bg-white/5 hover:bg-white/10 text-white font-bold text-xs rounded border border-white/10 transition-all"
+                      >
+                        ADD NODE
+                      </button>
+
+                      <div className="pt-2">
+                        <div className="text-[10px] text-gray-500 font-mono uppercase mb-2">College Tenders categories:</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {categories.college.map(cat => (
+                            <span key={cat} className="text-[10px] bg-[#101c2e] border border-[#1a273b] text-gray-400 px-2 py-0.5 rounded">
+                              {cat}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================== E. RESEARCH SECTOR (IMAGE 1 EXACT DESIGN) ==================== */}
+          {activeSector === "research" && (
+            <div className="space-y-6 animate-fadeIn">
+              
+              {/* Header Status Bar (From image 1) */}
+              <div className="flex justify-between items-center bg-[#0a121e] border border-[#1a273b]/40 px-6 py-3 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                  <span className="text-[10px] font-mono text-gray-400 uppercase tracking-wider">
+                    SYSTEM STATUS: OPTIMIZED | LAST SYNC: {new Date().toLocaleTimeString()} UTC
+                  </span>
+                </div>
+                <div className="flex gap-4 font-mono text-[10px]">
+                  <div>TOTAL ASSETS: <span className="text-white font-bold">14,208</span></div>
+                  <div>ACTIVE RUNS: <span className="text-[#e5a93b] font-bold">83</span></div>
+                </div>
+              </div>
+
+              {/* Asset Charts and maintenance cycle (split 2/3 and 1/3) */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Left Side: Asset Utilization Bar Chart */}
+                <div className="lg:col-span-2 bg-[#0a121e] border border-[#1a273b]/30 p-6 rounded-lg flex flex-col h-72">
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <h4 className="text-sm font-bold text-white uppercase tracking-wider">Asset Utilization</h4>
+                      <p className="text-[10px] text-gray-500">Real-time throughput analysis across all research sectors.</p>
+                    </div>
+                    <span className="text-[9px] font-mono bg-white/5 border border-white/10 px-2 py-0.5 rounded text-gray-400">
+                      LAST 24 HOURS
+                    </span>
+                  </div>
+
+                  {/* CSS Bar Chart */}
+                  <div className="flex-1 flex items-end justify-between gap-4 px-2 relative">
+                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                      <div className="border-t border-white/5 w-full"></div>
+                      <div className="border-t border-white/5 w-full"></div>
+                      <div className="border-t border-white/5 w-full"></div>
+                    </div>
+                    
+                    <div className="w-full flex flex-col items-center gap-2 relative z-10">
+                      <div className="w-full bg-[#1b2533] hover:bg-[#e5a93b]/80 h-24 rounded-t transition-colors cursor-pointer"></div>
+                      <span className="text-[8px] font-mono text-gray-500 uppercase">Sector 1</span>
+                    </div>
+                    <div className="w-full flex flex-col items-center gap-2 relative z-10">
+                      <div className="w-full bg-[#e5a93b] h-36 rounded-t shadow-[0_0_10px_rgba(229,169,59,0.2)] cursor-pointer"></div>
+                      <span className="text-[8px] font-mono text-gray-500 uppercase">Sector 2</span>
+                    </div>
+                    <div className="w-full flex flex-col items-center gap-2 relative z-10">
+                      <div className="w-full bg-[#1b2533] hover:bg-[#e5a93b]/80 h-20 rounded-t transition-colors cursor-pointer"></div>
+                      <span className="text-[8px] font-mono text-gray-500 uppercase">Sector 3</span>
+                    </div>
+                    <div className="w-full flex flex-col items-center gap-2 relative z-10">
+                      <div className="w-full bg-[#1b2533] hover:bg-[#e5a93b]/80 h-32 rounded-t transition-colors cursor-pointer"></div>
+                      <span className="text-[8px] font-mono text-gray-500 uppercase">Sector 4</span>
+                    </div>
+                    <div className="w-full flex flex-col items-center gap-2 relative z-10">
+                      <div className="w-full bg-[#1b2533] hover:bg-[#e5a93b]/80 h-28 rounded-t transition-colors cursor-pointer"></div>
+                      <span className="text-[8px] font-mono text-gray-500 uppercase">Sector 5</span>
+                    </div>
+                    <div className="w-full flex flex-col items-center gap-2 relative z-10">
+                      <div className="w-full bg-[#1b2533] hover:bg-[#e5a93b]/80 h-16 rounded-t transition-colors cursor-pointer"></div>
+                      <span className="text-[8px] font-mono text-gray-500 uppercase">Sector 6</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Side: Maintenance Cycles gauges */}
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-6 rounded-lg flex flex-col justify-between h-72">
+                  <div>
+                    <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Maintenance Cycles</h4>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-gray-400">Critical Calibration</span>
+                          <span className="text-[#ff4d4d] font-bold font-mono">92%</span>
+                        </div>
+                        <div className="w-full bg-[#050b14] h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-[#ff4d4d] h-full" style={{ width: "92%" }}></div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-gray-400">Routine Stackup</span>
+                          <span className="text-orange-400 font-bold font-mono">45%</span>
+                        </div>
+                        <div className="w-full bg-[#050b14] h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-orange-400 h-full" style={{ width: "45%" }}></div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-gray-400">Optimal State</span>
+                          <span className="text-green-400 font-bold font-mono">42%</span>
+                        </div>
+                        <div className="w-full bg-[#050b14] h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-green-400 h-full" style={{ width: "42%" }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 bg-white/5 border border-white/10 rounded flex items-start gap-2">
+                    <ShieldAlert size={14} className="text-[#e5a93b] shrink-0 mt-0.5" />
+                    <span className="text-[10px] text-gray-400 leading-relaxed font-mono">
+                      Next global system audit is in 2005.4 Hours.
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Lower Section: Registry List & Register Asset Form */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Asset Registry List */}
+                <div className="lg:col-span-2 bg-[#0a121e] border border-[#1a273b]/30 rounded-lg p-6 space-y-4">
+                  <div className="flex justify-between items-center pb-3 border-b border-[#1a273b]/40">
+                    <h4 className="text-sm font-bold text-white uppercase tracking-wider">Asset Registry List</h4>
+                    <span className="text-xs text-gray-500 font-mono">{assets.length} Registered Nodes</span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="text-[10px] font-mono text-gray-500 uppercase border-b border-[#1a273b]/30">
+                        <tr>
+                          <th className="py-2.5">Asset / SKU</th>
+                          <th className="py-2.5">Calibration</th>
+                          <th className="py-2.5">Stock Level</th>
+                          <th className="py-2.5">Location</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#1a273b]/20">
+                        {assets.map((ast) => (
+                          <tr key={ast.id} className="hover:bg-white/[0.01]">
+                            <td className="py-3">
+                              <div className="font-bold text-white">{ast.name}</div>
+                              <div className="text-[10px] text-gray-500 font-mono mt-0.5">{ast.sku}</div>
+                            </td>
+                            <td className="py-3">
+                              <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
+                                ast.calibration === "OPTIMIZED" 
+                                  ? "bg-green-500/10 text-green-400 border border-green-500/20" 
+                                  : ast.calibration === "CRITICAL"
+                                  ? "bg-[#ff4d4d]/10 text-[#ff4d4d] border border-[#ff4d4d]/20"
+                                  : "bg-[#e5a93b]/10 text-[#e5a93b] border border-[#e5a93b]/20"
+                              }`}>
+                                {ast.calibration}
+                              </span>
+                            </td>
+                            <td className="py-3">
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold font-mono text-white">{ast.stockLevel}%</span>
+                                <div className="w-16 bg-[#050b14] h-1 rounded overflow-hidden">
+                                  <div className="bg-green-400 h-full" style={{ width: `${ast.stockLevel}%` }}></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-3 text-gray-400 font-mono">{ast.location}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Register Asset Form (Right Side) */}
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 rounded-lg p-6 space-y-4">
+                  <div className="border-b border-[#1a273b]/40 pb-3">
+                    <h4 className="text-sm font-bold text-white uppercase tracking-wider">Register Asset</h4>
+                    <p className="text-[10px] text-gray-500 mt-1">Configure registry entries globally.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-1.5">Asset Name</label>
+                      <input 
+                        type="text" 
+                        value={newAssetName}
+                        onChange={(e) => setNewAssetName(e.target.value)}
+                        placeholder="e.g. Cryogenic Chamber v4" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-1.5">SKU ID</label>
+                        <input 
+                          type="text" 
+                          value={newAssetSKU}
+                          onChange={(e) => setNewAssetSKU(e.target.value)}
+                          placeholder="KE-CC-V4" 
+                          className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-1.5">Department</label>
+                        <select 
+                          value={newAssetDept}
+                          onChange={(e) => setNewAssetDept(e.target.value)}
+                          className="w-full bg-[#050b14] border border-[#1a273b] text-gray-400 rounded px-3 py-2 text-xs outline-none"
+                        >
+                          <option>Biotech</option>
+                          <option>Chemical</option>
+                          <option>Physics</option>
+                          <option>Environmental</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-1.5">Critical Stock Qty</label>
+                      <input 
+                        type="number" 
+                        value={newAssetStock}
+                        onChange={(e) => setNewAssetStock(e.target.value)}
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                    </div>
+
+                    <button 
+                      onClick={handleRegisterAsset}
+                      className="w-full py-3 bg-[#e5a93b] hover:bg-[#c9922e] text-black font-extrabold text-xs uppercase tracking-wider rounded transition-all mt-2"
+                    >
+                      CONFIRM REGISTRATION
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================== F. COMMERCIAL LABS ==================== */}
+          {activeSector === "commercial" && (
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Stat Row */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Completed Test Bookings</div>
+                  <div className="text-2xl font-black text-white mt-1">1,248 Tests</div>
+                </div>
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Active Test Queue</div>
+                  <div className="text-2xl font-black text-[#e5a93b] mt-1">15 In Progress</div>
+                </div>
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Service Revenue</div>
+                  <div className="text-2xl font-black text-white mt-1">₹4,82,500.00</div>
+                </div>
+                <div className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg">
+                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Utilization Rate</div>
+                  <div className="text-2xl font-black text-green-400 mt-1">82.5%</div>
+                </div>
+              </div>
+
+              {/* Service Management */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Commercial Services List */}
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="bg-[#0a121e] border border-[#1a273b]/40 px-6 py-4 rounded-lg flex justify-between items-center">
+                    <h3 className="font-bold text-white text-sm">Active Test Packages & Services</h3>
+                    <span className="text-xs text-gray-400">{commercialTests.length} Analysis Packages</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {commercialTests.map(svc => (
+                      <div key={svc.id} className="bg-[#0a121e] border border-[#1a273b]/30 p-5 rounded-lg flex justify-between items-center">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-mono bg-white/5 border border-white/10 text-white px-2 py-0.5 rounded">
+                              {svc.code}
+                            </span>
+                            <span className="text-xs text-gray-500 font-mono">{svc.category}</span>
+                          </div>
+                          <h4 className="text-sm font-bold text-white">{svc.serviceName}</h4>
+                          <div className="text-xs text-gray-400">Standard turnaround: <span className="text-white font-bold">{svc.turnaround}</span></div>
+                        </div>
+
+                        <div className="text-right space-y-2">
+                          <div className="text-xs text-gray-500">Service Fee</div>
+                          <div className="text-base font-black text-[#e5a93b]">₹{svc.price.toLocaleString()}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Svc Form panel */}
+                <div className="bg-[#0a121e] border border-[#1a273b]/40 p-6 rounded-lg space-y-4 h-max">
+                  <div>
+                    <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-1">Create Lab Service</h4>
+                    <p className="text-[11px] text-gray-500">Monetize testing services dynamically.</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <input 
+                      type="text" 
+                      value={newServiceName}
+                      onChange={(e) => setNewServiceName(e.target.value)}
+                      placeholder="e.g. Water Quality & Metal Testing" 
+                      className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <input 
+                        type="text" 
+                        value={newServiceCode}
+                        onChange={(e) => setNewServiceCode(e.target.value)}
+                        placeholder="SVC-Code" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                      <input 
+                        type="number" 
+                        value={newServicePrice}
+                        onChange={(e) => setNewServicePrice(e.target.value)}
+                        placeholder="Cost (INR)" 
+                        className="w-full bg-[#050b14] border border-[#1a273b] rounded px-3 py-2 text-white text-xs outline-none" 
+                      />
+                    </div>
+                    <select 
+                      value={newServiceTime}
+                      onChange={(e) => setNewServiceTime(e.target.value)}
+                      className="w-full bg-[#050b14] border border-[#1a273b] text-gray-400 rounded px-3 py-2 text-xs outline-none"
+                    >
+                      <option>24-48 Hours</option>
+                      <option>2-3 Days</option>
+                      <option>3-5 Days</option>
+                      <option>5-7 Days</option>
+                    </select>
+
+                    <button 
+                      onClick={handleAddCommercialTest}
+                      className="w-full py-2.5 bg-[#e5a93b] hover:bg-[#c9922e] text-black font-extrabold text-xs rounded transition-all mt-2"
+                    >
+                      MONETIZE SERVICE
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* ==================== G. UNIFIED ENQUIRY CENTER ==================== */}
+          {activeSector === "enquiries" && (
+            <div className="space-y-6 animate-fadeIn">
+              
+              {/* Filter controls */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[#0a121e] border border-[#1a273b]/40 px-6 py-4 rounded-lg">
+                <div className="relative w-full md:w-80">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <input 
+                    type="text" 
+                    placeholder="Search by ID, client or location..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-[#050b14] border border-[#1a273b] rounded pl-9 pr-4 py-2 text-white text-xs outline-none"
+                  />
+                </div>
+
+                <div className="flex gap-2 w-full md:w-auto">
+                  {["All", "Pending", "Under Review", "Approved", "Closed"].map(st => (
+                    <button
+                      key={st}
+                      onClick={() => setStatusFilter(st)}
+                      className={`px-3.5 py-1.5 rounded text-[11px] font-bold uppercase transition-all ${
+                        statusFilter === st 
+                          ? "bg-[#e5a93b] text-black" 
+                          : "bg-white/5 text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      {st}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Inquiry Table list */}
+              <div className="bg-[#0a121e] border border-[#1a273b]/40 rounded-lg overflow-hidden">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#0e1624] text-[10px] font-mono text-gray-400 uppercase border-b border-[#1a273b]/30">
+                    <tr>
+                      <th className="p-4">Inquiry Code</th>
+                      <th className="p-4">Client / Institution</th>
+                      <th className="p-4">Sector Type</th>
+                      <th className="p-4">Requirement Details</th>
+                      <th className="p-4">Estimated Value</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#1a273b]/20">
+                    {filteredInquiries.map(inq => (
+                      <tr key={inq.id} className="hover:bg-white/[0.01] transition-all">
+                        <td className="p-4">
+                          <span className="font-mono font-bold text-white">{inq.id}</span>
+                          <div className="text-[10px] text-gray-500 mt-1">
+                            {new Date(inq.submittedAt).toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="font-bold text-white">{inq.clientName}</div>
+                          <div className="text-[10px] text-gray-500 flex items-center gap-1 mt-0.5">
+                            <MapPin size={10} className="text-[#e5a93b]" /> {inq.location || "Online"}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
+                            inq.sector === "B2B" ? "bg-purple-500/10 text-purple-400" :
+                            inq.sector === "School" ? "bg-[#e5a93b]/10 text-[#e5a93b]" :
+                            inq.sector === "College" ? "bg-[#8bceff]/10 text-[#8bceff]" :
+                            inq.sector === "Research" ? "bg-green-500/10 text-green-400" :
+                            "bg-orange-500/10 text-orange-400"
+                          }`}>
+                            {inq.sector}
+                          </span>
+                          {inq.subSector && <div className="text-[9px] text-gray-500 mt-1 font-mono">{inq.subSector}</div>}
+                        </td>
+                        <td className="p-4 max-w-xs truncate text-gray-400">
+                          {inq.items}
+                        </td>
+                        <td className="p-4 font-bold text-white font-mono">
+                          ₹{inq.value.toLocaleString()}
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                            inq.status === "Approved" ? "bg-green-500/10 text-green-400 border border-green-500/20" :
+                            inq.status === "Under Review" ? "bg-[#8bceff]/10 text-[#8bceff] border border-[#8bceff]/20" :
+                            inq.status === "Closed" ? "bg-white/5 text-gray-400 border border-white/10" :
+                            "bg-[#e5a93b]/10 text-[#e5a93b] border border-[#e5a93b]/20"
+                          }`}>
+                            {inq.status.toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="p-4 text-center">
+                          <button 
+                            onClick={() => setSelectedInquiry(inq)}
+                            className="bg-[#101c2e] hover:bg-[#e5a93b] hover:text-black border border-[#1a273b] px-3 py-1 rounded text-[11px] font-bold transition-all"
+                          >
+                            Inspect Detail
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    
+                    {filteredInquiries.length === 0 && (
+                      <tr>
+                        <td colSpan={7} className="text-center py-12 text-gray-500 text-xs">
+                          No sourcing inquiries found matching criteria.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          )}
+
+        </div>
+
+      </main>
+
+      {/* 3. UINIFIED INQUIRY DETAIL MODAL / DRAWER */}
+      {selectedInquiry && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#0a121e] border border-[#1a273b] rounded-xl w-full max-w-2xl p-6 relative animate-zoomIn space-y-6 shadow-2xl">
+            
+            {/* Modal Header */}
+            <div className="flex justify-between items-center border-b border-[#1a273b]/40 pb-4">
+              <div>
+                <span className="text-[9px] font-mono text-[#e5a93b] uppercase tracking-widest font-black">
+                  Inquiry Detail Inspection
+                </span>
+                <h3 className="text-lg font-black text-white mt-1">
+                  RFQ ID: {selectedInquiry.id}
+                </h3>
+              </div>
               <button 
-                onClick={() => setIsQuoteModalOpen(false)} 
-                className="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors"
-                disabled={quoteExporting}
+                onClick={() => setSelectedInquiry(null)}
+                className="text-gray-500 hover:text-white"
               >
-                ✕
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Client Name</div>
+                  <div className="text-sm font-bold text-white">{selectedInquiry.clientName}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Sourcing Sector</div>
+                  <div className="text-xs text-gray-300 font-bold">
+                    {selectedInquiry.sector} {selectedInquiry.subSector ? `- ${selectedInquiry.subSector}` : ""}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Contact Email</div>
+                  <div className="text-xs text-gray-400 font-mono">{selectedInquiry.contactEmail}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Contact Phone</div>
+                  <div className="text-xs text-gray-400 font-mono">{selectedInquiry.contactPhone}</div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Estimated Tender Value</div>
+                  <div className="text-sm font-black text-[#e5a93b] font-mono">₹{selectedInquiry.value.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Shipping Location / Site Location</div>
+                  <div className="text-xs text-gray-400">{selectedInquiry.location || "Not Provided"}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase font-mono text-gray-500 mb-1">Requirement Overview</div>
+                  <div className="text-xs text-white bg-[#050b14] border border-[#1a273b] p-3 rounded font-mono">
+                    {selectedInquiry.items}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Inquiry Message */}
+            <div className="bg-[#050b14] border border-[#1a273b] p-4 rounded text-xs">
+              <div className="text-[10px] uppercase font-mono text-gray-500 mb-2">Detailed Sourcing Requirements / Cover Letter</div>
+              <p className="text-gray-300 leading-relaxed max-h-40 overflow-y-auto whitespace-pre-wrap">
+                {selectedInquiry.message}
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-4 border-t border-[#1a273b]/40">
+              
+              {/* Status Updater */}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono text-gray-500 uppercase">Set Status:</span>
+                <div className="flex bg-[#050b14] border border-[#1a273b] p-1 rounded gap-1">
+                  {(["Pending", "Under Review", "Approved", "Closed"] as const).map(st => (
+                    <button
+                      key={st}
+                      onClick={() => handleInquiryStatusChange(selectedInquiry.id, st)}
+                      className={`px-2.5 py-1 rounded text-[9px] font-bold uppercase transition-all ${
+                        selectedInquiry.status === st
+                          ? "bg-[#e5a93b] text-black"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      {st}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* WhatsApp follow up action */}
+              <button 
+                onClick={() => triggerWhatsAppFollowUp(selectedInquiry)}
+                className="w-full md:w-auto px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center gap-2 shadow-lg transition-all"
+              >
+                <Zap size={14} />
+                <span>FOLLOW-UP VIA WHATSAPP</span>
               </button>
 
-              {/* Modal Title */}
-              <div className="border-b border-[#1e1e24] pb-4 mb-6">
-                <span className="text-[8px] font-mono text-[#e5a93b] border border-[#e5a93b]/30 px-2 py-0.5 rounded bg-[#e5a93b]/5 uppercase tracking-widest font-black">
-                  GENERATIVE QUOTE BUILDER
-                </span>
-                <h3 className="text-lg font-black text-white mt-2 uppercase tracking-wide">
-                  Generate Quote for Sourcing
-                </h3>
-                <div className="text-[10px] text-gray-500 font-mono mt-0.5">Inquiry ID: {selectedInq.id} ({selectedInq.clientName})</div>
-              </div>
+            </div>
 
-              {/* Automated Margin calculations display */}
-              <div className="space-y-4">
-                
-                <div className="bg-[#050506] border border-[#1e1e24] p-4 rounded-lg space-y-2">
-                  <div className="text-[9px] font-mono text-gray-500 uppercase border-b border-[#1e1e24]/60 pb-2 mb-2">
-                    Automated Margin & Discount Matrix
-                  </div>
-
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-gray-400">Base Wholesale Value</span>
-                    <span className="font-mono text-white">₹{selectedInq.value.toLocaleString("en-IN")}</span>
-                  </div>
-
-                  {/* Dynamic Tier Discount calculation */}
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-emerald-400">Tier Sourcing Discount ({selectedInq.clientTier === "Tier 1 Client" ? "10%" : "5%"})</span>
-                    <span className="font-mono text-emerald-400 font-bold">
-                      -₹{(selectedInq.value * (selectedInq.clientTier === "Tier 1 Client" ? 0.1 : 0.05)).toLocaleString("en-IN")}
-                    </span>
-                  </div>
-
-                  {/* Manual adjustment value */}
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-[#e5a93b]">Selected Adjustment Margin ({customMargin}%)</span>
-                    <span className="font-mono text-[#e5a93b] font-bold">
-                      +₹{(selectedInq.value * (customMargin / 100)).toLocaleString("en-IN")}
-                    </span>
-                  </div>
-
-                  {/* Proposed total calculation */}
-                  <div className="flex justify-between items-center border-t border-[#1e1e24] pt-2.5 mt-2.5">
-                    <span className="text-xs font-bold text-white">PROPOSED FINAL QUOTE</span>
-                    <span className="text-base font-black font-mono text-[#e5a93b] tracking-wider">
-                      ₹{(
-                        selectedInq.value - 
-                        (selectedInq.value * (selectedInq.clientTier === "Tier 1 Client" ? 0.1 : 0.05)) +
-                        (selectedInq.value * (customMargin / 100))
-                      ).toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Adjustment slider */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-[9.5px] font-mono text-gray-400 uppercase">
-                    <span>Adjustment Margin (%)</span>
-                    <span className="text-[#e5a93b] font-bold font-mono">{customMargin}%</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="2" 
-                    max="25" 
-                    value={customMargin}
-                    onChange={(e) => setCustomMargin(parseInt(e.target.value))}
-                    className="w-full h-1 bg-[#1b1b1f] rounded-lg appearance-none cursor-pointer accent-[#e5a93b]"
-                    disabled={quoteExporting}
-                  />
-                  <div className="flex justify-between text-[8px] font-mono text-gray-600">
-                    <span>MIN (2%)</span>
-                    <span>DEF (12%)</span>
-                    <span>MAX (25%)</span>
-                  </div>
-                </div>
-
-                {/* Additional sourcing terms */}
-                <div className="space-y-1.5">
-                  <label className="block text-[9.5px] font-mono text-gray-400 uppercase">
-                    Additional Sourcing Terms (Optional)
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="e.g. Free door-step logistics, 18% ITC credit statement, dispatch within 7 days..."
-                    value={additionalTerms}
-                    onChange={(e) => setAdditionalTerms(e.target.value)}
-                    className="w-full bg-[#050506] border border-[#1e1e24] focus:border-[#e5a93b]/40 rounded p-2.5 text-xs text-white outline-none resize-none placeholder-gray-700"
-                    disabled={quoteExporting}
-                  ></textarea>
-                </div>
-
-              </div>
-
-              {/* Action buttons */}
-              <div className="flex justify-end gap-3 mt-6 border-t border-[#1e1e24] pt-4">
-                <button 
-                  onClick={() => setIsQuoteModalOpen(false)}
-                  className="px-4 py-2 text-xs font-bold text-gray-500 hover:text-white transition-colors"
-                  disabled={quoteExporting}
-                >
-                  Cancel
-                </button>
-                
-                <button
-                  onClick={triggerQuoteGeneration}
-                  className="px-5 py-2.5 bg-[#e5a93b] hover:bg-[#c9922f] text-black font-bold text-xs uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2 min-w-[170px]"
-                  disabled={quoteExporting}
-                >
-                  {quoteExporting ? (
-                    <>
-                      <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                      <span>Computing Margins...</span>
-                    </>
-                  ) : quoteExportDone ? (
-                    <>
-                      <Check size={14} strokeWidth={2.5} />
-                      <span>PDF Exported!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Download size={14} />
-                      <span>Export & Send Quote</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-            </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
 
     </div>
   );
