@@ -58,15 +58,6 @@ app.post('/api/upload', (req: Request, res: Response) => {
 });
 
 // API Routes
-app.use('/api/products', (req: Request, res: Response, next) => {
-  if (mongoose.connection.readyState !== 1) {
-    res.status(503).json({
-      message: 'MongoDB is not connected. Start MongoDB locally or set MONGO_URI in your backend .env file.'
-    });
-    return;
-  }
-  next();
-});
 app.use('/api/products', productRoutes);
 
 // --- Resolve Frontend Path ---

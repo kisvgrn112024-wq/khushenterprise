@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import argparse
 import mimetypes
 import base64
 import json
@@ -13,7 +14,7 @@ try:
 except ImportError:
     OpenAI = None
 
-# API Configuration
+# API Configuration Defaults
 DEFAULT_API_URL = "http://localhost:5000"
 FIXED_PRICE = 999.00
 DEFAULT_FOLDER = "ke aur online listing"
@@ -102,7 +103,6 @@ def generate_ai_metadata(openai_client, image_path, base_name):
         return data.get("title"), data.get("description"), data.get("bulk_specs")
     except Exception as e:
         print(f"  [AI Warning] OpenAI generation failed: {e}. Falling back to filename parser.")
-        # Fallback
         title = clean_name_from_path(image_path)
         description = f"High-precision {title} manufactured to industrial standards."
         bulk_specs = "Packaged in standard secure shockproof crates."
@@ -140,13 +140,20 @@ def push_product_to_db(api_url, product_data):
     return False
 
 def main():
+    parser = argparse.ArgumentParser(description="Khush Enterprises Catalog Listing Automation Wizard")
+    parser.add_argument("--api-url", default=DEFAULT_API_URL, help="Backend API server URL")
+    parser.add_argument("--folder", default=None, help="Path to images directory")
+    parser.add_argument("--openai-key", default=None, help="OpenAI API key")
+    parser.add_argument("--non-interactive", action="store_true", help="Run without prompts (uses fallbacks & defaults)")
+    args = parser.parse_args()
+
     print("=" * 60)
     print("      KHUSH ENTERPRISES LISTING AUTOMATION WIZARD")
     print("=" * 60)
     
-    # 1. Ask for OpenAI Key (Optional)
-    openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    if not openai_key:
+    # 1. Resolve OpenAI API Key
+    openai_key = args.openai_key or os.environ.get("OPENAI_API_KEY", "").strip()
+    if not openai_key and not args.non-interactive:
         print("Tip: You can set the OPENAI_API_KEY environment variable to use AI metadata generation.")
         openai_key = input("Enter OpenAI API Key (or press Enter to skip and use offline generator): ").strip()
         
@@ -159,42 +166,53 @@ def main():
             print("⚠ 'openai' library is not installed. Falling back to local offline mode.")
             
     # 2. Configure Backend Server URL
-    api_url = input(f"Enter Backend API Server URL (Default: {DEFAULT_API_URL}): ").strip()
-    if not api_url:
-        api_url = DEFAULT_API_URL
+    api_url = args.api_url or DEFAULT_API_URL
+    if not api_url and not args.non-interactive:
+        api_url = input(f"Enter Backend API Server URL (Default: {DEFAULT_API_URL}): ").strip() or DEFAULT_API_URL
         
     # Check server availability
     print(f"Connecting to backend at {api_url}...")
     try:
-        test_res = requests.get(f"{api_url}/api/products", timeout=5)
+        requests.get(f"{api_url}/api/products", timeout=5)
         print("✔ Connected to backend server successfully.")
     except Exception:
-        print("⚠ WARNING: Cannot connect to the server. Please verify the Express backend is running on Port 5000.")
-        choice = input("Would you like to run the script in simulated dry-run mode? (y/n): ").lower()
-        if choice != 'y':
-            sys.exit(1)
+        print("⚠ WARNING: Cannot connect to the server. Please verify the Express backend is running.")
+        if not args.non-interactive:
+            choice = input("Would you like to run in simulated dry-run mode? (y/n): ").lower()
+            if choice != 'y':
+                sys.exit(1)
+        else:
+            print("Running in simulated dry-run mode since server is unreachable and --non-interactive is set.")
             
     # 3. Locate Sourcing Folder
-    search_paths = [
+    search_paths = []
+    if args.folder:
+        search_paths.append(args.folder)
+    search_paths.extend([
         DEFAULT_FOLDER,
         FALLBACK_FOLDER,
         os.path.join("..", DEFAULT_FOLDER),
         os.path.join("..", FALLBACK_FOLDER)
-    ]
+    ])
     
     selected_folder = None
     for path in search_paths:
-        if os.path.exists(path) and os.path.isdir(path):
+        if path and os.path.exists(path) and os.path.isdir(path):
             selected_folder = path
             break
             
     if not selected_folder:
-        print(f"\n[Folder Error] Could not find folder: '{DEFAULT_FOLDER}' in local directory.")
-        selected_folder = input("Please enter the custom absolute or relative path to your images folder: ").strip()
-        if not selected_folder or not os.path.exists(selected_folder):
-            print("Error: Invalid directory path. Exiting.")
+        if not args.non-interactive:
+            print(f"\n[Folder Error] Could not find default folder: '{DEFAULT_FOLDER}'")
+            selected_folder = input("Please enter the path to your images folder: ").strip()
+        else:
+            print(f"Error: Folder '{DEFAULT_FOLDER}' not found. Exiting.")
             sys.exit(1)
             
+    if not selected_folder or not os.path.exists(selected_folder):
+        print("Error: Invalid directory path. Exiting.")
+        sys.exit(1)
+        
     print(f"✔ Scanning folder: '{selected_folder}'")
     
     # Find all images
@@ -224,7 +242,6 @@ def main():
         # 2. Upload to backend
         uploaded_url = upload_image_to_backend(api_url, base64_str, filename, mime_type)
         if not uploaded_url:
-            # Local fallback URL if upload fails
             uploaded_url = "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&q=80&w=400"
             print("  -> Upload failed, using fallback placeholder image URL.")
         else:
@@ -257,7 +274,6 @@ def main():
             variant_title = f"{title} (Set of {set_size})"
             variant_sku = f"KE-{hashlib.md5(img_path.encode()).hexdigest()[:6].upper()}-S{set_size}"
             
-            # Combine generated specs and the set specific configuration
             full_description = f"{description}\n\n[Pack Configuration]: Contains exactly {set_size} unit(s) of the item. Perfect for institutional and enterprise labs.\n\n[Bulk Sourcing Specs]: {bulk_specs}"
             
             product_payload = {
@@ -279,7 +295,6 @@ def main():
                 "aiManualEnabled": True,
                 "bulkPrice": FIXED_PRICE * 0.9,
                 "moq": set_size,
-                # Storefront visibility settings
                 "product_status": "active",
                 "edited_by_admin": True,
                 "isB2BVisible": True,
@@ -293,7 +308,7 @@ def main():
                 
         success_count += 1
         print("-" * 40)
-        time.sleep(0.5) # Prevent overloading backend
+        time.sleep(0.1) # Prevents overloading backend
         
     print("=" * 60)
     print("                   AUTOMATION SUMMARY")
