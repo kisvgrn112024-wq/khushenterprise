@@ -3,6 +3,8 @@ import {
   getProducts, 
   getProductById, 
   createProduct, 
+  updateProduct,
+  deleteProduct,
   purgePlaceholders, 
   bulkCreateProducts 
 } from '../controllers/productController';
@@ -15,6 +17,9 @@ router.route('/bulk').post(bulkCreateProducts);
 
 // Basic product CRUD routes
 router.route('/').get(getProducts).post(createProduct);
-router.route('/:id').get(getProductById);
+router.route('/:id')
+  .get(getProductById)
+  .put(updateProduct)
+  .delete(deleteProduct);
 
 export default router;

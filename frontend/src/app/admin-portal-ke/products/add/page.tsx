@@ -208,12 +208,14 @@ function AddEditProductForm() {
 
     // Try posting to backend API first
     try {
-      const POST_API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-        ? 'http://localhost:5000/api/products' 
-        : '/api/products';
-        
-      await fetch(POST_API_URL, {
-        method: 'POST',
+      const BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : '';
+      const url = editId ? `${BASE_URL}/api/products/${editId}` : `${BASE_URL}/api/products`;
+      const method = editId ? 'PUT' : 'POST';
+
+      await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productPayload)
       });

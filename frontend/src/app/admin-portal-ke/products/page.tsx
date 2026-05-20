@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Search, Filter, Download, Trash2, FlaskConical, Microscope, Scale, Pipette, Glasses, Flame, Package, Image as ImageIcon, Edit2 } from "lucide-react";
+import { Plus, Search, Filter, Download, Trash2, FlaskConical, Microscope, Scale, Pipette, Glasses, Flame, Package, Image as ImageIcon, Edit2, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getProducts, Product } from "@/lib/products";
@@ -73,7 +73,10 @@ export default function AdminProductsPage() {
       localStorage.setItem("ke_products", JSON.stringify(updated));
       window.dispatchEvent(new Event("products-updated"));
       // Sync delete with backend
-      fetch(`/api/products/${id}`, { method: 'DELETE' }).catch(err => console.log("Offline mode: deleted locally"));
+      const BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : '';
+      fetch(`${BASE_URL}/api/products/${id}`, { method: 'DELETE' }).catch(err => console.log("Offline mode: deleted locally"));
     }
   };
 
@@ -115,6 +118,9 @@ export default function AdminProductsPage() {
               className="bg-[#111111] border border-white/10 focus:border-[#8bceff]/50 text-xs text-white pl-8 pr-4 py-2.5 rounded w-64 outline-none transition-colors" 
             />
           </div>
+          <Link href="/admin-portal-ke/products/bulk" className="bg-[#1a1a1a] hover:bg-[#2a2a2a] text-white border border-white/10 font-bold px-5 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-wider cursor-pointer">
+            <FileSpreadsheet size={16} /> Bulk Listing
+          </Link>
           <Link href="/admin-portal-ke/products/add" className="bg-brand-yellow hover:bg-[#e6a800] text-black font-bold px-5 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-wider cursor-pointer">
             <Plus size={16} strokeWidth={2.5} /> Add Product
           </Link>

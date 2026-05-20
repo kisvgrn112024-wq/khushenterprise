@@ -117,7 +117,10 @@ export default function BulkUploadPage() {
 
           // Optional: bulk POST to backend server
           try {
-            await fetch('/api/products/bulk', {
+            const BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+              ? 'http://localhost:5000' 
+              : '';
+            await fetch(`${BASE_URL}/api/products/bulk`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ products: newProducts })
