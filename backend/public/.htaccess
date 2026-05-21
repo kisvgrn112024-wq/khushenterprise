@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Exclude real files and directories from rewrites
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2. Rewrite URLs without extensions to .html if the file exists
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html -f
+  RewriteRule ^(.*)$ $1.html [L]
+
+  # 3. Rewrite nested paths if .html file exists (e.g., /admin-portal-ke/products)
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.*)$ $1.html [L]
+
+  # 4. Serve index.html if a subdirectory contains it
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}/index.html -f
+  RewriteRule ^(.*)$ $1/index.html [L]
+</IfModule>

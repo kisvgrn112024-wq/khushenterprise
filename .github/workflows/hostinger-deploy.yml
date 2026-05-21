@@ -45,7 +45,7 @@ jobs:
           
       # 5. Deploy to Hostinger via FTP
       # This pushes the built 'out' folder directly to Hostinger's public_html
-      # Using dangerous-clean-slate to fully overwrite old files
+      # Setting dangerous-clean-slate to false to protect user-uploaded files
       - name: Sync to Hostinger public_html
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -54,7 +54,9 @@ jobs:
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           local-dir: ./frontend/out/
           server-dir: ./public_html/
-          dangerous-clean-slate: true
+          dangerous-clean-slate: false
+          exclude: |
+            **/uploads/**
           
   deploy-backend:
     name: Restart Backend Server (Optional)

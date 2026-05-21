@@ -5,6 +5,8 @@ node_modules/
 .env
 .env.local
 .env.*.local
+.env.deploy
+deploy-credentials.json
 
 # IDE
 .vscode/
@@ -29,6 +31,7 @@ backend/dist/
 
 # Temporary files and scripts
 temp/
+scratch/
 git_backup.txt
 generate-products.js
 npx -v/
