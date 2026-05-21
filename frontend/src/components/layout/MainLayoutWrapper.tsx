@@ -13,7 +13,7 @@ export default function MainLayoutWrapper({ children }: { children: React.ReactN
   const pathname = usePathname();
   const { viewMode, isInitialized } = useViewMode();
 
-  const isAdminRoute = pathname.startsWith("/admin-portal-ke") || pathname === "/secure-portal-access";
+  const isAdminRoute = pathname ? (pathname.startsWith("/admin-portal-ke") || pathname === "/secure-portal-access") : false;
 
   if (!isInitialized) {
     return (

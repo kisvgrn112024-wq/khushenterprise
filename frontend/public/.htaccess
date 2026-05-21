@@ -2,20 +2,24 @@
   RewriteEngine On
   RewriteBase /
 
-  # 1. Exclude real files and directories from rewrites
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
-
-  # 2. Rewrite URLs without extensions to .html if the file exists
+  # 1. If the requested URL with .html extension exists, serve it
+  # (e.g. /secure-portal-access -> /secure-portal-access.html, /admin-portal-ke/products -> /admin-portal-ke/products.html)
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html -f
   RewriteRule ^(.*)$ $1.html [L]
 
-  # 3. Rewrite nested paths if .html file exists (e.g., /admin-portal-ke/products)
-  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^(.*)$ $1.html [L]
+  # 2. If it has a trailing slash and removing it matches a .html file
+  # (e.g. /secure-portal-access/ -> /secure-portal-access.html)
+  RewriteCond %{REQUEST_URI} ^/(.+)/$
+  RewriteCond %{DOCUMENT_ROOT}/%1.html -f
+  RewriteRule ^(.*)/$ %1.html [L]
 
-  # 4. Serve index.html if a subdirectory contains it
+  # 3. Serve index.html if it exists inside a subdirectory
+  # (e.g. /some-dir/ -> /some-dir/index.html)
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}/index.html -f
   RewriteRule ^(.*)$ $1/index.html [L]
+
+  # 4. Exclude real files and directories from further rewrites (like assets/images)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
 </IfModule>
