@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import Jimp from 'jimp';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 // @ts-ignore
@@ -29,7 +30,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use('/uploads', express.static(uploadsDir));
 
 // Image Upload Endpoint (multipart file upload using Multer)
-app.post('/api/upload', upload.single('image'), (req: Request, res: Response) => {
+app.post('/api/upload', upload.single('image'), async (req: Request, res: Response) => {
   try {
     // Multer stores the file and provides file info in req.file
     const file = (req as any).file;
@@ -37,9 +38,25 @@ app.post('/api/upload', upload.single('image'), (req: Request, res: Response) =>
       res.status(400).json({ error: 'No file uploaded' });
       return;
     }
-    const filename = file.filename;
-    // Return the static asset URL
-    res.json({ url: `/uploads/${filename}` });
+    // Convert uploaded image to PNG using Jimp
+    const originalPath = file.path;
+    const baseName = file.originalname.replace(/\.[^/.]+$/, ''); // strip extension
+    const pngFileName = `img_${Date.now()}_${baseName}.png`;
+    const pngPath = path.join(uploadsDir, pngFileName);
+    try {
+      const image = await Jimp.read(originalPath);
+      await image.writeAsync(pngPath);
+      // Delete the original uploaded file (if different extension)
+      if (originalPath !== pngPath) {
+        fs.unlinkSync(originalPath);
+      }
+    } catch (convErr) {
+      console.error('Image conversion error:', convErr);
+      // If conversion fails, fallback to original file
+      return res.status(500).json({ error: 'Failed to convert image to PNG' });
+    }
+    // Return the static asset URL for the PNG
+    res.json({ url: `/uploads/${pngFileName}` });
   } catch (error: any) {
     console.error('Upload failed:', error);
     res.status(500).json({ error: 'Image upload failed', details: error.message });

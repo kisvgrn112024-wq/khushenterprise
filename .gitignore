@@ -24,3 +24,4 @@ backend/dist/
 
 # Misc
 *.zip
+backend/public/uploads/
