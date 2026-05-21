@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
+import { useViewMode } from "@/context/ViewModeContext";
 
 const IconMap: Record<string, React.ElementType> = {
   Microscope,
@@ -25,6 +26,7 @@ const ITEMS_PER_PAGE = 4;
 export default function Home() {
   const allProducts = useProducts();
   const { addToCart, toggleWishlist, wishlist } = useStore();
+  const { viewMode } = useViewMode();
 
   // Filter and Category state
   const [selectedCategory, setSelectedCategory] = useState("All Products");
@@ -103,10 +105,10 @@ export default function Home() {
         <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-cyan-500/5 blur-[100px] rounded-full pointer-events-none"></div>
 
-        <div className="container mx-auto px-4 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className={`container mx-auto px-4 lg:px-8 relative z-10 grid gap-12 items-center ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-12'}`}>
           
           {/* Hero Left Content */}
-          <div className="lg:col-span-6 space-y-6">
+          <div className={`${viewMode === 'mobile' ? 'space-y-6' : 'lg:col-span-6 space-y-6'}`}>
             <div className="inline-flex items-center gap-2 border border-[#8bceff]/20 bg-[#8bceff]/5 text-[#8bceff] text-[10px] font-black tracking-widest px-3.5 py-1.5 rounded-full uppercase">
               <span>★</span> LABORATORY EQUIPMENT
             </div>
@@ -135,7 +137,7 @@ export default function Home() {
           </div>
 
           {/* Hero Right Image - Clean Cinematic Display */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end">
+          <div className={`${viewMode === 'mobile' ? 'flex justify-center' : 'lg:col-span-6 flex justify-center lg:justify-end'}`}>
             <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0d111a] p-1.5 group">
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
               <div className="absolute inset-0 bg-[#8bceff]/5 mix-blend-overlay z-10 rounded-2xl"></div>
@@ -152,10 +154,10 @@ export default function Home() {
 
       {/* 2. DYNAMIC SIDEBAR & PRODUCT GRID SECTION */}
       <section className="py-16 container mx-auto px-4 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-10">
+        <div className={`flex gap-10 ${viewMode === 'mobile' ? 'flex-col' : 'flex-col lg:flex-row'}`}>
           
           {/* LEFT SIDEBAR: Categories & Filters */}
-          <aside className="w-full lg:w-64 shrink-0 space-y-8 bg-[#0b0d14]/40 p-6 rounded-xl border border-white/5 h-fit">
+          <aside className={`w-full shrink-0 space-y-8 bg-[#0b0d14]/40 p-6 rounded-xl border border-white/5 h-fit ${viewMode === 'mobile' ? '' : 'lg:w-64'}`}>
             
             {/* CATEGORIES LIST */}
             <div>
@@ -248,7 +250,7 @@ export default function Home() {
             </div>
 
             {/* Product Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+            <div className={`grid gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3'}`}>
               <AnimatePresence mode="popLayout">
                 {paginatedProducts.map((product, idx) => {
                   const IconComponent = IconMap[product.icon] || Package;

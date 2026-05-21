@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import ChatWidget from "@/components/shared/ChatWidget";
 import { StoreProvider } from "@/context/StoreContext";
-import CartDrawer from "@/components/store/CartDrawer";
+import { ViewModeProvider } from "@/context/ViewModeContext";
+import MainLayoutWrapper from "@/components/layout/MainLayoutWrapper";
 
 export const metadata: Metadata = {
   title: "Khush Enterprises - Scientific Laboratory Equipment",
@@ -23,13 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-background text-foreground font-sans">
+        <ViewModeProvider>
           <StoreProvider>
-            <Header />
-            {children}
-            <Footer />
-            <ChatWidget />
-            <CartDrawer />
+            <MainLayoutWrapper>
+              {children}
+            </MainLayoutWrapper>
           </StoreProvider>
+        </ViewModeProvider>
       </body>
     </html>
   );

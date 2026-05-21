@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useViewMode } from "@/context/ViewModeContext";
 
 export default function Footer() {
   const pathname = usePathname();
+  const { viewMode } = useViewMode();
 
   if (pathname?.startsWith("/admin-portal-ke")) {
     return null;
@@ -13,7 +15,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#0b0c10] pt-16 pb-8 border-t border-white/5 text-gray-400 text-xs">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className={`grid gap-12 mb-12 ${
+          viewMode === "mobile" ? "grid-cols-1" : "grid-cols-1 md:grid-cols-4"
+        }`}>
           
           {/* Column 1: Brand & Contact Info */}
           <div className="space-y-6">
@@ -87,7 +91,9 @@ export default function Footer() {
           
         </div>
 
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-gray-500 uppercase tracking-wider">
+        <div className={`border-t border-white/5 pt-8 flex items-center justify-between gap-4 text-[10px] text-gray-500 uppercase tracking-wider ${
+          viewMode === "mobile" ? "flex-col text-center" : "flex-col md:flex-row"
+        }`}>
           <p>© 2024 Khushi Enterprise Laboratory Aspected in Moderm Explorer. All Rights Reserved.</p>
           <div className="flex gap-2">
             <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors cursor-pointer">★</span>

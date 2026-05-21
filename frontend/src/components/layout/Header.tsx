@@ -3,20 +3,25 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { Search, Heart, ShoppingCart, User, Mic, Camera, Loader2, BotMessageSquare, AlertCircle } from "lucide-react";
+import { Search, Heart, ShoppingCart, User, Mic, Camera, Loader2, BotMessageSquare, Menu, X, ChevronDown } from "lucide-react";
 import { getProducts } from "@/lib/products";
 import { useStore } from "@/context/StoreContext";
+import { useViewMode } from "@/context/ViewModeContext";
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { cart, wishlist, setIsCartOpen } = useStore();
+  const { viewMode } = useViewMode();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [userSession, setUserSession] = useState<any>(null);
   const [isBulkDropdownOpen, setIsBulkDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isMobileBulkOpen, setIsMobileBulkOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -95,6 +100,7 @@ export default function Header() {
     e.preventDefault();
     if (searchQuery.trim()) {
       setIsSearchFocused(false);
+      setIsMobileSearchOpen(false);
       executeSmartRoute(searchQuery);
     }
   };
@@ -121,16 +127,16 @@ export default function Header() {
         {/* Top Row: Logo, Search, Icons */}
         <div className="flex items-center justify-between gap-6 mb-4">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-3">
-            <img src="/logo.png" alt="KE" className="w-9 h-9 object-contain" />
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-xl md:text-2xl font-black text-white tracking-wider">KHUSH</span>
-              <span className="text-lg md:text-xl font-bold text-white tracking-widest mt-1">ENTERPRISES</span>
+          <Link href="/" className="flex-shrink-0 flex items-center gap-2 md:gap-3">
+            <img src="/logo.png" alt="KE" className="w-8 h-8 md:w-9 md:h-9 object-contain" />
+            <div className="flex items-baseline gap-1 md:gap-1.5">
+              <span className="text-lg md:text-2xl font-black text-white tracking-wider">KHUSH</span>
+              <span className="text-sm md:text-xl font-bold text-white tracking-widest mt-1">ENTERPRISES</span>
             </div>
           </Link>
 
-          {/* Smart Search Bar */}
-          <div className="relative w-full max-w-2xl hidden md:block">
+          {/* Smart Search Bar (Desktop) */}
+          <div className={`relative w-full max-w-2xl ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}>
             <form onSubmit={handleSearchSubmit} className="flex items-center bg-[#1a1a1a] rounded overflow-hidden h-10 border border-white/10 focus-within:border-white/30 transition-all px-4">
               <input 
                 type="text" 
@@ -197,8 +203,19 @@ export default function Header() {
             )}
           </div>
 
-          {/* Icons */}
-          <div className="flex items-center gap-6 text-white ml-2 flex-shrink-0">
+          {/* Icons & Mobile controls */}
+          <div className="flex items-center gap-3.5 md:gap-6 text-white ml-2 flex-shrink-0">
+            {/* Search Icon (Mobile View Only) */}
+            <button
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              className={`hover:text-[#8bceff] transition-colors p-1 cursor-pointer ${
+                viewMode === "mobile" ? "block" : "md:hidden block"
+              }`}
+              title="Search"
+            >
+              <Search size={20} />
+            </button>
+
             {/* Live Chat link shortcut */}
             <Link href="/my-orders" className="hover:text-[#8bceff] transition-colors relative" title="Consignment Assistant Desk">
               <BotMessageSquare size={20} />
@@ -211,7 +228,7 @@ export default function Header() {
               )}
             </Link>
             
-            <button onClick={() => setIsCartOpen(true)} className="hover:text-gray-300 transition-colors relative">
+            <button onClick={() => setIsCartOpen(true)} className="hover:text-gray-300 transition-colors relative cursor-pointer">
                <ShoppingCart size={20} />
                {cart.length > 0 && (
                  <span className="absolute -top-2 -right-2 bg-brand-yellow text-black font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{cart.reduce((a,c) => a + c.quantity, 0)}</span>
@@ -236,11 +253,53 @@ export default function Header() {
                 )}
               </div>
             </div>
+
+            {/* Hamburger Button (Mobile View Only) */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`hover:text-[#8bceff] transition-colors p-1 cursor-pointer ${
+                viewMode === "mobile" ? "block" : "md:hidden block"
+              }`}
+              title="Menu"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
 
-        {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center justify-center gap-8 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        {/* Mobile Search Bar (Expandable, Mobile View Only) */}
+        {isMobileSearchOpen && (
+          <div className={`mb-4 w-full ${viewMode === "mobile" ? "block" : "md:hidden block"}`}>
+            <form onSubmit={handleSearchSubmit} className="flex items-center bg-[#1a1a1a] rounded overflow-hidden h-10 border border-white/10 focus-within:border-white/30 transition-all px-4">
+              <input 
+                type="text" 
+                placeholder={isListening ? "Listening with AI voice desk..." : "Search laboratory equipment..."} 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                className={`flex-1 bg-transparent text-sm text-white placeholder-gray-400 outline-none w-full ${isListening ? "text-red-400 font-bold" : ""}`}
+                disabled={isListening}
+              />
+              
+              <div className="flex items-center gap-3 ml-2 flex-shrink-0">
+                <button 
+                  type="button" 
+                  onClick={startSpeechRecognition}
+                  className={`transition-colors p-1 rounded hover:bg-white/5 ${isListening ? "text-red-500 animate-pulse" : "text-gray-400 hover:text-white"}`}
+                >
+                  <Mic size={16} />
+                </button>
+                <button type="submit" className="text-gray-400 hover:text-white">
+                  <Search size={18} />
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Navigation Links (Desktop, Hidden in Mobile View) */}
+        <nav className={`${viewMode === "mobile" ? "hidden" : "hidden md:flex"} items-center justify-center gap-8 text-xs font-semibold text-gray-400 uppercase tracking-wider`}>
           <Link href="/catalogue" className="hover:text-white transition-colors border-b-2 border-transparent hover:border-brand-yellow text-white pb-1">Catalogue</Link>
           
           {/* Bulk Orders Dropdown */}
@@ -311,6 +370,106 @@ export default function Header() {
           </Link>
         </nav>
       </div>
+
+      {/* Mobile Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[1000] flex justify-end">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+
+          {/* Drawer content */}
+          <div className="relative w-64 max-w-xs bg-[#111111] border-l border-white/5 h-full p-6 flex flex-col z-50 shadow-2xl overflow-y-auto">
+            <div className="flex items-center justify-between pb-4 border-b border-white/5 mb-6">
+              <div className="flex items-center gap-2">
+                <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
+                <span className="text-xs font-black text-white tracking-widest uppercase">Navigation</span>
+              </div>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-gray-400 hover:text-white cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <nav className="flex flex-col gap-3 text-xs font-semibold uppercase tracking-wider text-gray-300">
+              <Link 
+                href="/catalogue" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-white py-2.5 border-b border-white/5 block"
+              >
+                ★ Catalogue
+              </Link>
+
+              {/* Bulk Orders Collapsible */}
+              <div className="flex flex-col">
+                <button 
+                  onClick={() => setIsMobileBulkOpen(!isMobileBulkOpen)}
+                  className="flex items-center justify-between py-2.5 border-b border-white/5 text-left w-full cursor-pointer hover:text-white"
+                >
+                  <span>Bulk Orders</span>
+                  <span className={`text-[10px] transform transition-transform ${isMobileBulkOpen ? "rotate-180" : ""}`}>▼</span>
+                </button>
+                
+                {isMobileBulkOpen && (
+                  <div className="pl-4 py-2 flex flex-col gap-3 text-[11px] normal-case text-gray-400 border-l border-white/5 ml-2 mt-1">
+                    <Link href="/bulk-orders" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">All Bulk Orders</Link>
+                    <Link href="/bulk-orders?sector=b2b" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">💼 B2B Business</Link>
+                    <Link href="/bulk-orders?sector=institutional&sub=schools" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">🏫 School Lab Solutions</Link>
+                    <Link href="/bulk-orders?sector=institutional&sub=colleges" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">🎓 College Packages</Link>
+                    <Link href="/bulk-orders?sector=institutional&sub=research" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">🔬 Advanced Research Labs</Link>
+                    <Link href="/bulk-orders?sector=commercial" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">🏭 Commercial Labs</Link>
+                  </div>
+                )}
+              </div>
+
+              <Link 
+                href="/products" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-white py-2.5 border-b border-white/5 block"
+              >
+                Products
+              </Link>
+              
+              <Link 
+                href="/reviews" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-white py-2.5 border-b border-white/5 block"
+              >
+                Reviews
+              </Link>
+              
+              <Link 
+                href="/certifications" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-white py-2.5 border-b border-white/5 block"
+              >
+                Certifications
+              </Link>
+              
+              <Link 
+                href="/contact-us" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-white py-2.5 border-b border-white/5 block"
+              >
+                Contact Us
+              </Link>
+
+              <Link 
+                href="/export" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-brand-yellow text-brand-yellow/90 py-2.5 border-b border-white/5 flex items-center justify-between"
+              >
+                <span>Export Centre</span>
+                <span className="bg-brand-yellow text-black text-[8px] font-black px-1.5 py-0.5 rounded-sm">New</span>
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

@@ -54,3 +54,68 @@ body {
 @utility box-glow {
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
+
+/* =======================================================
+   MOBILE VIEW TOGGLE ENGINE GLOBAL RULES (FOR SIMULATOR)
+   ======================================================= */
+
+/* Horizontal Table Scrolling */
+.forced-mobile .overflow-hidden:has(table), 
+.forced-mobile .bg-\[\#161616\]:has(table),
+.forced-mobile .bg-[#1a1a1a]:has(table),
+.forced-mobile div:has(> table) {
+  overflow-x: auto !important;
+  scrollbar-width: thin;
+}
+
+.forced-mobile table {
+  min-width: 650px !important;
+}
+
+/* Stack all dashboard cards and grids in mobile simulator */
+.forced-mobile .grid-cols-2,
+.forced-mobile .grid-cols-3,
+.forced-mobile .grid-cols-4,
+.forced-mobile .grid-cols-5,
+.forced-mobile .md\:grid-cols-2,
+.forced-mobile .md\:grid-cols-3,
+.forced-mobile .md\:grid-cols-4,
+.forced-mobile .lg\:grid-cols-3,
+.forced-mobile .lg\:grid-cols-4,
+.forced-mobile .lg\:grid-cols-12,
+.forced-mobile .xl\:grid-cols-3,
+.forced-mobile .xl\:grid-cols-4 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+/* Fix paddings and text sizes */
+.forced-mobile .p-6,
+.forced-mobile .p-8,
+.forced-mobile .md\:p-8 {
+  padding: 1rem !important;
+}
+
+.forced-mobile .py-16,
+.forced-mobile .py-24,
+.forced-mobile .lg\:py-24 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.forced-mobile .text-4xl,
+.forced-mobile .text-5xl,
+.forced-mobile .text-6xl,
+.forced-mobile .md\:text-5xl,
+.forced-mobile .lg\:text-6xl {
+  font-size: 1.8rem !important;
+  line-height: 2.2rem !important;
+}
+
+.forced-mobile .text-3xl {
+  font-size: 1.4rem !important;
+}
+
+.forced-mobile .text-2xl {
+  font-size: 1.15rem !important;
+}
+
