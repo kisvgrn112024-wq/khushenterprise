@@ -36,8 +36,8 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
-      // Stealth redirect: bounce guessing users to public homepage to mask portal existence
-      router.replace("/");
+      // Redirect unauthenticated admin access to secure login page
+      router.replace("/secure-portal-access");
     }
     setIsMounted(true);
   }, [pathname, router]);
