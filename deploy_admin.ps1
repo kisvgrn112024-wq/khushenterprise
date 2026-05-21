@@ -32,7 +32,7 @@ if (-not $ftpHost -or -not $ftpUser -or -not $ftpPass) {
     Write-Host "No saved credentials found. Please enter details (they will be saved to .env.deploy for future use):" -ForegroundColor Yellow
     $ftpHost = Read-Host "FTP Server (e.g. ftp.khushenterprise.com or IP)"
     $ftpUser = Read-Host "FTP Username"
-    $ftpPass = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR((Read-Host "FTP Password" -AsSecureString)))
+    $ftpPass = Read-Host "FTP Password"
     $ftpProto = Read-Host "Protocol (ftp or ftps) [default: ftp]"
     if (-not $ftpProto) { $ftpProto = "ftp" }
 
