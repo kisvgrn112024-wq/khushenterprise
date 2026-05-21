@@ -46,7 +46,8 @@ npm start
 **Step 5: Access Admin Portal**
 - Homepage: `http://localhost:5000/`
 - Products: `http://localhost:5000/products.html`
-- Admin Panel: `http://localhost:5000/admin-portal-ke.html`
+- Secret Admin Login Entrance: `http://localhost:5000/secure-portal-access` (Password: `admin123`)
+- Admin Panel (requires login first): `http://localhost:5000/admin-portal-ke/products`
 - API: `http://localhost:5000/api/products` (will return JSON product data)
 
 ---
