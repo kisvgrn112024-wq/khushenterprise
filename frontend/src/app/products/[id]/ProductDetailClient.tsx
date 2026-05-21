@@ -34,12 +34,12 @@ export default function ProductDetailClient() {
 
   // Resolve main image URL with fallback to local design mocks
   const mainImageUrl = product.images && product.images.length > 0 
-    ? product.images[0] 
+    ? getImageUrl(product.images[0]) 
     : `/design/images/${product.id}.jpeg`;
 
   // Resolve thumbnail images (either from product.images or fallback)
   const imagesToRender = product.images && product.images.length > 0 
-    ? product.images 
+    ? product.images.map(img => getImageUrl(img)) 
     : [`/design/images/${product.id}.jpeg`, `/design/images/${product.id}.jpeg`, `/design/images/${product.id}.jpeg`];
 
   return (
@@ -265,7 +265,7 @@ export default function ProductDetailClient() {
                     </div>
                     <Link href={`/products/${rp.id}`} className="h-48 flex items-center justify-center p-4 bg-gradient-to-b from-[#1a1a1a] to-[#111111] relative overflow-hidden cursor-pointer">
                       <img 
-                        src={rpImageUrl} 
+                        src={getImageUrl(rpImageUrl)} 
                         alt={rp.title} 
                         className="max-w-full max-h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity group-hover:scale-105 duration-500" 
                         onError={(e) => {

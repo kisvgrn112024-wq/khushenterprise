@@ -258,7 +258,18 @@ const saveProducts = (products: Product[]) => {
     window.dispatchEvent(new Event('products-updated'));
   }
 };
-
+export const getImageUrl = (path: string): string => {
+  if (!path) return '';
+  // Return absolute URLs or data URIs unchanged
+  if (/^(https?:|data:)/i.test(path)) {
+    return path;
+  }
+  // In development, prepend localhost backend URL
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    return `http://localhost:5000${path}`;
+  }
+  return path;
+};
 export const updateProduct = (id: string, updates: Partial<Product>) => {
   const current = getProducts();
   const updated = current.map(p => p.id === id ? { ...p, ...updates } : p);

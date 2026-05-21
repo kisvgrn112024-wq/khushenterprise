@@ -83,7 +83,7 @@ export default function LatestProducts() {
                   
                   {product.images && product.images.length > 0 ? (
                     <img 
-                      src={product.images[0]} 
+                      src={getImageUrl(product.images[0])} 
                       alt={product.title} 
                       className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500 opacity-95 mix-blend-screen" 
                     />

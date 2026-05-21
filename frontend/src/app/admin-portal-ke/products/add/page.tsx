@@ -117,6 +117,35 @@ function AddEditProductForm() {
   };
 
   const handleFiles = (files: FileList) => {
+  const allowed = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+  Array.from(files).forEach(file => {
+    if (!allowed.includes(file.type)) {
+      alert(`Invalid file type: ${file.type}. Allowed: PNG, JPEG, JPG, WEBP.`);
+      return;
+    }
+    // Create preview URL for immediate display
+    const preview = URL.createObjectURL(file);
+    setLocalImages(prev => [...prev, preview].slice(0, 10));
+
+    // Determine API endpoint based on environment
+    const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+      ? 'http://localhost:5000/api/upload'
+      : '/api/upload';
+    const formData = new FormData();
+    formData.append('image', file);
+    fetch(API_URL, { method: 'POST', body: formData })
+      .then(res => res.json())
+      .then(data => {
+        if (data.url) {
+          // Replace preview with the uploaded image URL
+          setLocalImages(prev => prev.map(img => img === preview ? data.url : img));
+        }
+      })
+      .catch(() => {
+        console.log('Upload failed, retaining preview.');
+      });
+  });
+};
     // Read files as base64 to allow correct server/local storage representation and avoid blob issues
     Array.from(files).forEach(file => {
       const reader = new FileReader();

@@ -7,6 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import connectDB from './config/db';
 import productRoutes from './routes/productRoutes';
+import { upload } from './config/multer';
 
 dotenv.config();
 
@@ -27,28 +28,16 @@ if (!fs.existsSync(uploadsDir)) {
 }
 app.use('/uploads', express.static(uploadsDir));
 
-// Image Upload Endpoint (handles base64 image saving)
-app.post('/api/upload', (req: Request, res: Response) => {
+// Image Upload Endpoint (multipart file upload using Multer)
+app.post('/api/upload', upload.single('image'), (req: Request, res: Response) => {
   try {
-    const { image, name, type } = req.body;
-    if (!image) {
-      res.status(400).json({ error: 'No image data provided' });
+    // Multer stores the file and provides file info in req.file
+    const file = (req as any).file;
+    if (!file) {
+      res.status(400).json({ error: 'No file uploaded' });
       return;
     }
-
-    // Strip out base64 header if exists (e.g. "data:image/png;base64,")
-    const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, 'base64');
-
-    // Create unique safe filename
-    const safeName = (name || 'upload.png').replace(/[^a-zA-Z0-9.\-_]/g, '_');
-    const filename = `img_${Date.now()}_${safeName}`;
-    const filePath = path.join(uploadsDir, filename);
-
-    // Save file
-    fs.writeFileSync(filePath, buffer);
-    console.log(`Image saved to ${filePath}`);
-
+    const filename = file.filename;
     // Return the static asset URL
     res.json({ url: `/uploads/${filename}` });
   } catch (error: any) {

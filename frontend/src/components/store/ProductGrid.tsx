@@ -5,6 +5,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageUrl } from '@/lib/products';
 
 const IconMap: Record<string, React.ElementType> = {
   Microscope,
@@ -50,11 +51,11 @@ export default function ProductGrid() {
                   </div>
                   
                   {product.images && product.images.length > 0 ? (
-                    <img 
-                      src={product.images[0]} 
-                      alt={product.title} 
-                      className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500 opacity-90 mix-blend-screen" 
-                    />
+                        <img 
+                          src={getImageUrl(product.images[0])} 
+                          alt={product.title} 
+                          className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500 opacity-90 mix-blend-screen" 
+                        />
                   ) : (
                     <img 
                       src={`/design/images/${product.id}.jpeg`} 
