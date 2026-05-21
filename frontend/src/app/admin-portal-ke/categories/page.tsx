@@ -93,8 +93,8 @@ export default function CategoriesPage() {
 
     setIsWiping(true);
     try {
-      const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-        ? 'http://localhost:5000/api/products/purge-placeholders' 
+      const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+        ? `http://${window.location.hostname}:5000/api/products/purge-placeholders` 
         : '/api/products/purge-placeholders';
       await fetch(API_URL, { method: 'DELETE' });
     } catch (e) {

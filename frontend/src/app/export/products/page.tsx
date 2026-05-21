@@ -8,6 +8,7 @@ import {
   Package2, FileQuestion, Award, Star, ChevronDown,
   Plane, Ship, RefreshCw,
 } from "lucide-react";
+import { getImageUrl } from "@/lib/products";
 
 // ── Types ─────────────────────────────────────────────
 interface Product {
@@ -257,7 +258,7 @@ export default function ExportProductsPage() {
                   <div className="relative h-44 bg-[#0d0d0d] overflow-hidden">
                     {product.images?.[0] ? (
                       <img
-                        src={product.images[0]}
+                        src={getImageUrl(product.images[0])}
                         alt={product.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
                       />

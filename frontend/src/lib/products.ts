@@ -11,6 +11,7 @@ export type Product = {
   discount?: string | null;
   stock: number;
   // Advanced fields
+  imageUrl?: string;
   images?: string[];
   images360?: string[];
   video?: string | null;
@@ -265,8 +266,8 @@ export const getImageUrl = (path: string): string => {
     return path;
   }
   // In development, prepend localhost backend URL
-  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-    return `http://localhost:5000${path}`;
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return `http://${window.location.hostname}:5000${path}`;
   }
   return path;
 };

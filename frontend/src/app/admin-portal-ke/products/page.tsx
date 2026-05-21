@@ -3,7 +3,7 @@
 import { Plus, Search, Filter, Download, Trash2, FlaskConical, Microscope, Scale, Pipette, Glasses, Flame, Package, Image as ImageIcon, Edit2, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getProducts, Product } from "@/lib/products";
+import { getProducts, Product, getImageUrl } from "@/lib/products";
 import { useDownload } from "@/components/admin/DownloadToast";
 
 const IconMap: Record<string, React.ElementType> = {
@@ -26,8 +26,8 @@ export default function AdminProductsPage() {
   useEffect(() => {
     const fetchDBProducts = async () => {
       try {
-        const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-          ? 'http://localhost:5000/api/products' 
+        const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+          ? `http://${window.location.hostname}:5000/api/products` 
           : '/api/products';
           
         const res = await fetch(API_URL);
@@ -73,8 +73,8 @@ export default function AdminProductsPage() {
       localStorage.setItem("ke_products", JSON.stringify(updated));
       window.dispatchEvent(new Event("products-updated"));
       // Sync delete with backend
-      const BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-        ? 'http://localhost:5000' 
+      const BASE_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+        ? `http://${window.location.hostname}:5000` 
         : '';
       fetch(`${BASE_URL}/api/products/${id}`, { method: 'DELETE' }).catch(err => console.log("Offline mode: deleted locally"));
     }
@@ -194,7 +194,7 @@ export default function AdminProductsPage() {
                   const IconComp = IconMap[prod.icon || ""] || Package;
                   const isOutOfStock = (prod.stock || 0) === 0;
                   const isLowStock = (prod.stock || 0) > 0 && (prod.stock || 0) < 10;
-                  const displayImg = prod.images && prod.images[0] ? prod.images[0] : "";
+                  const displayImg = prod.imageUrl || (prod.images && prod.images[0]) || "";
 
                   return (
                     <tr key={prod.id} className="hover:bg-white/[0.01] transition-colors">
@@ -202,7 +202,7 @@ export default function AdminProductsPage() {
                       <td className="p-4 flex items-center gap-4">
                         <div className="w-12 h-12 rounded bg-[#111111] border border-white/5 flex items-center justify-center shrink-0 overflow-hidden">
                           {displayImg ? (
-                            <img src={displayImg} alt={prod.title} className="w-full h-full object-cover opacity-80" />
+                            <img src={getImageUrl(displayImg)} alt={prod.title} className="w-full h-full object-cover opacity-80" />
                           ) : (
                             <IconComp size={20} className="text-[#8bceff]" />
                           )}

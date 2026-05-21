@@ -6,13 +6,27 @@ import AdminLayout from "@/components/admin/AdminLayout";
 
 export default function AdminPortalLayout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const router = useRouter();
-  const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
+  let router: ReturnType<typeof useRouter> | null = null;
+  let pathname: string | null = null;
+  
+  try {
+    router = useRouter();
+    pathname = usePathname();
+  } catch (e) {
+    // useRouter/usePathname may fail during static export - that's OK
+  }
 
   useEffect(() => {
+    if (!router || !pathname) {
+      setIsMounted(true);
+      return;
+    }
+
     // B2B subroutes are public-facing and bypass admin master auth
     if (pathname.startsWith("/admin-portal-ke/b2b")) {
       setIsAuthenticated(true);
+      setIsMounted(true);
       return;
     }
 
@@ -25,7 +39,18 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
       // Stealth redirect: bounce guessing users to public homepage to mask portal existence
       router.replace("/");
     }
+    setIsMounted(true);
   }, [pathname, router]);
+
+  // During static export, show content; on client, apply auth
+  if (!isMounted) {
+    return <div className="h-screen bg-[#050b14] flex items-center justify-center text-neon-cyan">Initializing...</div>;
+  }
+
+  if (!router || !pathname) {
+    // Static export mode - show content without auth
+    return <AdminLayout>{children}</AdminLayout>;
+  }
 
   if (pathname.startsWith("/admin-portal-ke/b2b")) {
     return <>{children}</>;

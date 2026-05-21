@@ -15,8 +15,8 @@ export function useProducts() {
       setProducts(getProducts());
 
       try {
-        const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-          ? 'http://localhost:5000/api/products'
+        const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? `http://${window.location.hostname}:5000/api/products`
           : '/api/products';
 
         // 3-second timeout so we don't hang when backend is offline

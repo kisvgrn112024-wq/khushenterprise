@@ -10,7 +10,7 @@ import {
   GraduationCap, FlaskConical, Microscope
 } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
-import { Product } from "@/lib/products";
+import { Product, getImageUrl } from "@/lib/products";
 
 // Quick Entry row interface
 interface QuickEntryRow {
@@ -794,7 +794,7 @@ function BulkOrdersContent() {
                       {/* Graphic/Image display */}
                       <div className="bg-[#0e111a] rounded-lg mb-4 h-36 border border-white/5 relative overflow-hidden flex items-center justify-center">
                         {prod.images && prod.images[0] ? (
-                          <img src={prod.images[0]} alt={prod.title} className="w-full h-full object-contain opacity-80 mix-blend-screen p-2 transform group-hover:scale-105 transition-transform duration-500" />
+                          <img src={getImageUrl(prod.images[0])} alt={prod.title} className="w-full h-full object-contain opacity-80 mix-blend-screen p-2 transform group-hover:scale-105 transition-transform duration-500" />
                         ) : (
                           <Package size={48} className="text-gray-700 transform group-hover:scale-105 transition-transform duration-500" strokeWidth={1} />
                         )}

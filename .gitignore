@@ -20,8 +20,15 @@ yarn-debug.log*
 
 # Build artifacts that should be rebuilt on deploy
 frontend/.next/
+frontend/out/
 backend/dist/
 
 # Misc
 *.zip
-backend/public/uploads/
+# backend/public/uploads/
+
+# Temporary files and scripts
+temp/
+git_backup.txt
+generate-products.js
+npx -v/

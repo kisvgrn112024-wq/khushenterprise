@@ -6,7 +6,7 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
 
 // Default initial products matching productsDB in frontend
-const defaultProducts = [
+export const defaultProducts = [
   {
     id: "p1",
     title: "Professional Binocular Microscope",

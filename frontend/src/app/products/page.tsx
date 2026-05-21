@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Product } from "@/lib/products";
+import { Product, getImageUrl } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
 import { Star, ShoppingCart, Heart, Search, FileText, Download, FileSpreadsheet, File as FilePdf, Microscope, Scale, Pipette, Glasses, FlaskConical, Flame, ShieldCheck, Package } from "lucide-react";
@@ -181,7 +181,7 @@ function ProductsContent() {
                      <Link href={`/products/${product.id}`} className="h-48 bg-[#0a0a0a] flex items-center justify-center p-6 border-b border-white/5 relative overflow-hidden cursor-pointer">
                         {product.images && product.images.length > 0 ? (
                           <img 
-                            src={product.images[0]} 
+                            src={getImageUrl(product.images[0])} 
                             alt={product.title} 
                             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 absolute" 
                           />

@@ -62,7 +62,7 @@ body {
 /* Horizontal Table Scrolling */
 .forced-mobile .overflow-hidden:has(table), 
 .forced-mobile .bg-\[\#161616\]:has(table),
-.forced-mobile .bg-[#1a1a1a]:has(table),
+.forced-mobile .bg-\[\#1a1a1a\]:has(table),
 .forced-mobile div:has(> table) {
   overflow-x: auto !important;
   scrollbar-width: thin;

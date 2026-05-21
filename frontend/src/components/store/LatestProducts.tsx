@@ -3,6 +3,7 @@
 import { ShoppingCart, Heart, Package, Microscope, Scale, Pipette, Glasses, FlaskConical, Flame, ArrowRight } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
+import { getImageUrl } from "@/lib/products";
 import Link from "next/link";
 
 const IconMap: Record<string, React.ElementType> = {

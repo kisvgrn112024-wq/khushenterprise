@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { Product } from "@/lib/products";
+import { Product, getImageUrl } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
 import { Star, ShieldCheck, Truck, RotateCcw, Share2, Heart, ShoppingCart, Check, ChevronRight, Package, FileText, Bot } from "lucide-react";

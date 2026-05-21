@@ -2,6 +2,7 @@
 
 import { Plus, Calendar, Clock, Edit2, Trash2, Image as ImageIcon, PenLine, X, Loader2, Save } from "lucide-react";
 import { useState, useEffect } from "react";
+import { getImageUrl } from "@/lib/products";
 
 interface Banner {
   id: string;
@@ -85,8 +86,8 @@ export default function BannersMarketing() {
       reader.onloadend = async () => {
         const base64String = reader.result as string;
         try {
-          const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-            ? 'http://localhost:5000/api/upload' 
+          const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+            ? `http://${window.location.hostname}:5000/api/upload` 
             : '/api/upload';
 
           const res = await fetch(API_URL, {
@@ -295,7 +296,7 @@ export default function BannersMarketing() {
                       <span className="text-xs text-gray-400 font-bold">Uploading file payload...</span>
                     </div>
                   ) : image ? (
-                    <img src={image} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={getImageUrl(image)} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
                     <>
                       <ImageIcon size={24} className="mb-2" />
@@ -343,7 +344,7 @@ export default function BannersMarketing() {
           {banners.map((b) => (
             <div key={b.id} className="bg-[#161616] border border-white/5 rounded-xl overflow-hidden flex flex-col hover:border-white/10 transition-colors">
               <div className="relative h-48 bg-[#111111]">
-                <img src={b.image} alt={b.title} className="w-full h-full object-cover" />
+                <img src={getImageUrl(b.image)} alt={b.title} className="w-full h-full object-cover" />
                 <div className="absolute top-4 right-4 flex gap-2">
                   <span className={`flex items-center gap-1.5 text-[10px] font-bold tracking-widest px-3 py-1 rounded-full text-white backdrop-blur-md ${
                     b.status === "active" ? "bg-[#0c1825] border border-[#8bceff]/20 text-[#8bceff]" :

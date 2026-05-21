@@ -16,7 +16,16 @@ cd ..
 echo.
 echo 2/3: Cleaning Backend Public Directory...
 if not exist "backend\public" mkdir "backend\public"
+if exist "backend\public\uploads" (
+    echo Saving uploads folder...
+    move "backend\public\uploads" "backend\uploads_temp" >nul 2>&1
+)
 del /q /s "backend\public\*" >nul 2>&1
+for /d %%p in ("backend\public\*") do rmdir "%%p" /s /q >nul 2>&1
+if exist "backend\uploads_temp" (
+    echo Restoring uploads folder...
+    move "backend\uploads_temp" "backend\public\uploads" >nul 2>&1
+)
 
 echo.
 echo 3/3: Copying Frontend Build to Backend...

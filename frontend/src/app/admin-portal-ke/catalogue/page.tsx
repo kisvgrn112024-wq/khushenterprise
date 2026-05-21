@@ -3,7 +3,7 @@
 import { Plus, Filter, Download, MoreVertical, FileText, CheckCircle2, Save, X, ToggleLeft, ToggleRight, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDownload } from "@/components/admin/DownloadToast";
-import { getProducts } from "@/lib/products";
+import { getProducts, getImageUrl } from "@/lib/products";
 
 interface Catalogue {
   id: string;
@@ -333,7 +333,7 @@ export default function CatalogueManagement() {
         {catalogues.map((cat) => (
           <div key={cat.id} className="bg-[#161616] border border-white/5 rounded-xl overflow-hidden flex flex-col hover:border-white/10 transition-colors">
             <div className="relative h-48 bg-[#0a0a0a]">
-              <img src={cat.image} alt={cat.title} className="w-full h-full object-cover opacity-80" />
+              <img src={getImageUrl(cat.image)} alt={cat.title} className="w-full h-full object-cover opacity-80" />
               <div className="absolute top-4 right-4 flex gap-1.5">
                 <span className="text-[9px] font-extrabold tracking-widest bg-[#0c1825] border border-[#8bceff]/20 px-2 py-0.5 rounded text-[#8bceff] backdrop-blur-md uppercase">
                   {cat.version}
