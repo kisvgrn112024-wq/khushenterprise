@@ -133,7 +133,7 @@ foreach ($item in $filesToUpload) {
     $count++
     $localPath = $item.Local
     $remotePath = $item.Remote
-    $remoteUrl = "$ftpProto://$ftpHost/public_html/$remotePath"
+    $remoteUrl = "${ftpProto}://${ftpHost}/public_html/${remotePath}"
 
     Write-Host "[$count/$total] Uploading: $remotePath ... " -NoNewline -ForegroundColor Gray
 
@@ -143,7 +143,7 @@ foreach ($item in $filesToUpload) {
         "--ftp-create-dirs",
         "-T", $localPath,
         $remoteUrl,
-        "--user", "$ftpUser:$ftpPass",
+        "--user", "${ftpUser}:${ftpPass}",
         "--silent",
         "--show-error",
         "--fail"

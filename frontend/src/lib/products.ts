@@ -6119,11 +6119,11 @@ export const getProducts = (): Product[] => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length >= productsDB.length) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       } catch (e) {
-        // parsing error, fallback
+        // parsing error, fallback to DB
       }
     }
   }
@@ -6166,19 +6166,26 @@ export const addProductsBulk = (products: Product[]) => {
   saveProducts([...products, ...current]);
 };
 
-// Initialize localStorage on first load or when database is updated
+// Initialize localStorage: merge DB products into existing localStorage
+// preserving any admin edits, just adding any brand-new products from DB
 if (typeof window !== 'undefined') {
   const saved = localStorage.getItem('ke_products');
   if (!saved) {
+    // First load - seed from DB
     localStorage.setItem('ke_products', JSON.stringify(productsDB));
   } else {
     try {
-      const parsed = JSON.parse(saved);
-      if (parsed.length < productsDB.length) {
-        localStorage.setItem('ke_products', JSON.stringify(productsDB));
+      const parsed: Product[] = JSON.parse(saved);
+      // Find DB products not yet in localStorage and add them
+      const savedIds = new Set(parsed.map(p => p.id));
+      const newFromDB = productsDB.filter(p => !savedIds.has(p.id));
+      if (newFromDB.length > 0) {
+        localStorage.setItem('ke_products', JSON.stringify([...parsed, ...newFromDB]));
       }
     } catch (e) {
+      // Corrupt data - re-seed from DB
       localStorage.setItem('ke_products', JSON.stringify(productsDB));
     }
   }
 }
+
