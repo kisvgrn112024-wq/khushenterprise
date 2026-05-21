@@ -244,11 +244,17 @@ export default function Header() {
               {/* Dropdown menu */}
               <div className="absolute top-full mt-2 right-0 w-48 bg-[#1a1a1a] border border-white/10 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-2">
                 {!userSession ? (
-                  <Link href="/account/login" className="block p-2 text-sm text-gray-300 hover:bg-[#2a2a2a] hover:text-white rounded font-medium">Login / Register</Link>
+                  <>
+                    <Link href="/account/login" className="block p-2 text-sm text-gray-300 hover:bg-[#2a2a2a] hover:text-white rounded font-medium">Login / Register</Link>
+                    <div className="h-[1px] bg-white/5 my-1"></div>
+                    <Link href="/secure-portal-access" className="block p-2 text-sm text-gray-400 hover:bg-[#2a2a2a] hover:text-white rounded font-medium">Admin Portal</Link>
+                  </>
                 ) : (
                   <>
                     <div className="px-2 py-1.5 text-[10px] font-bold text-gray-500 uppercase border-b border-white/5 mb-1">{userSession.org}</div>
                     <Link href="/my-orders" className="block p-2 text-sm text-gray-300 hover:bg-[#2a2a2a] hover:text-white rounded font-medium">Consignment Status</Link>
+                    <div className="h-[1px] bg-white/5 my-1"></div>
+                    <Link href="/secure-portal-access" className="block p-2 text-sm text-gray-400 hover:bg-[#2a2a2a] hover:text-white rounded font-medium">Admin Portal</Link>
                   </>
                 )}
               </div>
@@ -456,6 +462,14 @@ export default function Header() {
                 className="hover:text-white py-2.5 border-b border-white/5 block"
               >
                 Contact Us
+              </Link>
+
+              <Link 
+                href="/secure-portal-access" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="hover:text-white py-2.5 border-b border-white/5 block text-gray-400 font-medium"
+              >
+                Admin Portal
               </Link>
 
               <Link 

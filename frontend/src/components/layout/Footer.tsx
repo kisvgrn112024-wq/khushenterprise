@@ -64,6 +64,7 @@ export default function Footer() {
               <li><Link href="/shipping" className="hover:text-white transition-colors">Product Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Termsk conditions</Link></li>
               <li><Link href="/help" className="hover:text-white transition-colors">Chhathhar</Link></li>
+              <li><Link href="/secure-portal-access" className="hover:text-white transition-colors">Admin Portal</Link></li>
             </ul>
           </div>
 
