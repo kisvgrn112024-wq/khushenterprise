@@ -23,41 +23,50 @@ export default function AdminProductsPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const { startDownload } = useDownload();
 
+  const loadAndSetProducts = (prods: Product[]) => {
+    setProducts(prods);
+    const uniqueCats = Array.from(new Set(prods.map(p => p.category).filter(Boolean))) as string[];
+    setCategories(uniqueCats);
+  };
+
   useEffect(() => {
-    const fetchDBProducts = async () => {
+    // STEP 1: Always immediately load ALL products from localStorage/productsDB
+    // This ensures every product listed on the customer site is visible in admin
+    const localProducts = getProducts();
+    loadAndSetProducts(localProducts);
+
+    // STEP 2: Try to fetch from backend API and merge any server-only products
+    const mergeFromAPI = async () => {
       try {
-        const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
-          ? `http://${window.location.hostname}:5000/api/products` 
+        const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? `http://${window.location.hostname}:5000/api/products`
           : '/api/products';
-          
-        const res = await fetch(API_URL);
-        if (!res.ok) throw new Error("Failed to fetch products");
-        const data = await res.json();
-        
-        if (Array.isArray(data) && data.length > 0) {
-          setProducts(data);
-          const uniqueCats = Array.from(new Set(data.map((p: Product) => p.category).filter(Boolean))) as string[];
-          setCategories(uniqueCats);
-        } else {
-          loadFallback();
+
+        const res = await fetch(API_URL, { signal: AbortSignal.timeout(3000) });
+        if (!res.ok) return;
+        const apiData = await res.json();
+
+        if (Array.isArray(apiData) && apiData.length > 0) {
+          // Merge API products with local products (local takes priority for edits)
+          const localProds = getProducts();
+          const localIds = new Set(localProds.map((p: Product) => p.id));
+          const serverOnlyProds = apiData.filter((p: Product) => !localIds.has(p.id));
+          if (serverOnlyProds.length > 0) {
+            const merged = [...localProds, ...serverOnlyProds];
+            loadAndSetProducts(merged);
+          }
         }
-      } catch (err) {
-        console.error("Using offline local mode:", err);
-        loadFallback();
+      } catch {
+        // API offline or timed out — local data already displayed, nothing to do
       }
     };
+    mergeFromAPI();
 
-    const loadFallback = () => {
-      const allProducts = getProducts();
-      setProducts(allProducts);
-      const uniqueCats = Array.from(new Set(allProducts.map(p => p.category).filter(Boolean))) as string[];
-      setCategories(uniqueCats);
+    // STEP 3: Listen for real-time local updates (e.g. product added/edited)
+    const handleLocalUpdate = () => {
+      const updated = getProducts();
+      loadAndSetProducts(updated);
     };
-
-    fetchDBProducts();
-    
-    // Listen for local add/updates
-    const handleLocalUpdate = () => fetchDBProducts();
     window.addEventListener('products-updated', handleLocalUpdate);
     return () => window.removeEventListener('products-updated', handleLocalUpdate);
   }, []);

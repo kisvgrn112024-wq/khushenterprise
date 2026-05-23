@@ -7,6 +7,7 @@ import { Search, Heart, ShoppingCart, User, Mic, Camera, Loader2, BotMessageSqua
 import { getProducts } from "@/lib/products";
 import { useStore } from "@/context/StoreContext";
 import { useViewMode } from "@/context/ViewModeContext";
+import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 
 export default function Header() {
   const pathname = usePathname();
@@ -234,6 +235,7 @@ export default function Header() {
                  <span className="absolute -top-2 -right-2 bg-brand-yellow text-black font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{cart.reduce((a,c) => a + c.quantity, 0)}</span>
                )}
             </button>
+            <div className="ml-4"><ThemeSwitcher /></div>
             
             <div className="relative group cursor-pointer hover:text-gray-300">
               <div className="flex items-center gap-1">

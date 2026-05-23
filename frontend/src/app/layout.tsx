@@ -22,11 +22,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased bg-background text-foreground font-sans">
         <ViewModeProvider>
-          <StoreProvider>
-            <MainLayoutWrapper>
-              {children}
-            </MainLayoutWrapper>
-          </StoreProvider>
+          <ThemeProvider>
+            <StoreProvider>
+              <MainLayoutWrapper>
+                {children}
+              </MainLayoutWrapper>
+            </StoreProvider>
+          </ThemeProvider>
         </ViewModeProvider>
       </body>
     </html>
