@@ -2,7 +2,7 @@
 
 export default function InstitutionalLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-[#121212] text-gray-300 min-h-screen font-sans selection:bg-[#e5a93b] selection:text-black relative">
+    <div className="bg-theme text-theme min-h-screen font-sans selection:bg-theme selection:text-theme relative">
       {/* Background Grid Pattern */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"

@@ -41,16 +41,16 @@ export default function CustomQuotationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] text-gray-300 flex items-center justify-center p-6">
-      <form onSubmit={handleSubmit} className="bg-[#1a1a1a] border border-white/10 rounded-xl p-8 max-w-lg w-full">
-        <h2 className="text-2xl font-black text-white mb-6">Custom Quotation Request</h2>
+    <div className="min-h-screen bg-theme text-theme flex items-center justify-center p-6">
+      <form onSubmit={handleSubmit} className="bg-theme border border-theme/10 rounded-xl p-8 max-w-lg w-full">
+        <h2 className="text-2xl font-black text-theme mb-6">Custom Quotation Request</h2>
         <div className="grid grid-cols-1 gap-4">
           <input
             name="institution"
             value={formData.institution}
             onChange={handleChange}
             placeholder="Institution Name"
-            className="bg-[#0e121a] border border-white/10 focus:border-[#e5a93b] text-white px-4 py-2 rounded w-full"
+            className="bg-theme border border-theme/10 focus:border-theme text-theme px-4 py-2 rounded w-full"
             required
           />
           <input
@@ -58,7 +58,7 @@ export default function CustomQuotationPage() {
             value={formData.department}
             onChange={handleChange}
             placeholder="Department / Division"
-            className="bg-[#0e121a] border border-white/10 focus:border-[#e5a93b] text-white px-4 py-2 rounded w-full"
+            className="bg-theme border border-theme/10 focus:border-theme text-theme px-4 py-2 rounded w-full"
             required
           />
           <input
@@ -66,7 +66,7 @@ export default function CustomQuotationPage() {
             value={formData.contactName}
             onChange={handleChange}
             placeholder="Contact Person"
-            className="bg-[#0e121a] border border-white/10 focus:border-[#e5a93b] text-white px-4 py-2 rounded w-full"
+            className="bg-theme border border-theme/10 focus:border-theme text-theme px-4 py-2 rounded w-full"
             required
           />
           <input
@@ -75,7 +75,7 @@ export default function CustomQuotationPage() {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email Address"
-            className="bg-[#0e121a] border border-white/10 focus:border-[#e5a93b] text-white px-4 py-2 rounded w-full"
+            className="bg-theme border border-theme/10 focus:border-theme text-theme px-4 py-2 rounded w-full"
             required
           />
           <input
@@ -84,7 +84,7 @@ export default function CustomQuotationPage() {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone Number"
-            className="bg-[#0e121a] border border-white/10 focus:border-[#e5a93b] text-white px-4 py-2 rounded w-full"
+            className="bg-theme border border-theme/10 focus:border-theme text-theme px-4 py-2 rounded w-full"
             required
           />
           <textarea
@@ -93,14 +93,14 @@ export default function CustomQuotationPage() {
             onChange={handleChange}
             placeholder="Detailed requirements, specifications, quantities, etc."
             rows={5}
-            className="bg-[#0e121a] border border-white/10 focus:border-[#e5a93b] text-white px-4 py-2 rounded w-full resize-none"
+            className="bg-theme border border-theme/10 focus:border-theme text-theme px-4 py-2 rounded w-full resize-none"
             required
           />
         </div>
         <div className="flex gap-4 mt-6">
           <button
             type="submit"
-            className="flex-1 bg-[#e5a93b] hover:bg-[#d49932] text-black py-2.5 rounded font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            className="flex-1 bg-theme hover:bg-theme text-theme py-2.5 rounded font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
             Submit Request <ArrowRight size={16} />
           </button>
@@ -108,7 +108,7 @@ export default function CustomQuotationPage() {
           <button
             type="button"
             onClick={handleWhatsAppSubmit}
-            className="px-5 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded font-bold flex items-center justify-center gap-2 transition-all transform active:scale-95 cursor-pointer shadow-[0_0_15px_rgba(37,211,102,0.15)]"
+            className="px-5 py-2.5 bg-theme hover:bg-theme text-theme rounded font-bold flex items-center justify-center gap-2 transition-all transform active:scale-95 cursor-pointer shadow-[0_0_15px_rgba(37,211,102,0.15)]"
             title="Submit request via WhatsApp"
           >
             <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

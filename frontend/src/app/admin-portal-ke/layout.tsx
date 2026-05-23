@@ -44,7 +44,7 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
 
   // During static export, show content; on client, apply auth
   if (!isMounted) {
-    return <div className="h-screen bg-[#050b14] flex items-center justify-center text-neon-cyan">Initializing...</div>;
+    return <div className="h-screen bg-theme flex items-center justify-center text-neon-cyan">Initializing...</div>;
   }
 
   if (!router || !pathname) {
@@ -57,7 +57,7 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
   }
 
   if (isAuthenticated === null) {
-    return <div className="h-screen bg-[#050b14] flex items-center justify-center text-neon-cyan">Verifying Access...</div>;
+    return <div className="h-screen bg-theme flex items-center justify-center text-neon-cyan">Verifying Access...</div>;
   }
 
   return isAuthenticated ? <AdminLayout>{children}</AdminLayout> : null;

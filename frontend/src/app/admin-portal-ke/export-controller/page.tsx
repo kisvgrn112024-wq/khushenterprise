@@ -245,7 +245,7 @@ export default function ExportControllerPage() {
       case "PENDING REVIEW":
         return "bg-amber-500/10 text-amber-400 border border-amber-500/20";
       case "PENDING QUOTE":
-        return "bg-[#8bceff]/10 text-[#8bceff] border border-[#8bceff]/20";
+        return "bg-theme/10 text-[#8bceff] border border-theme/20";
     }
   };
 
@@ -307,7 +307,7 @@ export default function ExportControllerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090f] text-gray-300 font-mono relative overflow-hidden select-none bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:30px_30px]">
+    <div className="min-h-screen bg-theme text-theme font-mono relative overflow-hidden select-none bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:30px_30px]">
       
       {/* Glow ambient background highlights */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/5 blur-[120px] rounded-full pointer-events-none"></div>
@@ -316,24 +316,24 @@ export default function ExportControllerPage() {
       <div className="flex flex-col xl:flex-row gap-6">
         
         {/* SUB SIDEBAR: Global Export Control specific menu */}
-        <aside className="w-full xl:w-72 shrink-0 bg-[#0c0e16] border border-white/10 rounded-xl p-5 flex flex-col justify-between">
+        <aside className="w-full xl:w-72 shrink-0 bg-theme border border-theme/10 rounded-xl p-5 flex flex-col justify-between">
           <div className="space-y-6">
             
             {/* Control brand header */}
-            <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+            <div className="flex items-center gap-3 pb-4 border-b border-theme/10">
               <div className="w-8 h-8 rounded bg-amber-500/10 flex items-center justify-center border border-amber-500/30 text-amber-400">
                 <Globe size={18} />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-white uppercase tracking-wider">Khush Admin</h2>
-                <p className="text-[10px] text-gray-500 tracking-wider">Global Export Control</p>
+                <h2 className="text-sm font-bold text-theme uppercase tracking-wider">Khush Admin</h2>
+                <p className="text-[10px] text-theme tracking-wider">Global Export Control</p>
               </div>
             </div>
 
             {/* "+ NEW SHIPMENT" button */}
             <button 
               onClick={() => setIsNewShipmentOpen(true)}
-              className="w-full py-3 bg-[#fbbf24] hover:bg-[#f59e0b] text-black text-xs font-black uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(251,191,36,0.15)]"
+              className="w-full py-3 bg-theme hover:bg-theme text-theme text-xs font-black uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(251,191,36,0.15)]"
             >
               <Plus size={14} strokeWidth={3} />
               <span>+ New Shipment</span>
@@ -346,7 +346,7 @@ export default function ExportControllerPage() {
                 className={`w-full flex items-center justify-between px-3.5 py-3 rounded text-xs uppercase tracking-widest font-bold transition-all border cursor-pointer ${
                   activeSubTab === "inquiries" 
                     ? "bg-amber-500/10 text-amber-400 border-amber-500/25" 
-                    : "text-gray-400 border-transparent hover:text-white hover:bg-white/5"
+                    : "text-theme border-transparent hover:text-theme hover:bg-theme/5"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -361,7 +361,7 @@ export default function ExportControllerPage() {
                 className={`w-full flex items-center justify-between px-3.5 py-3 rounded text-xs uppercase tracking-widest font-bold transition-all border cursor-pointer ${
                   activeSubTab === "catalog" 
                     ? "bg-amber-500/10 text-amber-400 border-amber-500/25" 
-                    : "text-gray-400 border-transparent hover:text-white hover:bg-white/5"
+                    : "text-theme border-transparent hover:text-theme hover:bg-theme/5"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -376,7 +376,7 @@ export default function ExportControllerPage() {
                 className={`w-full flex items-center justify-between px-3.5 py-3 rounded text-xs uppercase tracking-widest font-bold transition-all border cursor-pointer ${
                   activeSubTab === "logistics" 
                     ? "bg-amber-500/10 text-amber-400 border-amber-500/25" 
-                    : "text-gray-400 border-transparent hover:text-white hover:bg-white/5"
+                    : "text-theme border-transparent hover:text-theme hover:bg-theme/5"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -391,7 +391,7 @@ export default function ExportControllerPage() {
                 className={`w-full flex items-center justify-between px-3.5 py-3 rounded text-xs uppercase tracking-widest font-bold transition-all border cursor-pointer ${
                   activeSubTab === "settings" 
                     ? "bg-amber-500/10 text-amber-400 border-amber-500/25" 
-                    : "text-gray-400 border-transparent hover:text-white hover:bg-white/5"
+                    : "text-theme border-transparent hover:text-theme hover:bg-theme/5"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -404,7 +404,7 @@ export default function ExportControllerPage() {
 
           </div>
 
-          <div className="pt-6 mt-6 border-t border-white/5 text-[10px] text-gray-600 space-y-4">
+          <div className="pt-6 mt-6 border-t border-theme/5 text-[10px] text-theme space-y-4">
             <div className="flex items-center justify-between">
               <span>System Node</span>
               <span className="text-emerald-500 font-bold">ONLINE</span>
@@ -417,17 +417,17 @@ export default function ExportControllerPage() {
         </aside>
 
         {/* MAIN DISPLAY VIEWPORT */}
-        <div className="flex-1 bg-[#0b0c14]/40 border border-white/10 rounded-xl p-6 min-h-[600px] flex flex-col">
+        <div className="flex-1 bg-theme/40 border border-theme/10 rounded-xl p-6 min-h-[600px] flex flex-col">
           
           {/* TAB 1: INQUIRIES VIEW */}
           {activeSubTab === "inquiries" && (
             <div className="space-y-6 flex-1 flex flex-col">
               
               {/* Header section with toggle between Overview (Image 2) and Card details (Image 4) */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-white/10">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-theme/10">
                 <div>
                   <span className="text-[10px] text-amber-400 uppercase tracking-widest block mb-1">Global Inventory Management</span>
-                  <h1 className="text-2xl font-bold text-white uppercase tracking-tight">Global Command Center</h1>
+                  <h1 className="text-2xl font-bold text-theme uppercase tracking-tight">Global Command Center</h1>
                 </div>
 
                 <div className="flex gap-2">
@@ -435,8 +435,8 @@ export default function ExportControllerPage() {
                     onClick={() => setInquiriesView("overview")}
                     className={`px-3 py-1.5 rounded text-[11px] font-bold uppercase transition-all cursor-pointer border ${
                       inquiriesView === "overview" 
-                        ? "bg-amber-500 text-black border-amber-500" 
-                        : "border-white/10 hover:bg-white/5"
+                        ? "bg-amber-500 text-theme border-amber-500" 
+                        : "border-theme/10 hover:bg-theme/5"
                     }`}
                   >
                     Overview Panel
@@ -445,8 +445,8 @@ export default function ExportControllerPage() {
                     onClick={() => setInquiriesView("cards")}
                     className={`px-3 py-1.5 rounded text-[11px] font-bold uppercase transition-all cursor-pointer border ${
                       inquiriesView === "cards" 
-                        ? "bg-amber-500 text-black border-amber-500" 
-                        : "border-white/10 hover:bg-white/5"
+                        ? "bg-amber-500 text-theme border-amber-500" 
+                        : "border-theme/10 hover:bg-theme/5"
                     }`}
                   >
                     Inquiry Cards
@@ -459,9 +459,9 @@ export default function ExportControllerPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   
                   {/* Left Column: Active Global Inquiries Table */}
-                  <div className="lg:col-span-8 bg-[#0c0e16] border border-white/10 rounded-xl p-5 space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                      <div className="flex items-center gap-2 text-white font-bold text-xs uppercase">
+                  <div className="lg:col-span-8 bg-theme border border-theme/10 rounded-xl p-5 space-y-4">
+                    <div className="flex items-center justify-between border-b border-theme/5 pb-3">
+                      <div className="flex items-center gap-2 text-theme font-bold text-xs uppercase">
                         <FileText size={16} className="text-amber-400" />
                         <span>Active Global Inquiries</span>
                       </div>
@@ -476,7 +476,7 @@ export default function ExportControllerPage() {
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-xs">
                         <thead>
-                          <tr className="border-b border-white/10 text-gray-500 font-bold">
+                          <tr className="border-b border-theme/10 text-theme font-bold">
                             <th className="py-2.5">REF ID</th>
                             <th className="py-2.5">CLIENT ENTITY</th>
                             <th className="py-2.5">REGION</th>
@@ -486,9 +486,9 @@ export default function ExportControllerPage() {
                         </thead>
                         <tbody>
                           {inquiries.map((inq) => (
-                            <tr key={inq.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                              <td className="py-3 font-bold text-white">{inq.referenceId}</td>
-                              <td className="py-3 text-gray-400">{inq.clientEntity}</td>
+                            <tr key={inq.id} className="border-b border-theme/5 hover:bg-theme/5 transition-colors">
+                              <td className="py-3 font-bold text-theme">{inq.referenceId}</td>
+                              <td className="py-3 text-theme">{inq.clientEntity}</td>
                               <td className="py-3">{inq.region}</td>
                               <td className="py-3 text-amber-400 font-bold">{inq.estVolume}</td>
                               <td className="py-3">
@@ -507,29 +507,29 @@ export default function ExportControllerPage() {
                   <div className="lg:col-span-4 space-y-6">
                     
                     {/* Catalog Health */}
-                    <div className="bg-[#0c0e16] border border-white/10 rounded-xl p-5 space-y-4">
+                    <div className="bg-theme border border-theme/10 rounded-xl p-5 space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-gray-500 uppercase font-black">Catalog Health</span>
+                        <span className="text-[10px] text-theme uppercase font-black">Catalog Health</span>
                         <span className="text-emerald-500 font-bold text-xs uppercase">Nominal</span>
                       </div>
                       <div className="space-y-3">
                         <div>
                           <div className="flex justify-between items-center text-xs mb-1">
-                            <span className="text-white font-bold">98.4%</span>
+                            <span className="text-theme font-bold">98.4%</span>
                             <span className="text-emerald-400 text-[10px] font-bold">▲ +0.2%</span>
                           </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-1 bg-theme/5 rounded-full overflow-hidden">
                             <div className="h-full bg-emerald-500" style={{ width: "98.4%" }}></div>
                           </div>
                         </div>
 
                         <div className="space-y-1.5 pt-2">
                           <div className="flex justify-between items-center text-[10px]">
-                            <span className="text-gray-500">HS Code Verification</span>
+                            <span className="text-theme">HS Code Verification</span>
                             <span className="text-emerald-400 font-bold">100%</span>
                           </div>
                           <div className="flex justify-between items-center text-[10px]">
-                            <span className="text-gray-500">Pricing Parity (Global)</span>
+                            <span className="text-theme">Pricing Parity (Global)</span>
                             <span className="text-amber-400 font-bold">92%</span>
                           </div>
                         </div>
@@ -537,52 +537,52 @@ export default function ExportControllerPage() {
                     </div>
 
                     {/* Recent Dispatches */}
-                    <div className="bg-[#0c0e16] border border-white/10 rounded-xl p-5 space-y-4">
-                      <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                        <span className="text-[10px] text-gray-500 uppercase font-black">Recent Dispatches</span>
+                    <div className="bg-theme border border-theme/10 rounded-xl p-5 space-y-4">
+                      <div className="flex items-center justify-between border-b border-theme/5 pb-2">
+                        <span className="text-[10px] text-theme uppercase font-black">Recent Dispatches</span>
                         <Activity size={14} className="text-amber-400" />
                       </div>
                       <div className="space-y-3 text-[11px]">
                         <div className="flex justify-between items-start gap-2">
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                            <span className="text-white font-bold">SHP-996-GLB</span>
+                            <span className="text-theme font-bold">SHP-996-GLB</span>
                           </div>
-                          <span className="text-gray-600">1h ago</span>
+                          <span className="text-theme">1h ago</span>
                         </div>
-                        <p className="text-gray-400 pl-3.5 leading-tight">Departed Port of Rotterdam</p>
+                        <p className="text-theme pl-3.5 leading-tight">Departed Port of Rotterdam</p>
 
                         <div className="flex justify-between items-start gap-2">
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
-                            <span className="text-white font-bold">ARR-772-FRA</span>
+                            <span className="text-theme font-bold">ARR-772-FRA</span>
                           </div>
-                          <span className="text-gray-600">3h ago</span>
+                          <span className="text-theme">3h ago</span>
                         </div>
-                        <p className="text-gray-400 pl-3.5 leading-tight">In transit to Frankfurt</p>
+                        <p className="text-theme pl-3.5 leading-tight">In transit to Frankfurt</p>
 
                         <div className="flex justify-between items-start gap-2">
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                            <span className="text-white font-bold">SHP-888-DXB</span>
+                            <span className="text-theme font-bold">SHP-888-DXB</span>
                           </div>
-                          <span className="text-gray-600">1d ago</span>
+                          <span className="text-theme">1d ago</span>
                         </div>
-                        <p className="text-gray-400 pl-3.5 leading-tight">Delivered Jebel Ali, UAE</p>
+                        <p className="text-theme pl-3.5 leading-tight">Delivered Jebel Ali, UAE</p>
                       </div>
                     </div>
 
                   </div>
 
                   {/* World Node Graphic Banner */}
-                  <div className="lg:col-span-12 bg-[#0c0e16] border border-white/10 rounded-xl p-5 space-y-3">
-                    <div className="h-28 bg-[#10121d] rounded-lg overflow-hidden border border-white/5 relative flex items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.08),transparent)]">
+                  <div className="lg:col-span-12 bg-theme border border-theme/10 rounded-xl p-5 space-y-3">
+                    <div className="h-28 bg-theme rounded-lg overflow-hidden border border-theme/5 relative flex items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.08),transparent)]">
                       <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center"></div>
-                      <span className="text-white/25 text-[10px] uppercase font-bold tracking-[8px]">LOGISTICS NETWORK VISUALIZER</span>
+                      <span className="text-theme/25 text-[10px] uppercase font-bold tracking-[8px]">LOGISTICS NETWORK VISUALIZER</span>
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] text-gray-500">
+                    <div className="flex items-center gap-2 text-[10px] text-theme">
                       <span className="text-amber-400">●</span>
-                      <span className="font-bold text-gray-400">GLOBAL NODE STATUS: NOMINAL.</span>
+                      <span className="font-bold text-theme">GLOBAL NODE STATUS: NOMINAL.</span>
                       <span>Tracking 1.18k active physical transport assets.</span>
                     </div>
                   </div>
@@ -596,28 +596,28 @@ export default function ExportControllerPage() {
                   
                   {/* Top quick stats cards */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-[#0c0e16] border border-white/10 p-4 rounded-xl flex items-center justify-between">
+                    <div className="bg-theme border border-theme/10 p-4 rounded-xl flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] text-gray-500 uppercase font-black">PENDING REVIEW</span>
-                        <h4 className="text-2xl font-bold text-white mt-1">{metrics.pendingReview}</h4>
+                        <span className="text-[10px] text-theme uppercase font-black">PENDING REVIEW</span>
+                        <h4 className="text-2xl font-bold text-theme mt-1">{metrics.pendingReview}</h4>
                         <span className="text-[9px] text-emerald-400 font-bold">+2 since last shift</span>
                       </div>
                       <Shield size={24} className="text-amber-400 opacity-30" />
                     </div>
 
-                    <div className="bg-[#0c0e16] border border-white/10 p-4 rounded-xl flex items-center justify-between">
+                    <div className="bg-theme border border-theme/10 p-4 rounded-xl flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] text-gray-500 uppercase font-black">PRIORITY / URGENT</span>
-                        <h4 className="text-2xl font-bold text-white mt-1">{metrics.urgent}</h4>
+                        <span className="text-[10px] text-theme uppercase font-black">PRIORITY / URGENT</span>
+                        <h4 className="text-2xl font-bold text-theme mt-1">{metrics.urgent}</h4>
                         <span className="text-[9px] text-rose-400 font-bold">Requires immediate quote</span>
                       </div>
                       <ShieldAlert size={24} className="text-rose-500 opacity-30" />
                     </div>
 
-                    <div className="bg-[#0c0e16] border border-white/10 p-4 rounded-xl flex items-center justify-between">
+                    <div className="bg-theme border border-theme/10 p-4 rounded-xl flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] text-gray-500 uppercase font-black">QUOTED TODAY</span>
-                        <h4 className="text-2xl font-bold text-white mt-1">{metrics.quotedToday}</h4>
+                        <span className="text-[10px] text-theme uppercase font-black">QUOTED TODAY</span>
+                        <h4 className="text-2xl font-bold text-theme mt-1">{metrics.quotedToday}</h4>
                         <span className="text-[9px] text-emerald-400 font-bold">Conversion rate 68%</span>
                       </div>
                       <BadgePercent size={24} className="text-emerald-500 opacity-30" />
@@ -625,47 +625,47 @@ export default function ExportControllerPage() {
                   </div>
 
                   {/* Filter Sub-links */}
-                  <div className="flex border-b border-white/10 pb-1 text-xs gap-6 font-bold">
+                  <div className="flex border-b border-theme/10 pb-1 text-xs gap-6 font-bold">
                     <button className="text-amber-400 border-b border-amber-400 pb-2.5">ALL INQUIRIES</button>
-                    <button className="text-gray-500 hover:text-white pb-2.5 transition-colors">AIR FREIGHT</button>
-                    <button className="text-gray-500 hover:text-white pb-2.5 transition-colors">SEA FREIGHT</button>
+                    <button className="text-theme hover:text-theme pb-2.5 transition-colors">AIR FREIGHT</button>
+                    <button className="text-theme hover:text-theme pb-2.5 transition-colors">SEA FREIGHT</button>
                   </div>
 
                   {/* Three detailed cards list */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {inquiries.map((inq) => (
-                      <div key={inq.id} className="bg-[#0c0e16] border border-white/10 p-5 rounded-xl space-y-4 flex flex-col justify-between hover:border-amber-500/40 transition-colors">
+                      <div key={inq.id} className="bg-theme border border-theme/10 p-5 rounded-xl space-y-4 flex flex-col justify-between hover:border-amber-500/40 transition-colors">
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-[9px] text-gray-500 font-black">{inq.referenceId}</span>
+                            <span className="text-[9px] text-theme font-black">{inq.referenceId}</span>
                             <span className={`px-2 py-0.5 rounded-[3px] text-[8px] font-black uppercase ${getStatusBadge(inq.statusCode)}`}>
                               {inq.statusCode}
                             </span>
                           </div>
 
-                          <h3 className="text-white font-bold text-sm line-clamp-1">{inq.clientEntity}</h3>
-                          <p className="text-[10px] text-gray-500 flex items-center gap-1.5">
+                          <h3 className="text-theme font-bold text-sm line-clamp-1">{inq.clientEntity}</h3>
+                          <p className="text-[10px] text-theme flex items-center gap-1.5">
                             <Globe size={10} />
                             <span>{inq.region}</span>
                           </p>
                         </div>
 
-                        <div className="bg-[#10121d] p-3 rounded border border-white/5 space-y-2 text-[10px]">
+                        <div className="bg-theme p-3 rounded border border-theme/5 space-y-2 text-[10px]">
                           <div className="flex justify-between">
-                            <span className="text-gray-500">CLASSIFICATION:</span>
-                            <span className="text-white font-bold uppercase">{inq.classification}</span>
+                            <span className="text-theme">CLASSIFICATION:</span>
+                            <span className="text-theme font-bold uppercase">{inq.classification}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-500">FORWARDING:</span>
+                            <span className="text-theme">FORWARDING:</span>
                             <span className="text-amber-400 font-bold uppercase">{inq.forwarding}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-500">EST. VOLUME:</span>
-                            <span className="text-white font-bold">{inq.estVolume}</span>
+                            <span className="text-theme">EST. VOLUME:</span>
+                            <span className="text-theme font-bold">{inq.estVolume}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-500">EST. WEIGHT:</span>
-                            <span className="text-white font-bold">{inq.weight}</span>
+                            <span className="text-theme">EST. WEIGHT:</span>
+                            <span className="text-theme font-bold">{inq.weight}</span>
                           </div>
                         </div>
 
@@ -675,7 +675,7 @@ export default function ExportControllerPage() {
                               onClick={() => {
                                 setInquiries(prev => prev.map(i => i.id === inq.id ? { ...i, statusCode: "PENDING QUOTE" } : i));
                               }}
-                              className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-black font-black uppercase text-[10px] rounded transition-colors cursor-pointer"
+                              className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-theme font-black uppercase text-[10px] rounded transition-colors cursor-pointer"
                             >
                               Generate Quote
                             </button>
@@ -685,7 +685,7 @@ export default function ExportControllerPage() {
                               onClick={() => {
                                 setInquiries(prev => prev.map(i => i.id === inq.id ? { ...i, statusCode: "CLEARED" } : i));
                               }}
-                              className="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white font-black uppercase text-[10px] rounded transition-colors cursor-pointer"
+                              className="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-theme font-black uppercase text-[10px] rounded transition-colors cursor-pointer"
                             >
                               Expedite Quote
                             </button>
@@ -695,7 +695,7 @@ export default function ExportControllerPage() {
                               onClick={() => {
                                 setInquiries(prev => prev.map(i => i.id === inq.id ? { ...i, statusCode: "CLEARED" } : i));
                               }}
-                              className="flex-1 py-2 bg-[#8bceff] hover:bg-[#72bde6] text-black font-black uppercase text-[10px] rounded transition-colors cursor-pointer"
+                              className="flex-1 py-2 bg-theme hover:bg-theme text-theme font-black uppercase text-[10px] rounded transition-colors cursor-pointer"
                             >
                               Review & Clear
                             </button>
@@ -712,7 +712,7 @@ export default function ExportControllerPage() {
                             onClick={() => {
                               setInquiries(prev => prev.filter(i => i.id !== inq.id));
                             }}
-                            className="p-2 border border-white/10 hover:border-white/30 rounded text-gray-500 hover:text-white transition-colors cursor-pointer"
+                            className="p-2 border border-theme/10 hover:border-theme/30 rounded text-theme hover:text-theme transition-colors cursor-pointer"
                             aria-label="Delete inquiry"
                           >
                             <X size={12} />
@@ -733,10 +733,10 @@ export default function ExportControllerPage() {
             <div className="space-y-6 flex-1 flex flex-col">
               
               {/* Header with Catalog list vs compiler picker */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-white/10">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-theme/10">
                 <div>
                   <span className="text-[10px] text-amber-400 uppercase tracking-widest block mb-1">Global Inventory Management</span>
-                  <h1 className="text-2xl font-bold text-white uppercase tracking-tight">Export Catalog Management</h1>
+                  <h1 className="text-2xl font-bold text-theme uppercase tracking-tight">Export Catalog Management</h1>
                 </div>
 
                 <div className="flex gap-2">
@@ -744,8 +744,8 @@ export default function ExportControllerPage() {
                     onClick={() => setInquiriesView("overview")} // recycling view switch states to keep clean code
                     className={`px-3 py-1.5 rounded text-[11px] font-bold uppercase transition-all cursor-pointer border ${
                       inquiriesView === "overview" 
-                        ? "bg-amber-500 text-black border-amber-500" 
-                        : "border-white/10 hover:bg-white/5"
+                        ? "bg-amber-500 text-theme border-amber-500" 
+                        : "border-theme/10 hover:bg-theme/5"
                     }`}
                   >
                     Products List
@@ -754,8 +754,8 @@ export default function ExportControllerPage() {
                     onClick={() => setInquiriesView("cards")}
                     className={`px-3 py-1.5 rounded text-[11px] font-bold uppercase transition-all cursor-pointer border ${
                       inquiriesView === "cards" 
-                        ? "bg-amber-500 text-black border-amber-500" 
-                        : "border-white/10 hover:bg-white/5"
+                        ? "bg-amber-500 text-theme border-amber-500" 
+                        : "border-theme/10 hover:bg-theme/5"
                     }`}
                   >
                     PDF Compiler
@@ -772,36 +772,36 @@ export default function ExportControllerPage() {
                     
                     {/* Search Bar */}
                     <div className="flex-1 max-w-md relative flex items-center">
-                      <Search className="absolute left-3.5 text-gray-500" size={14} />
+                      <Search className="absolute left-3.5 text-theme" size={14} />
                       <input 
                         type="text"
                         placeholder="Search by SKU, Model, or Component..."
                         value={catalogSearch}
                         onChange={(e) => setCatalogSearch(e.target.value)}
-                        className="w-full bg-[#0c0e16] border border-white/10 pl-10 pr-4 py-2.5 rounded text-xs focus:outline-none focus:border-amber-500 transition-colors"
+                        className="w-full bg-theme border border-theme/10 pl-10 pr-4 py-2.5 rounded text-xs focus:outline-none focus:border-amber-500 transition-colors"
                       />
                     </div>
 
                     <div className="flex flex-wrap gap-2.5 items-center">
                       {/* Sector filter drop down */}
-                      <div className="bg-[#0c0e16] border border-white/10 px-3 py-2 rounded text-xs flex items-center gap-1.5">
-                        <Filter size={12} className="text-gray-500" />
+                      <div className="bg-theme border border-theme/10 px-3 py-2 rounded text-xs flex items-center gap-1.5">
+                        <Filter size={12} className="text-theme" />
                         <select 
                           value={selectedSector}
                           onChange={(e) => setSelectedSector(e.target.value)}
-                          className="bg-transparent text-white border-none focus:outline-none focus:ring-0 cursor-pointer"
+                          className="bg-transparent text-theme border-none focus:outline-none focus:ring-0 cursor-pointer"
                         >
-                          <option className="bg-[#0c0e16]" value="All Sectors">All Sectors</option>
-                          <option className="bg-[#0c0e16]" value="Mining">Mining</option>
-                          <option className="bg-[#0c0e16]" value="Automation">Automation</option>
-                          <option className="bg-[#0c0e16]" value="Power Gen">Power Gen</option>
+                          <option className="bg-theme" value="All Sectors">All Sectors</option>
+                          <option className="bg-theme" value="Mining">Mining</option>
+                          <option className="bg-theme" value="Automation">Automation</option>
+                          <option className="bg-theme" value="Power Gen">Power Gen</option>
                         </select>
                       </div>
 
                       {/* Export CSV button */}
                       <button 
                         onClick={handleExportCsv}
-                        className="px-4 py-2 border border-white/10 hover:border-white/35 bg-[#101322] text-white hover:text-amber-400 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center gap-2 cursor-pointer"
+                        className="px-4 py-2 border border-theme/10 hover:border-theme/35 bg-theme text-theme hover:text-amber-400 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center gap-2 cursor-pointer"
                       >
                         <Download size={14} />
                         <span>Export CSV</span>
@@ -810,7 +810,7 @@ export default function ExportControllerPage() {
                       {/* Add Product button */}
                       <button 
                         onClick={() => setIsAddProductOpen(true)}
-                        className="px-4 py-2 bg-[#fbbf24] hover:bg-[#f59e0b] text-black text-xs font-black uppercase tracking-wider rounded transition-colors flex items-center gap-1.5 cursor-pointer"
+                        className="px-4 py-2 bg-theme hover:bg-theme text-theme text-xs font-black uppercase tracking-wider rounded transition-colors flex items-center gap-1.5 cursor-pointer"
                       >
                         <Plus size={14} strokeWidth={3} />
                         <span>Add Product</span>
@@ -820,11 +820,11 @@ export default function ExportControllerPage() {
                   </div>
 
                   {/* Catalog Table */}
-                  <div className="bg-[#0c0e16] border border-white/10 rounded-xl overflow-hidden flex-1">
+                  <div className="bg-theme border border-theme/10 rounded-xl overflow-hidden flex-1">
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-xs">
                         <thead>
-                          <tr className="bg-[#121522]/80 text-gray-400 font-bold uppercase tracking-wider border-b border-white/10">
+                          <tr className="bg-theme/80 text-theme font-bold uppercase tracking-wider border-b border-theme/10">
                             <th className="py-3.5 px-4">SKU / PRODUCT NAME</th>
                             <th className="py-3.5 px-4">SECTOR</th>
                             <th className="py-3.5 px-4 text-right">FOB PRICE (USD)</th>
@@ -836,26 +836,26 @@ export default function ExportControllerPage() {
                         </thead>
                         <tbody>
                           {filteredCatalog.map((prod) => (
-                            <tr key={prod.sku} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <tr key={prod.sku} className="border-b border-theme/5 hover:bg-theme/5 transition-colors">
                               <td className="py-4 px-4">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 font-black">
+                                  <div className="w-8 h-8 rounded bg-theme/5 border border-theme/10 flex items-center justify-center text-theme font-black">
                                     ★
                                   </div>
                                   <div>
-                                    <div className="font-bold text-white">{prod.name}</div>
-                                    <div className="text-[10px] text-gray-500">SKU: {prod.sku}</div>
+                                    <div className="font-bold text-theme">{prod.name}</div>
+                                    <div className="text-[10px] text-theme">SKU: {prod.sku}</div>
                                   </div>
                                 </div>
                               </td>
-                              <td className="py-4 px-4 font-bold text-gray-400 text-[10px]">{prod.sector}</td>
+                              <td className="py-4 px-4 font-bold text-theme text-[10px]">{prod.sector}</td>
                               <td className="py-4 px-4 text-right text-amber-400 font-black">${prod.fobPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                               <td className="py-4 px-4 text-center">
                                 <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 text-[9px] font-bold">
                                   {prod.paidStatus}
                                 </span>
                               </td>
-                              <td className="py-4 px-4 text-gray-400 text-[10px] max-w-[200px] truncate" title={prod.techSpecs}>
+                              <td className="py-4 px-4 text-theme text-[10px] max-w-[200px] truncate" title={prod.techSpecs}>
                                 {prod.techSpecs}
                               </td>
                               <td className="py-4 px-4 text-center font-bold">{prod.quantity}</td>
@@ -864,7 +864,7 @@ export default function ExportControllerPage() {
                                   onClick={() => {
                                     setExportProducts(prev => prev.filter(p => p.sku !== prod.sku));
                                   }}
-                                  className="p-1 hover:bg-rose-500/10 text-gray-500 hover:text-rose-400 rounded transition-colors cursor-pointer"
+                                  className="p-1 hover:bg-rose-500/10 text-theme hover:text-rose-400 rounded transition-colors cursor-pointer"
                                   title="Remove product"
                                 >
                                   <X size={14} />
@@ -877,11 +877,11 @@ export default function ExportControllerPage() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center text-[10px] text-gray-500 font-bold pt-2">
+                  <div className="flex justify-between items-center text-[10px] text-theme font-bold pt-2">
                     <span>Showing 1-{filteredCatalog.length} of {exportProducts.length} Export Variants</span>
                     <div className="flex gap-2">
-                      <button disabled className="px-2 py-1 border border-white/5 text-gray-600 rounded cursor-not-allowed">&lt;</button>
-                      <button disabled className="px-2 py-1 border border-white/5 text-gray-600 rounded cursor-not-allowed">&gt;</button>
+                      <button disabled className="px-2 py-1 border border-theme/5 text-theme rounded cursor-not-allowed">&lt;</button>
+                      <button disabled className="px-2 py-1 border border-theme/5 text-theme rounded cursor-not-allowed">&gt;</button>
                     </div>
                   </div>
 
@@ -893,20 +893,20 @@ export default function ExportControllerPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   
                   {/* Left block: Form parameters */}
-                  <div className="lg:col-span-8 bg-[#0c0e16] border border-white/10 rounded-xl p-5 space-y-6">
-                    <div className="flex items-center gap-2 border-b border-white/5 pb-3">
+                  <div className="lg:col-span-8 bg-theme border border-theme/10 rounded-xl p-5 space-y-6">
+                    <div className="flex items-center gap-2 border-b border-theme/5 pb-3">
                       <FileText size={16} className="text-amber-400" />
-                      <span className="text-white font-bold text-xs uppercase">COMPILATION PARAMETERS</span>
+                      <span className="text-theme font-bold text-xs uppercase">COMPILATION PARAMETERS</span>
                     </div>
 
                     {/* Checkbox inclusion list */}
                     <div className="space-y-3">
-                      <span className="text-[10px] text-gray-500 font-black uppercase block">INCLUSION CATEGORIES</span>
+                      <span className="text-[10px] text-theme font-black uppercase block">INCLUSION CATEGORIES</span>
                       <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                         {["Heavy Machinery", "Electronic Components", "Automotive Parts", "Raw Materials"].map((cat) => {
                           const isChecked = selectedCategories.includes(cat);
                           return (
-                            <label key={cat} className="flex items-center gap-3 cursor-pointer select-none text-xs text-gray-400 hover:text-white transition-colors">
+                            <label key={cat} className="flex items-center gap-3 cursor-pointer select-none text-xs text-theme hover:text-theme transition-colors">
                               <input 
                                 type="checkbox"
                                 checked={isChecked}
@@ -917,7 +917,7 @@ export default function ExportControllerPage() {
                                     setSelectedCategories([...selectedCategories, cat]);
                                   }
                                 }}
-                                className="w-4 h-4 rounded border-white/10 bg-[#111] text-amber-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                                className="w-4 h-4 rounded border-theme/10 bg-theme text-amber-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
                               />
                               <span>{cat}</span>
                             </label>
@@ -928,7 +928,7 @@ export default function ExportControllerPage() {
 
                     {/* Priority Overrides Tag list */}
                     <div className="space-y-3">
-                      <span className="text-[10px] text-gray-500 font-black uppercase block">PRIORITY SKU OVERRIDES (FORCE INCLUSION)</span>
+                      <span className="text-[10px] text-theme font-black uppercase block">PRIORITY SKU OVERRIDES (FORCE INCLUSION)</span>
                       
                       <div className="flex gap-2">
                         <input 
@@ -937,11 +937,11 @@ export default function ExportControllerPage() {
                           value={overrideInput}
                           onChange={(e) => setOverrideInput(e.target.value)}
                           onKeyDown={(e) => e.key === "Enter" && handleAddOverride()}
-                          className="bg-[#10121d] border border-white/10 text-xs px-3 py-2 rounded focus:outline-none focus:border-amber-500 flex-1 uppercase"
+                          className="bg-theme border border-theme/10 text-xs px-3 py-2 rounded focus:outline-none focus:border-amber-500 flex-1 uppercase"
                         />
                         <button 
                           onClick={handleAddOverride}
-                          className="px-4 bg-[#101322] border border-white/10 hover:border-amber-500/40 hover:text-amber-400 text-xs font-bold uppercase rounded cursor-pointer transition-colors"
+                          className="px-4 bg-theme border border-theme/10 hover:border-amber-500/40 hover:text-amber-400 text-xs font-bold uppercase rounded cursor-pointer transition-colors"
                         >
                           + Add
                         </button>
@@ -951,12 +951,12 @@ export default function ExportControllerPage() {
                         {skuOverrides.map((sku) => (
                           <span 
                             key={sku}
-                            className="bg-[#10121d] border border-white/10 text-[9px] font-bold text-gray-300 px-2 py-1 rounded flex items-center gap-1.5"
+                            className="bg-theme border border-theme/10 text-[9px] font-bold text-theme px-2 py-1 rounded flex items-center gap-1.5"
                           >
                             <span>{sku}</span>
                             <button 
                               onClick={() => handleRemoveOverride(sku)}
-                              className="text-gray-500 hover:text-rose-400 cursor-pointer"
+                              className="text-theme hover:text-rose-400 cursor-pointer"
                             >
                               <X size={10} />
                             </button>
@@ -968,11 +968,11 @@ export default function ExportControllerPage() {
                     {/* Dropdowns */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <span className="text-[10px] text-gray-500 font-black uppercase block mb-2">TARGET REGION</span>
+                        <span className="text-[10px] text-theme font-black uppercase block mb-2">TARGET REGION</span>
                         <select 
                           value={compilationRegion}
                           onChange={(e) => setCompilationRegion(e.target.value)}
-                          className="w-full bg-[#10121d] border border-white/10 rounded px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 cursor-pointer"
+                          className="w-full bg-theme border border-theme/10 rounded px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 cursor-pointer"
                         >
                           <option>Global (All Regions)</option>
                           <option>European Union</option>
@@ -982,11 +982,11 @@ export default function ExportControllerPage() {
                       </div>
 
                       <div>
-                        <span className="text-[10px] text-gray-500 font-black uppercase block mb-2">PRICING TIER</span>
+                        <span className="text-[10px] text-theme font-black uppercase block mb-2">PRICING TIER</span>
                         <select 
                           value={pricingTier}
                           onChange={(e) => setPricingTier(e.target.value)}
-                          className="w-full bg-[#10121d] border border-white/10 rounded px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 cursor-pointer"
+                          className="w-full bg-theme border border-theme/10 rounded px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 cursor-pointer"
                         >
                           <option>Standard Wholesale</option>
                           <option>Distributor Discount Tier</option>
@@ -1006,14 +1006,14 @@ export default function ExportControllerPage() {
                             </span>
                             <span>{compileProgress}%</span>
                           </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-1 bg-theme/5 rounded-full overflow-hidden">
                             <div className="h-full bg-amber-500 transition-all duration-200" style={{ width: `${compileProgress}%` }}></div>
                           </div>
                         </div>
                       ) : (
                         <button 
                           onClick={triggerPdfCompilation}
-                          className="w-full py-4 bg-[#fbbf24] hover:bg-[#f59e0b] text-black font-black uppercase tracking-widest text-xs rounded transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(251,191,36,0.1)]"
+                          className="w-full py-4 bg-theme hover:bg-theme text-theme font-black uppercase tracking-widest text-xs rounded transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(251,191,36,0.1)]"
                         >
                           <RefreshCw size={14} />
                           <span>Compile & Generate PDF</span>
@@ -1024,9 +1024,9 @@ export default function ExportControllerPage() {
                   </div>
 
                   {/* Right block: Compile History */}
-                  <div className="lg:col-span-4 bg-[#0c0e16] border border-white/10 rounded-xl p-5 space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                      <div className="text-white font-bold text-xs uppercase flex items-center gap-2">
+                  <div className="lg:col-span-4 bg-theme border border-theme/10 rounded-xl p-5 space-y-4">
+                    <div className="flex items-center justify-between border-b border-theme/5 pb-3">
+                      <div className="text-theme font-bold text-xs uppercase flex items-center gap-2">
                         <FileText size={16} className="text-amber-400" />
                         <span>PREVIOUS VERSIONS</span>
                       </div>
@@ -1034,9 +1034,9 @@ export default function ExportControllerPage() {
 
                     <div className="space-y-4">
                       {pdfHistory.map((pdf) => (
-                        <div key={pdf.id} className="p-3 border border-white/5 bg-[#10121d]/50 rounded-lg hover:border-white/10 transition-colors space-y-1">
+                        <div key={pdf.id} className="p-3 border border-theme/5 bg-theme/50 rounded-lg hover:border-theme/10 transition-colors space-y-1">
                           <div className="flex justify-between items-center">
-                            <span className="text-white text-xs font-bold line-clamp-1">{pdf.name}</span>
+                            <span className="text-theme text-xs font-bold line-clamp-1">{pdf.name}</span>
                             {pdf.status === "LATEST" && (
                               <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[7px] font-black tracking-wider">
                                 LATEST
@@ -1049,16 +1049,16 @@ export default function ExportControllerPage() {
                             )}
                           </div>
                           
-                          <div className="text-[10px] text-gray-500 flex flex-col gap-0.5">
+                          <div className="text-[10px] text-theme flex flex-col gap-0.5">
                             <span>Generated: {pdf.generated}</span>
                             <span>Size: {pdf.size} | {pdf.region}</span>
                           </div>
 
-                          <div className="flex gap-2 pt-2 border-t border-white/5 mt-2 justify-end">
-                            <button className="p-1 hover:bg-white/5 text-gray-400 hover:text-white rounded transition-colors cursor-pointer" title="View Document">
+                          <div className="flex gap-2 pt-2 border-t border-theme/5 mt-2 justify-end">
+                            <button className="p-1 hover:bg-theme/5 text-theme hover:text-theme rounded transition-colors cursor-pointer" title="View Document">
                               <Search size={12} />
                             </button>
-                            <button className="p-1 hover:bg-white/5 text-gray-400 hover:text-white rounded transition-colors cursor-pointer" title="Download Document">
+                            <button className="p-1 hover:bg-theme/5 text-theme hover:text-theme rounded transition-colors cursor-pointer" title="Download Document">
                               <Download size={12} />
                             </button>
                           </div>
@@ -1076,45 +1076,45 @@ export default function ExportControllerPage() {
           {/* TAB 3: LOGISTICS VIEW */}
           {activeSubTab === "logistics" && (
             <div className="space-y-6">
-              <div className="pb-4 border-b border-white/10">
+              <div className="pb-4 border-b border-theme/10">
                 <span className="text-[10px] text-amber-400 uppercase tracking-widest block mb-1">GLOBAL INVENTORY MANAGEMENT</span>
-                <h1 className="text-2xl font-bold text-white uppercase tracking-tight">Logistics Management</h1>
+                <h1 className="text-2xl font-bold text-theme uppercase tracking-tight">Logistics Management</h1>
               </div>
 
               {/* Mock tracking and freight status */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 {/* Active Dispatches */}
-                <div className="bg-[#0c0e16] border border-white/10 p-5 rounded-xl space-y-4">
-                  <h3 className="text-white font-bold text-xs uppercase pb-2 border-b border-white/5">Active Logistics Dispatches</h3>
+                <div className="bg-theme border border-theme/10 p-5 rounded-xl space-y-4">
+                  <h3 className="text-theme font-bold text-xs uppercase pb-2 border-b border-theme/5">Active Logistics Dispatches</h3>
                   
                   <div className="space-y-4">
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-white font-bold">SHP-996-GLB (Rotterdam)</span>
+                        <span className="text-theme font-bold">SHP-996-GLB (Rotterdam)</span>
                         <span className="text-emerald-400 font-bold">85% Complete</span>
                       </div>
-                      <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-theme/5 rounded-full overflow-hidden">
                         <div className="h-full bg-emerald-500" style={{ width: "85%" }}></div>
                       </div>
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-white font-bold">ARR-772-FRA (Frankfurt)</span>
+                        <span className="text-theme font-bold">ARR-772-FRA (Frankfurt)</span>
                         <span className="text-amber-400 font-bold">42% In Transit</span>
                       </div>
-                      <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-theme/5 rounded-full overflow-hidden">
                         <div className="h-full bg-amber-500" style={{ width: "42%" }}></div>
                       </div>
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-white font-bold">SHP-888-DXB (Dubai)</span>
+                        <span className="text-theme font-bold">SHP-888-DXB (Dubai)</span>
                         <span className="text-blue-400 font-bold">100% Delivered</span>
                       </div>
-                      <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-theme/5 rounded-full overflow-hidden">
                         <div className="h-full bg-blue-500" style={{ width: "100%" }}></div>
                       </div>
                     </div>
@@ -1122,17 +1122,17 @@ export default function ExportControllerPage() {
                 </div>
 
                 {/* Freight Distribution */}
-                <div className="bg-[#0c0e16] border border-white/10 p-5 rounded-xl space-y-4">
-                  <h3 className="text-white font-bold text-xs uppercase pb-2 border-b border-white/5">Freight Channels Distribution</h3>
+                <div className="bg-theme border border-theme/10 p-5 rounded-xl space-y-4">
+                  <h3 className="text-theme font-bold text-xs uppercase pb-2 border-b border-theme/5">Freight Channels Distribution</h3>
                   
                   <div className="grid grid-cols-2 gap-4 text-center">
-                    <div className="p-4 bg-[#10121d] rounded-lg border border-white/5">
+                    <div className="p-4 bg-theme rounded-lg border border-theme/5">
                       <div className="text-2xl font-black text-amber-400">14</div>
-                      <div className="text-[10px] text-gray-500 uppercase font-black mt-1">Air Freight Operations</div>
+                      <div className="text-[10px] text-theme uppercase font-black mt-1">Air Freight Operations</div>
                     </div>
-                    <div className="p-4 bg-[#10121d] rounded-lg border border-white/5">
+                    <div className="p-4 bg-theme rounded-lg border border-theme/5">
                       <div className="text-2xl font-black text-[#8bceff]">32</div>
-                      <div className="text-[10px] text-gray-500 uppercase font-black mt-1">Sea Freight Container slots</div>
+                      <div className="text-[10px] text-theme uppercase font-black mt-1">Sea Freight Container slots</div>
                     </div>
                   </div>
                 </div>
@@ -1144,27 +1144,27 @@ export default function ExportControllerPage() {
           {/* TAB 4: SETTINGS VIEW */}
           {activeSubTab === "settings" && (
             <div className="space-y-6">
-              <div className="pb-4 border-b border-white/10">
+              <div className="pb-4 border-b border-theme/10">
                 <span className="text-[10px] text-amber-400 uppercase tracking-widest block mb-1">GLOBAL INVENTORY MANAGEMENT</span>
-                <h1 className="text-2xl font-bold text-white uppercase tracking-tight">Export Settings</h1>
+                <h1 className="text-2xl font-bold text-theme uppercase tracking-tight">Export Settings</h1>
               </div>
 
-              <div className="bg-[#0c0e16] border border-white/10 p-5 rounded-xl max-w-xl space-y-4 text-xs">
-                <div className="flex justify-between items-center pb-3 border-b border-white/5">
-                  <span className="text-white font-bold">Global Export Mode</span>
+              <div className="bg-theme border border-theme/10 p-5 rounded-xl max-w-xl space-y-4 text-xs">
+                <div className="flex justify-between items-center pb-3 border-b border-theme/5">
+                  <span className="text-theme font-bold">Global Export Mode</span>
                   <span className="text-emerald-400 font-black">ENABLED</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-white/5">
-                  <span className="text-white font-bold">Automated PDF Catalog Sync</span>
+                <div className="flex justify-between items-center pb-3 border-b border-theme/5">
+                  <span className="text-theme font-bold">Automated PDF Catalog Sync</span>
                   <span className="text-emerald-400 font-black">ACTIVE</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-white/5">
-                  <span className="text-white font-bold">HS Code Auto-Verification API</span>
+                <div className="flex justify-between items-center pb-3 border-b border-theme/5">
+                  <span className="text-theme font-bold">HS Code Auto-Verification API</span>
                   <span className="text-amber-400 font-black">STANDBY</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-white font-bold">Wholesale Pricing Modifier</span>
-                  <span className="text-white font-bold">1.0x (Default)</span>
+                  <span className="text-theme font-bold">Wholesale Pricing Modifier</span>
+                  <span className="text-theme font-bold">1.0x (Default)</span>
                 </div>
               </div>
             </div>
@@ -1176,45 +1176,45 @@ export default function ExportControllerPage() {
 
       {/* MODAL 1: ADD PRODUCT TO EXPORT CATALOG (Image 1 - ADD PRODUCT) */}
       {isAddProductOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-[#0c0e16] border border-white/15 w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
-            <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center bg-[#10121d]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-theme/80 backdrop-blur-sm p-4 animate-fadeIn">
+          <div className="bg-theme border border-theme/15 w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
+            <div className="px-5 py-4 border-b border-theme/10 flex justify-between items-center bg-theme">
               <span className="text-xs font-black uppercase text-amber-400 tracking-wider">Add Export Product</span>
-              <button onClick={() => setIsAddProductOpen(false)} className="text-gray-500 hover:text-white cursor-pointer"><X size={16} /></button>
+              <button onClick={() => setIsAddProductOpen(false)} className="text-theme hover:text-theme cursor-pointer"><X size={16} /></button>
             </div>
             
             <form onSubmit={handleAddProduct} className="p-5 space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="text-gray-400 font-bold block">SKU Code (e.g. EX-CEN-9080-A)</label>
+                <label className="text-theme font-bold block">SKU Code (e.g. EX-CEN-9080-A)</label>
                 <input 
                   type="text"
                   required
                   value={newProduct.sku}
                   onChange={(e) => setNewProduct({ ...newProduct, sku: e.target.value })}
                   placeholder="EX-CEN-..."
-                  className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 uppercase text-white"
+                  className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 uppercase text-theme"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-gray-400 font-bold block">Product Name</label>
+                <label className="text-theme font-bold block">Product Name</label>
                 <input 
                   type="text"
                   required
                   value={newProduct.name}
                   onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
                   placeholder="Centrifuge, Multimeter..."
-                  className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                  className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-gray-400 font-bold block">Sector</label>
+                  <label className="text-theme font-bold block">Sector</label>
                   <select 
                     value={newProduct.sector}
                     onChange={(e) => setNewProduct({ ...newProduct, sector: e.target.value })}
-                    className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white cursor-pointer"
+                    className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme cursor-pointer"
                   >
                     <option value="MINING">Mining</option>
                     <option value="AUTOMATION">Automation</option>
@@ -1224,43 +1224,43 @@ export default function ExportControllerPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-gray-400 font-bold block">FOB Price (USD)</label>
+                  <label className="text-theme font-bold block">FOB Price (USD)</label>
                   <input 
                     type="number"
                     required
                     value={newProduct.fobPrice}
                     onChange={(e) => setNewProduct({ ...newProduct, fobPrice: e.target.value })}
                     placeholder="e.g. 42500"
-                    className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                    className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-gray-400 font-bold block">Tech Specs (Volt/Freq)</label>
+                <label className="text-theme font-bold block">Tech Specs (Volt/Freq)</label>
                 <input 
                   type="text"
                   value={newProduct.techSpecs}
                   onChange={(e) => setNewProduct({ ...newProduct, techSpecs: e.target.value })}
                   placeholder="e.g. 380V / 415V (3-Phase) | 50Hz"
-                  className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                  className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-gray-400 font-bold block">FOB Quantity / Status</label>
+                <label className="text-theme font-bold block">FOB Quantity / Status</label>
                 <input 
                   type="number"
                   value={newProduct.quantity}
                   onChange={(e) => setNewProduct({ ...newProduct, quantity: e.target.value })}
                   placeholder="e.g. 100"
-                  className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                  className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                 />
               </div>
 
               <button 
                 type="submit"
-                className="w-full py-3 bg-[#fbbf24] hover:bg-[#f59e0b] text-black font-black uppercase text-xs rounded transition-colors cursor-pointer mt-2"
+                className="w-full py-3 bg-theme hover:bg-theme text-theme font-black uppercase text-xs rounded transition-colors cursor-pointer mt-2"
               >
                 Create Product Option
               </button>
@@ -1271,33 +1271,33 @@ export default function ExportControllerPage() {
 
       {/* MODAL 2: NEW SHIPMENT / INQUIRY (Image 2 & 4 - NEW SHIPMENT) */}
       {isNewShipmentOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-[#0c0e16] border border-white/15 w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
-            <div className="px-5 py-4 border-b border-white/10 flex justify-between items-center bg-[#10121d]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-theme/80 backdrop-blur-sm p-4 animate-fadeIn">
+          <div className="bg-theme border border-theme/15 w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
+            <div className="px-5 py-4 border-b border-theme/10 flex justify-between items-center bg-theme">
               <span className="text-xs font-black uppercase text-amber-400 tracking-wider">Register Export Shipment Inquiry</span>
-              <button onClick={() => setIsNewShipmentOpen(false)} className="text-gray-500 hover:text-white cursor-pointer"><X size={16} /></button>
+              <button onClick={() => setIsNewShipmentOpen(false)} className="text-theme hover:text-theme cursor-pointer"><X size={16} /></button>
             </div>
             
             <form onSubmit={handleAddInquiry} className="p-5 space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="text-gray-400 font-bold block">Client Entity / Company</label>
+                <label className="text-theme font-bold block">Client Entity / Company</label>
                 <input 
                   type="text"
                   required
                   value={newInquiry.clientEntity}
                   onChange={(e) => setNewInquiry({ ...newInquiry, clientEntity: e.target.value })}
                   placeholder="e.g. Stellar Dynamics Corp"
-                  className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                  className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-gray-400 font-bold block">Forwarding Channel</label>
+                  <label className="text-theme font-bold block">Forwarding Channel</label>
                   <select 
                     value={newInquiry.forwarding}
                     onChange={(e) => setNewInquiry({ ...newInquiry, forwarding: e.target.value })}
-                    className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white cursor-pointer"
+                    className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme cursor-pointer"
                   >
                     <option value="Air Freight">Air Freight</option>
                     <option value="Sea Freight">Sea Freight</option>
@@ -1305,11 +1305,11 @@ export default function ExportControllerPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-gray-400 font-bold block">Region</label>
+                  <label className="text-theme font-bold block">Region</label>
                   <select 
                     value={newInquiry.region}
                     onChange={(e) => setNewInquiry({ ...newInquiry, region: e.target.value })}
-                    className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white cursor-pointer"
+                    className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme cursor-pointer"
                   >
                     <option value="EU-Central">EU-Central</option>
                     <option value="APAC-East">APAC-East</option>
@@ -1321,35 +1321,35 @@ export default function ExportControllerPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-gray-400 font-bold block">Est. Volume (Containers/Pallets)</label>
+                  <label className="text-theme font-bold block">Est. Volume (Containers/Pallets)</label>
                   <input 
                     type="text"
                     required
                     value={newInquiry.estVolume}
                     onChange={(e) => setNewInquiry({ ...newInquiry, estVolume: e.target.value })}
                     placeholder="e.g. 4x 40ft HQ"
-                    className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                    className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-gray-400 font-bold block">Est. Total Weight (KG)</label>
+                  <label className="text-theme font-bold block">Est. Total Weight (KG)</label>
                   <input 
                     type="text"
                     value={newInquiry.weight}
                     onChange={(e) => setNewInquiry({ ...newInquiry, weight: e.target.value })}
                     placeholder="e.g. 1,200 KG"
-                    className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white"
+                    className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-gray-400 font-bold block">Classification Sector</label>
+                <label className="text-theme font-bold block">Classification Sector</label>
                 <select 
                   value={newInquiry.classification}
                   onChange={(e) => setNewInquiry({ ...newInquiry, classification: e.target.value })}
-                  className="w-full bg-[#10121d] border border-white/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-white cursor-pointer"
+                  className="w-full bg-theme border border-theme/10 px-3 py-2 rounded focus:outline-none focus:border-amber-500 text-theme cursor-pointer"
                 >
                   <option value="Bluechips">Bluechips</option>
                   <option value="Ind. Parts">Industrial Parts</option>
@@ -1359,7 +1359,7 @@ export default function ExportControllerPage() {
 
               <button 
                 type="submit"
-                className="w-full py-3 bg-[#fbbf24] hover:bg-[#f59e0b] text-black font-black uppercase text-xs rounded transition-colors cursor-pointer mt-2"
+                className="w-full py-3 bg-theme hover:bg-theme text-theme font-black uppercase text-xs rounded transition-colors cursor-pointer mt-2"
               >
                 Register Inquiry
               </button>

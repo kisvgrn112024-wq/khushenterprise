@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <DownloadProvider>
-      <div className="w-full min-h-screen bg-[#07090e] flex flex-col font-sans">
+      <div className="w-full min-h-screen bg-theme flex flex-col font-sans">
         {/* Sticky top layout toggle bar */}
         <ViewToggleBar />
 
@@ -53,22 +53,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div
           className={`flex-grow flex flex-col w-full transition-all duration-300 ${
             viewMode === "desktop"
-              ? "min-w-[1280px] overflow-x-auto bg-[#0a0a0a]"
-              : "max-w-full md:max-w-[480px] mx-auto bg-[#0a0a0a] min-h-screen shadow-[0_0_50px_rgba(0,255,255,0.08)] border-x border-white/5 relative overflow-x-hidden"
+              ? "min-w-[1280px] overflow-x-auto bg-theme"
+              : "max-w-full md:max-w-[480px] mx-auto bg-theme min-h-screen shadow-[0_0_50px_rgba(0,255,255,0.08)] border-x border-theme/5 relative overflow-x-hidden"
           }`}
         >
-          <div className="relative flex flex-1 h-screen overflow-hidden text-gray-300 bg-[#111111]">
+          <div className="relative flex flex-1 h-screen overflow-hidden text-theme bg-theme">
             {/* Sidebar backdrop for mobile view */}
             {viewMode === "mobile" && isSidebarOpen && (
               <div 
-                className="absolute inset-0 bg-black/75 z-40 backdrop-blur-sm transition-opacity" 
+                className="absolute inset-0 bg-theme/75 z-40 backdrop-blur-sm transition-opacity" 
                 onClick={() => setIsSidebarOpen(false)}
               ></div>
             )}
 
             {/* Sidebar */}
             <aside 
-              className={`bg-[#161616] border-r border-white/5 flex flex-col z-50 shrink-0 transition-transform duration-300 ${
+              className={`bg-theme border-r border-theme/5 flex flex-col z-50 shrink-0 transition-transform duration-300 ${
                 viewMode === "mobile"
                   ? `absolute inset-y-0 left-0 w-64 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`
                   : "w-64 relative translate-x-0"
@@ -80,12 +80,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className="flex items-center gap-3">
                   <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100" alt="Admin" className="w-10 h-10 rounded shadow-md object-cover grayscale" />
                   <div>
-                    <div className="text-white font-bold text-sm tracking-wide">Khush Admin</div>
-                    <div className="text-gray-400 text-[10px]">Lab Specialist</div>
+                    <div className="text-theme font-bold text-sm tracking-wide">Khush Admin</div>
+                    <div className="text-theme text-[10px]">Lab Specialist</div>
                   </div>
                 </div>
                 {viewMode === "mobile" && (
-                  <button onClick={() => setIsSidebarOpen(false)} className="text-gray-500 hover:text-white cursor-pointer">
+                  <button onClick={() => setIsSidebarOpen(false)} className="text-theme hover:text-theme cursor-pointer">
                     <X size={18} />
                   </button>
                 )}
@@ -108,21 +108,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                           onClick={() => setIsBulkOpen(!isBulkOpen)}
                           className={`w-full flex items-center justify-between px-3 py-2.5 rounded text-sm transition-colors relative group cursor-pointer ${
                             isAnySubActive
-                              ? "text-[#8bceff] bg-[#0c1825]/50"
-                              : "text-gray-400 hover:text-white hover:bg-white/5"
+                              ? "text-[#8bceff] bg-theme/50"
+                              : "text-theme hover:text-theme hover:bg-theme/5"
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <item.icon size={18} className={isAnySubActive ? "text-[#8bceff]" : "text-gray-400 group-hover:text-white"} strokeWidth={1.5} />
+                            <item.icon size={18} className={isAnySubActive ? "text-[#8bceff]" : "text-theme group-hover:text-theme"} strokeWidth={1.5} />
                             <span className="font-semibold">{item.label}</span>
                           </div>
-                          <div className="text-gray-400 group-hover:text-white">
+                          <div className="text-theme group-hover:text-theme">
                             {isBulkOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                           </div>
                         </button>
 
                         {isBulkOpen && (
-                          <div className="pl-6 pr-2 py-1 space-y-1 bg-black/10 rounded ml-4 border-l border-white/5">
+                          <div className="pl-6 pr-2 py-1 space-y-1 bg-theme/10 rounded ml-4 border-l border-theme/5">
                             {subItems.map((sub: any, subIdx: number) => {
                               // Match sub route actively
                               let isSubActive = false;
@@ -144,8 +144,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                   onClick={() => viewMode === "mobile" && setIsSidebarOpen(false)}
                                   className={`block px-3 py-1.5 rounded text-xs transition-colors ${
                                     isSubActive
-                                      ? "text-[#8bceff] font-bold bg-[#0c1825]/30"
-                                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                                      ? "text-[#8bceff] font-bold bg-theme/30"
+                                      : "text-theme hover:text-theme hover:bg-theme/5"
                                   }`}
                                 >
                                   {sub.label}
@@ -167,14 +167,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       onClick={() => viewMode === "mobile" && setIsSidebarOpen(false)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-colors relative group ${
                         isActive 
-                          ? "text-[#8bceff] bg-[#0c1825]" 
-                          : "text-gray-400 hover:text-white hover:bg-white/5"
+                          ? "text-[#8bceff] bg-theme" 
+                          : "text-theme hover:text-theme hover:bg-theme/5"
                       }`}
                     >
                       {isActive && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#8bceff] rounded-r"></div>
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-theme rounded-r"></div>
                       )}
-                      <item.icon size={18} className={isActive ? "text-[#8bceff]" : "text-gray-400 group-hover:text-white"} strokeWidth={1.5} />
+                      <item.icon size={18} className={isActive ? "text-[#8bceff]" : "text-theme group-hover:text-theme"} strokeWidth={1.5} />
                       <span className="font-semibold">{item.label}</span>
                     </Link>
                   );
@@ -185,12 +185,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Link 
                   href="/admin-portal-ke/settings" 
                   onClick={() => viewMode === "mobile" && setIsSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-theme hover:text-theme hover:bg-theme/5 transition-colors"
                 >
                   <Settings size={18} strokeWidth={1.5} />
                   <span className="font-semibold">Settings</span>
                 </Link>
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded text-sm text-[#ffa8a8] hover:bg-[#ffa8a8]/10 transition-colors cursor-pointer">
+                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded text-sm text-[#ffa8a8] hover:bg-theme/10 transition-colors cursor-pointer">
                   <LogOut size={18} strokeWidth={1.5} />
                   <span className="font-semibold">Logout</span>
                 </button>
@@ -201,20 +201,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex-1 flex flex-col overflow-hidden">
               {/* Mobile top admin bar */}
               {viewMode === "mobile" && (
-                <div className="w-full bg-[#161616] border-b border-white/5 px-4 py-3 flex items-center justify-between z-30 shrink-0">
-                  <button onClick={() => setIsSidebarOpen(true)} className="text-gray-400 hover:text-white cursor-pointer p-1">
+                <div className="w-full bg-theme border-b border-theme/5 px-4 py-3 flex items-center justify-between z-30 shrink-0">
+                  <button onClick={() => setIsSidebarOpen(true)} className="text-theme hover:text-theme cursor-pointer p-1">
                     <Menu size={18} />
                   </button>
                   <div className="flex items-center gap-2">
                     <img src="/logo.png" alt="Logo" className="w-5 h-5 object-contain" />
-                    <span className="text-xs font-bold text-white tracking-wider uppercase">Admin Portal</span>
+                    <span className="text-xs font-bold text-theme tracking-wider uppercase">Admin Portal</span>
                   </div>
                   <div className="w-6"></div>
                 </div>
               )}
 
               {/* Main Content */}
-              <main className={`flex-grow overflow-y-auto bg-[#0a0a0a] transition-all duration-300 ${
+              <main className={`flex-grow overflow-y-auto bg-theme transition-all duration-300 ${
                 viewMode === "mobile" ? "p-4" : "p-6 md:p-8"
               }`}>
                 {children}

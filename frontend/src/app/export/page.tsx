@@ -276,7 +276,7 @@ export default function ExportPage() {
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-theme text-theme overflow-x-hidden">
       {/* ── Hero Section ── */}
       <section className="relative min-h-[680px] flex items-center overflow-hidden">
         {/* Background glows */}
@@ -311,10 +311,10 @@ export default function ExportPage() {
               Khush Global<br />
               <span className="text-brand-yellow">Export</span>
             </h1>
-            <p className="text-gray-400 text-sm mb-2 tracking-wide">
+            <p className="text-theme text-sm mb-2 tracking-wide">
               Ishan &amp; Vikas Malhotra, Proprietors ✦
             </p>
-            <p className="text-gray-500 text-sm mb-10 max-w-md leading-relaxed">
+            <p className="text-theme text-sm mb-10 max-w-md leading-relaxed">
               Precision-engineered goods cleared for international freight. Compliant G2G logistics, ISO-certified documentation, and global supply chains — all from a single desk.
             </p>
 
@@ -324,7 +324,7 @@ export default function ExportPage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-black px-6 py-3 rounded text-xs font-black uppercase tracking-wider transition-colors"
+                  className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-theme px-6 py-3 rounded text-xs font-black uppercase tracking-wider transition-colors"
                 >
                   <Package size={14} />
                   View Products
@@ -335,7 +335,7 @@ export default function ExportPage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="flex items-center gap-2 bg-transparent border border-white/20 hover:border-brand-yellow/60 hover:text-brand-yellow text-gray-300 px-6 py-3 rounded text-xs font-black uppercase tracking-wider transition-all"
+                  className="flex items-center gap-2 bg-transparent border border-theme/20 hover:border-brand-yellow/60 hover:text-brand-yellow text-theme px-6 py-3 rounded text-xs font-black uppercase tracking-wider transition-all"
                 >
                   <FileText size={14} />
                   Send Enquiry
@@ -346,7 +346,7 @@ export default function ExportPage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="flex items-center gap-2 bg-transparent border border-white/20 hover:border-electric-blue/60 hover:text-electric-blue text-gray-300 px-6 py-3 rounded text-xs font-black uppercase tracking-wider transition-all"
+                  className="flex items-center gap-2 bg-transparent border border-theme/20 hover:border-electric-blue/60 hover:text-electric-blue text-theme px-6 py-3 rounded text-xs font-black uppercase tracking-wider transition-all"
                 >
                   <Globe size={14} />
                   View Catalogue
@@ -368,7 +368,7 @@ export default function ExportPage() {
                 <div className="absolute inset-0 bg-brand-yellow/5 blur-[60px] rounded-full" />
               </div>
             </div>
-            <p className="text-gray-600 text-[10px] font-mono mt-2 tracking-widest uppercase">
+            <p className="text-theme text-[10px] font-mono mt-2 tracking-widest uppercase">
               ↔ Drag to rotate
             </p>
           </motion.div>
@@ -376,7 +376,7 @@ export default function ExportPage() {
       </section>
 
       {/* ── Stats Bar ── */}
-      <section className="border-y border-white/5 bg-[#0d0d0d]">
+      <section className="border-y border-theme/5 bg-theme">
         <div className="container mx-auto px-4 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {STATS.map((s, i) => (
@@ -389,7 +389,7 @@ export default function ExportPage() {
                 className="text-center"
               >
                 <div className="text-3xl font-black text-brand-yellow mb-1">{s.value}</div>
-                <div className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold">{s.label}</div>
+                <div className="text-theme text-[10px] uppercase tracking-widest font-semibold">{s.label}</div>
               </motion.div>
             ))}
           </div>
@@ -400,7 +400,7 @@ export default function ExportPage() {
       <section className="container mx-auto px-4 lg:px-8 py-20">
         <div className="mb-10">
           <div className="text-brand-yellow text-[10px] font-bold tracking-widest uppercase mb-2">INDUSTRIAL PRECISION</div>
-          <h2 className="text-2xl md:text-3xl font-black text-white">KBL UNIFIED OPERATIONS</h2>
+          <h2 className="text-2xl md:text-3xl font-black text-theme">KBL UNIFIED OPERATIONS</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -413,19 +413,19 @@ export default function ExportPage() {
               transition={{ delay: i * 0.08 }}
               onMouseEnter={() => setActiveFeature(i)}
               onMouseLeave={() => setActiveFeature(null)}
-              className={`group relative bg-[#111111] border rounded-xl p-6 cursor-default transition-all duration-300 ${
+              className={`group relative bg-theme border rounded-xl p-6 cursor-default transition-all duration-300 ${
                 activeFeature === i
                   ? "border-brand-yellow/40 shadow-[0_0_30px_rgba(252,211,77,0.1)]"
-                  : "border-white/5"
+                  : "border-theme/5"
               }`}
             >
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors ${
-                activeFeature === i ? "bg-brand-yellow/15 text-brand-yellow" : "bg-white/5 text-gray-500"
+                activeFeature === i ? "bg-brand-yellow/15 text-brand-yellow" : "bg-theme/5 text-theme"
               }`}>
                 <f.icon size={20} />
               </div>
-              <h3 className="text-white font-bold text-base mb-2 group-hover:text-brand-yellow transition-colors">{f.title}</h3>
-              <p className="text-gray-500 text-xs leading-relaxed">{f.desc}</p>
+              <h3 className="text-theme font-bold text-base mb-2 group-hover:text-brand-yellow transition-colors">{f.title}</h3>
+              <p className="text-theme text-xs leading-relaxed">{f.desc}</p>
               <div className={`absolute bottom-6 right-6 transition-all ${activeFeature === i ? "opacity-100" : "opacity-0"}`}>
                 <ChevronRight size={16} className="text-brand-yellow" />
               </div>
@@ -443,14 +443,14 @@ export default function ExportPage() {
           className="bg-gradient-to-r from-brand-yellow/10 via-brand-yellow/5 to-transparent border border-brand-yellow/20 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div>
-            <h3 className="text-white font-black text-xl mb-1">Ready to Export Globally?</h3>
-            <p className="text-gray-400 text-sm">Submit your export enquiry and our logistics team will respond within 24 hours.</p>
+            <h3 className="text-theme font-black text-xl mb-1">Ready to Export Globally?</h3>
+            <p className="text-theme text-sm">Submit your export enquiry and our logistics team will respond within 24 hours.</p>
           </div>
           <Link href="/export/enquiry">
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
-              className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-black px-8 py-3.5 rounded text-xs font-black uppercase tracking-wider transition-colors whitespace-nowrap"
+              className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-theme px-8 py-3.5 rounded text-xs font-black uppercase tracking-wider transition-colors whitespace-nowrap"
             >
               Submit Inquiry to Anvil
               <ArrowRight size={14} />

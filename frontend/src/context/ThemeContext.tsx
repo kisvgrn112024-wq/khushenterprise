@@ -1,6 +1,7 @@
+"use client";
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-export type Theme = 'dark' | 'light' | 'medical';
+export type Theme = 'dark' | 'light' | 'blue';
 
 interface ThemeContextProps {
   theme: Theme;
@@ -15,7 +16,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Load persisted theme on mount
   useEffect(() => {
     const stored = typeof window !== 'undefined' ? localStorage.getItem('ke_theme') : null;
-    if (stored === 'light' || stored === 'medical' || stored === 'dark') {
+    if (stored === 'light' || stored === 'blue' || stored === 'dark') {
       setThemeState(stored);
       document.documentElement.setAttribute('data-theme', stored);
     } else {

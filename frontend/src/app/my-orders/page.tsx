@@ -134,18 +134,18 @@ export default function MyOrdersPage() {
       
       {/* Dynamic greeting header from Google One-Tap */}
       {currentUser && (
-        <div className="bg-[#1c2e42]/20 border border-[#8bceff]/10 p-4 rounded-xl mb-8 flex justify-between items-center backdrop-blur-md">
+        <div className="bg-theme/20 border border-theme/10 p-4 rounded-xl mb-8 flex justify-between items-center backdrop-blur-md">
           <div>
             <div className="text-[10px] uppercase font-bold text-[#8bceff] tracking-widest">Active B2B Contract Session</div>
-            <div className="text-white font-extrabold text-lg mt-0.5">Welcome, {currentUser.name}</div>
-            <div className="text-xs text-gray-400 font-mono mt-0.5">{currentUser.org} | {currentUser.email}</div>
+            <div className="text-theme font-extrabold text-lg mt-0.5">Welcome, {currentUser.name}</div>
+            <div className="text-xs text-theme font-mono mt-0.5">{currentUser.org} | {currentUser.email}</div>
           </div>
           <button 
             onClick={() => {
               localStorage.removeItem("ke_user");
               window.location.reload();
             }}
-            className="text-xs text-gray-500 hover:text-white underline"
+            className="text-xs text-theme hover:text-theme underline"
           >
             Switch Account
           </button>
@@ -157,27 +157,27 @@ export default function MyOrdersPage() {
         
         {/* Left Side: Order Consignments */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="flex items-center justify-between pb-4 border-b border-white/5">
+          <div className="flex items-center justify-between pb-4 border-b border-theme/5">
             <div>
-              <h1 className="text-2xl font-bold text-white mb-1">Your Consignments</h1>
-              <p className="text-xs text-gray-400">Track shipping, packaging dimensions, and retrieve custom HSN reports.</p>
+              <h1 className="text-2xl font-bold text-theme mb-1">Your Consignments</h1>
+              <p className="text-xs text-theme">Track shipping, packaging dimensions, and retrieve custom HSN reports.</p>
             </div>
           </div>
 
           <div className="space-y-6">
             {orders.map((order) => (
-              <div key={order.id} className="bg-[#161616] rounded-xl p-6 border border-white/5 shadow-md flex flex-col justify-between">
+              <div key={order.id} className="bg-theme rounded-xl p-6 border border-theme/5 shadow-md flex flex-col justify-between">
                 
                 {/* Core Order Info Bar */}
-                <div className="flex flex-wrap md:flex-nowrap justify-between gap-6 mb-6 pb-6 border-b border-white/5">
+                <div className="flex flex-wrap md:flex-nowrap justify-between gap-6 mb-6 pb-6 border-b border-theme/5">
                   <div className="w-full md:w-1/3">
-                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Order ID</div>
-                    <div className="font-bold text-white text-base mb-1">{order.id}</div>
-                    <div className="text-xs text-gray-400 mb-4 flex items-center gap-1.5"><Calendar size={13}/> {order.date}</div>
+                    <div className="text-[10px] font-bold text-theme uppercase tracking-widest mb-1">Order ID</div>
+                    <div className="font-bold text-theme text-base mb-1">{order.id}</div>
+                    <div className="text-xs text-theme mb-4 flex items-center gap-1.5"><Calendar size={13}/> {order.date}</div>
                     
-                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Wholesale Total</div>
-                    <div className="font-extrabold text-white text-lg mb-1">₹{order.total.toLocaleString("en-IN")}</div>
-                    <div className="text-xs text-gray-400 font-mono">Terms: {order.payment}</div>
+                    <div className="text-[10px] font-bold text-theme uppercase tracking-widest mb-1">Wholesale Total</div>
+                    <div className="font-extrabold text-theme text-lg mb-1">₹{order.total.toLocaleString("en-IN")}</div>
+                    <div className="text-xs text-theme font-mono">Terms: {order.payment}</div>
                   </div>
 
                   {/* Dynamic Progress Timeline */}
@@ -189,7 +189,7 @@ export default function MyOrdersPage() {
                       }`}>
                         {order.status}
                       </span>
-                      <span className="text-xs text-gray-400">{order.expectedDate}</span>
+                      <span className="text-xs text-theme">{order.expectedDate}</span>
                     </div>
 
                     <div className="relative mt-4">
@@ -200,11 +200,11 @@ export default function MyOrdersPage() {
                         {steps.map((step, idx) => (
                           <div key={idx} className="flex flex-col items-center">
                             {idx <= order.progress ? (
-                              <CheckCircle2 size={16} className="text-green-500 bg-[#161616] rounded-full z-10" />
+                              <CheckCircle2 size={16} className="text-green-500 bg-theme rounded-full z-10" />
                             ) : (
-                              <Circle size={16} className="text-slate-600 bg-[#161616] rounded-full z-10" />
+                              <Circle size={16} className="text-slate-600 bg-theme rounded-full z-10" />
                             )}
-                            <span className={`text-[10px] font-bold mt-2 ${idx <= order.progress ? 'text-white' : 'text-slate-600'}`}>{step}</span>
+                            <span className={`text-[10px] font-bold mt-2 ${idx <= order.progress ? 'text-theme' : 'text-slate-600'}`}>{step}</span>
                           </div>
                         ))}
                       </div>
@@ -214,44 +214,44 @@ export default function MyOrdersPage() {
 
                 {/* Logistics Dispatch Summary Box for "Dispatched" orders */}
                 {order.status === "Dispatched" && (
-                  <div className="bg-[#0c1825]/60 border border-[#8bceff]/20 rounded-lg p-5 mb-6">
+                  <div className="bg-theme/60 border border-theme/20 rounded-lg p-5 mb-6">
                     <div className="text-[#8bceff] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
                       <Truck size={14} /> Cargo Logistics Dispatch Summary
                     </div>
                     
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono mb-4 pb-4 border-b border-white/5">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono mb-4 pb-4 border-b border-theme/5">
                       <div>
-                        <span className="text-gray-500 block text-[9px] uppercase tracking-wider">HSN Code</span>
-                        <span className="text-white font-bold">{order.hsnCode}</span>
+                        <span className="text-theme block text-[9px] uppercase tracking-wider">HSN Code</span>
+                        <span className="text-theme font-bold">{order.hsnCode}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500 block text-[9px] uppercase tracking-wider">Cargo Weight</span>
-                        <span className="text-white font-bold">{order.weight}</span>
+                        <span className="text-theme block text-[9px] uppercase tracking-wider">Cargo Weight</span>
+                        <span className="text-theme font-bold">{order.weight}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500 block text-[9px] uppercase tracking-wider">Box Dimensions</span>
-                        <span className="text-white font-bold">{order.dimensions}</span>
+                        <span className="text-theme block text-[9px] uppercase tracking-wider">Box Dimensions</span>
+                        <span className="text-theme font-bold">{order.dimensions}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500 block text-[9px] uppercase tracking-wider">Courier Carrier</span>
-                        <span className="text-white font-bold">{order.courier}</span>
+                        <span className="text-theme block text-[9px] uppercase tracking-wider">Courier Carrier</span>
+                        <span className="text-theme font-bold">{order.courier}</span>
                       </div>
                     </div>
 
                     <div className="text-xs mb-4">
-                      <span className="text-gray-500 block text-[9px] font-mono uppercase tracking-wider mb-0.5">Packaging Description</span>
-                      <p className="text-gray-300 leading-relaxed">{order.packingDesc}</p>
+                      <span className="text-theme block text-[9px] font-mono uppercase tracking-wider mb-0.5">Packaging Description</span>
+                      <p className="text-theme leading-relaxed">{order.packingDesc}</p>
                     </div>
 
-                    <div className="flex items-center justify-between bg-black/30 p-3 rounded border border-white/5">
+                    <div className="flex items-center justify-between bg-theme/30 p-3 rounded border border-theme/5">
                       <div>
-                        <span className="text-gray-500 block text-[9px] font-mono uppercase tracking-wider">Blue Dart Air Tracking ID</span>
+                        <span className="text-theme block text-[9px] font-mono uppercase tracking-wider">Blue Dart Air Tracking ID</span>
                         <span className="text-[#8bceff] font-bold font-mono">{order.tracking}</span>
                       </div>
                       <div className="flex gap-2">
                         <button 
                           onClick={() => copyToClipboard(order.tracking)}
-                          className="px-2.5 py-1.5 bg-[#111111] hover:bg-white/5 border border-white/5 rounded text-[10px] text-white flex items-center gap-1 transition-colors"
+                          className="px-2.5 py-1.5 bg-theme hover:bg-theme/5 border border-theme/5 rounded text-[10px] text-theme flex items-center gap-1 transition-colors"
                         >
                           {copiedId === order.tracking ? <Check size={10} className="text-green-400" /> : <Copy size={10} />}
                           {copiedId === order.tracking ? "Copied" : "Copy ID"}
@@ -260,7 +260,7 @@ export default function MyOrdersPage() {
                           href="https://api.whatsapp.com/send?phone=919876543210&text=Hi%20Khush%20Enterprises,%20I'm%20checking%20the%20status%20of%20my%20consignment%20ID%20KE-ORD-88741"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20ba59] text-black font-bold rounded text-[10px] flex items-center gap-1 transition-colors"
+                          className="px-3 py-1.5 bg-theme hover:bg-theme text-theme font-bold rounded text-[10px] flex items-center gap-1 transition-colors"
                         >
                           WhatsApp Support
                         </a>
@@ -271,15 +271,15 @@ export default function MyOrdersPage() {
 
                 {/* Default Bottom Bar / Actions */}
                 <div className="flex justify-between items-center pt-2 mt-auto">
-                  <div className="text-[11px] text-gray-500 font-mono">
+                  <div className="text-[11px] text-theme font-mono">
                     Consignment items count: {order.itemsCount}
                   </div>
                   <div className="flex gap-3">
-                    <button className="px-4 py-1.5 bg-[#111111] hover:bg-white/5 border border-white/5 rounded text-xs font-bold transition-colors">
+                    <button className="px-4 py-1.5 bg-theme hover:bg-theme/5 border border-theme/5 rounded text-xs font-bold transition-colors">
                       Download HSN Invoice
                     </button>
                     {order.status === "Delivered" && (
-                      <button className="px-4 py-1.5 bg-[#8bceff]/10 hover:bg-[#8bceff]/20 border border-[#8bceff]/20 text-[#8bceff] rounded text-xs font-bold transition-colors">
+                      <button className="px-4 py-1.5 bg-theme/10 hover:bg-theme/20 border border-theme/20 text-[#8bceff] rounded text-xs font-bold transition-colors">
                         Order Again
                       </button>
                     )}
@@ -293,13 +293,13 @@ export default function MyOrdersPage() {
 
         {/* Right Side: Integrated B2B Support Desk */}
         <div className="space-y-6">
-          <div className="bg-[#161616] border border-white/5 rounded-xl p-6 flex flex-col h-[550px]">
-            <div className="border-b border-white/5 pb-4 mb-4 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#8bceff]/10 text-[#8bceff] flex items-center justify-center">
+          <div className="bg-theme border border-theme/5 rounded-xl p-6 flex flex-col h-[550px]">
+            <div className="border-b border-theme/5 pb-4 mb-4 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-theme/10 text-[#8bceff] flex items-center justify-center">
                 <MessageSquare size={18} />
               </div>
               <div>
-                <h3 className="text-white font-bold text-sm">KE Consignment Assistant</h3>
+                <h3 className="text-theme font-bold text-sm">KE Consignment Assistant</h3>
                 <span className="text-[10px] text-green-400 flex items-center gap-1">
                   <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping"></div> Online (B2B Desk)
                 </span>
@@ -313,8 +313,8 @@ export default function MyOrdersPage() {
                   key={idx} 
                   className={`p-3 rounded-lg max-w-[85%] ${
                     msg.sender === "user" 
-                      ? "bg-[#8bceff]/10 text-white ml-auto border border-[#8bceff]/20" 
-                      : "bg-[#111111] text-gray-300 mr-auto border border-white/5"
+                      ? "bg-theme/10 text-theme ml-auto border border-theme/20" 
+                      : "bg-theme text-theme mr-auto border border-theme/5"
                   }`}
                 >
                   {msg.text}
@@ -324,23 +324,23 @@ export default function MyOrdersPage() {
 
             {/* Quick Queries Buttons */}
             <div className="space-y-2 mb-4">
-              <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Consignment Quick Prompts</span>
+              <span className="text-[9px] font-bold text-theme uppercase tracking-widest block mb-1">Consignment Quick Prompts</span>
               <div className="flex flex-wrap gap-1.5">
                 <button 
                   onClick={() => handleSendMessage("Check current order tracking")}
-                  className="bg-[#111111] hover:bg-white/5 border border-white/5 rounded px-2.5 py-1 text-[10px] text-gray-300 transition-all text-left"
+                  className="bg-theme hover:bg-theme/5 border border-theme/5 rounded px-2.5 py-1 text-[10px] text-theme transition-all text-left"
                 >
                   🔍 Track Active Consignment
                 </button>
                 <button 
                   onClick={() => handleSendMessage("Request duplicate HSN invoice")}
-                  className="bg-[#111111] hover:bg-white/5 border border-white/5 rounded px-2.5 py-1 text-[10px] text-gray-300 transition-all text-left"
+                  className="bg-theme hover:bg-theme/5 border border-theme/5 rounded px-2.5 py-1 text-[10px] text-theme transition-all text-left"
                 >
                   📄 Download HSN Invoice
                 </button>
                 <button 
                   onClick={() => handleSendMessage("Show B2B contract credit balance")}
-                  className="bg-[#111111] hover:bg-white/5 border border-white/5 rounded px-2.5 py-1 text-[10px] text-gray-300 transition-all text-left"
+                  className="bg-theme hover:bg-theme/5 border border-theme/5 rounded px-2.5 py-1 text-[10px] text-theme transition-all text-left"
                 >
                   💳 Check Credit Terms
                 </button>
@@ -348,18 +348,18 @@ export default function MyOrdersPage() {
             </div>
 
             {/* Message Input */}
-            <div className="flex gap-2 border-t border-white/5 pt-3">
+            <div className="flex gap-2 border-t border-theme/5 pt-3">
               <input 
                 type="text" 
                 value={chatInput}
                 onChange={e => setChatInput(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter") handleSendMessage(chatInput); }}
                 placeholder="Ask dispatch query..."
-                className="flex-1 bg-[#111111] border border-white/5 rounded px-3 py-2 text-white text-xs outline-none focus:border-[#8bceff] transition-colors"
+                className="flex-1 bg-theme border border-theme/5 rounded px-3 py-2 text-theme text-xs outline-none focus:border-theme transition-colors"
               />
               <button 
                 onClick={() => handleSendMessage(chatInput)}
-                className="bg-[#8bceff] hover:bg-[#6ab3f0] text-black px-3 rounded text-xs font-bold transition-all"
+                className="bg-theme hover:bg-theme text-theme px-3 rounded text-xs font-bold transition-all"
               >
                 Send
               </button>
@@ -367,18 +367,18 @@ export default function MyOrdersPage() {
           </div>
 
           {/* Corporate Contacts Helpbox */}
-          <div className="bg-[#111111] border border-white/5 rounded-xl p-5 space-y-4">
-            <h4 className="text-xs font-bold text-white uppercase tracking-widest">Wholesale Dispatch Records</h4>
-            <div className="space-y-2.5 text-xs text-gray-400">
+          <div className="bg-theme border border-theme/5 rounded-xl p-5 space-y-4">
+            <h4 className="text-xs font-bold text-theme uppercase tracking-widest">Wholesale Dispatch Records</h4>
+            <div className="space-y-2.5 text-xs text-theme">
               <div className="flex items-center gap-2">
                 <Phone size={13} className="text-[#8bceff]" />
-                <span>Consignment Hotline: <span className="text-white">+91 98765 43210</span></span>
+                <span>Consignment Hotline: <span className="text-theme">+91 98765 43210</span></span>
               </div>
               <div className="flex items-center gap-2">
                 <ExternalLink size={13} className="text-[#8bceff]" />
-                <span>Support Email: <span className="text-white">dispatch@khushenterprises.com</span></span>
+                <span>Support Email: <span className="text-theme">dispatch@khushenterprises.com</span></span>
               </div>
-              <p className="text-[10px] text-gray-500 leading-normal font-mono">
+              <p className="text-[10px] text-theme leading-normal font-mono">
                 Logistics Hub Hours:<br/>
                 Mon - Sat: 09:30 AM to 06:30 PM (IST)
               </p>

@@ -27,7 +27,7 @@ export default function ProductDetailClient() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   if (!product) {
-    return <div className="min-h-screen flex items-center justify-center text-white bg-[#0a0a0a]">Loading product details...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-theme bg-theme">Loading product details...</div>;
   }
 
   const IconComponent = IconMap[product.icon] || Package;
@@ -43,18 +43,18 @@ export default function ProductDetailClient() {
     : [`/design/images/${product.id}.jpeg`, `/design/images/${product.id}.jpeg`, `/design/images/${product.id}.jpeg`];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] pb-24">
+    <div className="min-h-screen bg-theme pb-24">
       <div className="container mx-auto px-4 lg:px-8 py-8">
         
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[10px] text-gray-400 uppercase tracking-wider mb-8">
-          <Link href="/" className="hover:text-white transition-colors">Home</Link> 
+        <div className="flex items-center gap-2 text-[10px] text-theme uppercase tracking-wider mb-8">
+          <Link href="/" className="hover:text-theme transition-colors">Home</Link> 
           <span>/</span>
-          <Link href="/products" className="hover:text-white transition-colors">Products</Link> 
+          <Link href="/products" className="hover:text-theme transition-colors">Products</Link> 
           <span>/</span>
-          <Link href="/products" className="hover:text-white transition-colors">{product.category || "General Lab"}</Link>
+          <Link href="/products" className="hover:text-theme transition-colors">{product.category || "General Lab"}</Link>
           <span>/</span>
-          <span className="text-white truncate max-w-[200px] inline-block">{product.title}</span>
+          <span className="text-theme truncate max-w-[200px] inline-block">{product.title}</span>
         </div>
 
         {/* Top Section */}
@@ -62,7 +62,7 @@ export default function ProductDetailClient() {
           
           {/* Left: Image Viewer */}
           <div className="flex flex-col gap-4">
-            <div className="bg-[#111111] rounded border border-white/10 aspect-square flex items-center justify-center p-8 relative overflow-hidden">
+            <div className="bg-theme rounded border border-theme/10 aspect-square flex items-center justify-center p-8 relative overflow-hidden">
               <img 
                 src={mainImageUrl} 
                 alt={product.title} 
@@ -84,7 +84,7 @@ export default function ProductDetailClient() {
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-4">
               {imagesToRender.slice(0, 3).map((img, idx) => (
-                <div key={idx} className="bg-[#111111] rounded border border-white/10 aspect-square flex items-center justify-center overflow-hidden hover:border-electric-blue transition-colors cursor-pointer">
+                <div key={idx} className="bg-theme rounded border border-theme/10 aspect-square flex items-center justify-center overflow-hidden hover:border-electric-blue transition-colors cursor-pointer">
                   <img 
                     src={img} 
                     className="w-full h-full object-cover opacity-80 hover:opacity-100" 
@@ -97,7 +97,7 @@ export default function ProductDetailClient() {
                   />
                 </div>
               ))}
-              <div className="bg-[#111111] rounded border border-white/10 aspect-square flex items-center justify-center text-xs text-gray-400 hover:text-white hover:border-white/30 transition-colors cursor-pointer">
+              <div className="bg-theme rounded border border-theme/10 aspect-square flex items-center justify-center text-xs text-theme hover:text-theme hover:border-theme/30 transition-colors cursor-pointer">
                 +4 More
               </div>
             </div>
@@ -117,13 +117,13 @@ export default function ProductDetailClient() {
                   <Star size={12} fill="currentColor" />
                   <Star size={12} fill="currentColor" />
                 </div>
-                <span className="text-[10px] text-gray-400 tracking-wider">({product.rating || "4.8"} / {product.reviews || "15"} reviews)</span>
+                <span className="text-[10px] text-theme tracking-wider">({product.rating || "4.8"} / {product.reviews || "15"} reviews)</span>
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{product.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-theme mb-4">{product.title}</h1>
             
-            <p className="text-gray-400 text-sm leading-relaxed mb-6 whitespace-pre-line">
+            <p className="text-theme text-sm leading-relaxed mb-6 whitespace-pre-line">
               {product.description}
             </p>
 
@@ -131,20 +131,20 @@ export default function ProductDetailClient() {
               <div className="flex items-end gap-2 mb-1">
                 <span className="text-4xl font-bold text-brand-yellow">₹{product.price.toLocaleString()}</span>
                 {product.originalPrice && (
-                  <span className="text-sm text-gray-500 line-through mb-1">₹{product.originalPrice.toLocaleString()}</span>
+                  <span className="text-sm text-theme line-through mb-1">₹{product.originalPrice.toLocaleString()}</span>
                 )}
               </div>
-              <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">INCLUSIVE OF ALL TAXES</div>
+              <div className="text-[10px] text-theme uppercase tracking-widest font-bold">INCLUSIVE OF ALL TAXES</div>
             </div>
 
-            <div className="bg-[#1a1a1a] border border-white/10 rounded p-6 grid grid-cols-2 gap-4 mb-6">
-              <div className="text-[10px] text-gray-400 uppercase tracking-wider flex gap-2">
-                SKU: <span className="text-white">{product.sku || `KE-${product.id.slice(-6).toUpperCase()}`}</span>
+            <div className="bg-theme border border-theme/10 rounded p-6 grid grid-cols-2 gap-4 mb-6">
+              <div className="text-[10px] text-theme uppercase tracking-wider flex gap-2">
+                SKU: <span className="text-theme">{product.sku || `KE-${product.id.slice(-6).toUpperCase()}`}</span>
               </div>
-              <div className="text-[10px] text-gray-400 uppercase tracking-wider flex gap-2">
-                BRAND: <span className="text-white font-black tracking-widest bg-white/10 px-1 rounded">{product.brand || "KE"}</span>
+              <div className="text-[10px] text-theme uppercase tracking-wider flex gap-2">
+                BRAND: <span className="text-theme font-black tracking-widest bg-theme/10 px-1 rounded">{product.brand || "KE"}</span>
               </div>
-              <div className="text-[10px] text-gray-400 uppercase tracking-wider flex gap-2 col-span-2">
+              <div className="text-[10px] text-theme uppercase tracking-wider flex gap-2 col-span-2">
                 STATUS: <span className={product.stock > 0 ? "text-electric-blue" : "text-red-400"}>{product.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}</span>
               </div>
             </div>
@@ -156,37 +156,37 @@ export default function ProductDetailClient() {
             )}
 
             <div className="flex gap-4 mb-4">
-              <div className="flex items-center bg-[#111111] border border-white/10 rounded px-2 w-32 justify-between">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-3 text-gray-400 hover:text-white transition-colors">-</button>
-                <span className="text-white text-sm">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="px-3 py-3 text-gray-400 hover:text-white transition-colors">+</button>
+              <div className="flex items-center bg-theme border border-theme/10 rounded px-2 w-32 justify-between">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-3 text-theme hover:text-theme transition-colors">-</button>
+                <span className="text-theme text-sm">{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)} className="px-3 py-3 text-theme hover:text-theme transition-colors">+</button>
               </div>
               <button 
                 onClick={() => addToCart(product, quantity)}
-                className="flex-1 bg-[#dbeafe] hover:bg-blue-200 text-blue-900 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
+                className="flex-1 bg-theme hover:bg-blue-200 text-blue-900 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
               >
                 <ShoppingCart size={16} /> ADD TO CART
               </button>
             </div>
             
             <button 
-              className="w-full bg-brand-yellow hover:bg-yellow-400 text-black py-4 rounded font-bold text-xs uppercase tracking-wider transition-colors mb-8"
+              className="w-full bg-brand-yellow hover:bg-yellow-400 text-theme py-4 rounded font-bold text-xs uppercase tracking-wider transition-colors mb-8"
             >
               BUY NOW
             </button>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-[#111111] border border-white/10 rounded p-4 flex flex-col items-center justify-center gap-2 text-center">
+              <div className="bg-theme border border-theme/10 rounded p-4 flex flex-col items-center justify-center gap-2 text-center">
                 <Truck size={18} className="text-electric-blue" />
-                <span className="text-[10px] text-white font-bold">Fast Delivery</span>
+                <span className="text-[10px] text-theme font-bold">Fast Delivery</span>
               </div>
-              <div className="bg-[#111111] border border-white/10 rounded p-4 flex flex-col items-center justify-center gap-2 text-center">
+              <div className="bg-theme border border-theme/10 rounded p-4 flex flex-col items-center justify-center gap-2 text-center">
                 <ShieldCheck size={18} className="text-electric-blue" />
-                <span className="text-[10px] text-white font-bold">Secure Payment</span>
+                <span className="text-[10px] text-theme font-bold">Secure Payment</span>
               </div>
-              <div className="bg-[#111111] border border-white/10 rounded p-4 flex flex-col items-center justify-center gap-2 text-center">
+              <div className="bg-theme border border-theme/10 rounded p-4 flex flex-col items-center justify-center gap-2 text-center">
                 <RotateCcw size={18} className="text-electric-blue" />
-                <span className="text-[10px] text-white font-bold">Easy Returns</span>
+                <span className="text-[10px] text-theme font-bold">Easy Returns</span>
               </div>
             </div>
           </div>
@@ -194,12 +194,12 @@ export default function ProductDetailClient() {
 
         {/* Tabs Section */}
         <div className="mb-16">
-          <div className="flex overflow-x-auto border-b border-white/10 mb-8">
+          <div className="flex overflow-x-auto border-b border-theme/10 mb-8">
             {['description', 'specifications', 'ai manual', `reviews (${product.reviews || 15})`, 'shipping'].map(tab => (
               <button 
                 key={tab}
                 onClick={() => setActiveTab(tab.split(' ')[0])}
-                className={`px-8 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap border-b-2 transition-colors ${activeTab === tab.split(' ')[0] ? 'border-white text-white' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+                className={`px-8 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap border-b-2 transition-colors ${activeTab === tab.split(' ')[0] ? 'border-theme text-theme' : 'border-transparent text-theme hover:text-theme'}`}
               >
                 {tab}
               </button>
@@ -208,48 +208,48 @@ export default function ProductDetailClient() {
           
           <div className="px-4">
             {activeTab === 'description' && (
-              <div className="text-gray-400 text-sm space-y-6 max-w-3xl">
+              <div className="text-theme text-sm space-y-6 max-w-3xl">
                 <p className="whitespace-pre-line leading-relaxed">
                   {product.description}
                 </p>
 
-                <div className="mt-12 pt-8 border-t border-white/5">
-                  <div className="text-[10px] font-bold text-white uppercase tracking-widest mb-4">
+                <div className="mt-12 pt-8 border-t border-theme/5">
+                  <div className="text-[10px] font-bold text-theme uppercase tracking-widest mb-4">
                     DOWNLOAD AI GENERATED MANUAL:
                   </div>
                   <div className="flex flex-wrap gap-4">
-                    <button className="flex items-center gap-2 bg-[#111111] border border-white/10 px-4 py-2 rounded hover:bg-white/5 transition-colors">
+                    <button className="flex items-center gap-2 bg-theme border border-theme/10 px-4 py-2 rounded hover:bg-theme/5 transition-colors">
                       <FileText size={14} className="text-red-400" />
-                      <span className="text-[10px] text-white font-bold tracking-wider">PDF</span>
+                      <span className="text-[10px] text-theme font-bold tracking-wider">PDF</span>
                     </button>
-                    <button className="flex items-center gap-2 bg-[#111111] border border-white/10 px-4 py-2 rounded hover:bg-white/5 transition-colors">
+                    <button className="flex items-center gap-2 bg-theme border border-theme/10 px-4 py-2 rounded hover:bg-theme/5 transition-colors">
                       <FileText size={14} className="text-blue-400" />
-                      <span className="text-[10px] text-white font-bold tracking-wider">DOCX</span>
+                      <span className="text-[10px] text-theme font-bold tracking-wider">DOCX</span>
                     </button>
-                    <button className="flex items-center gap-2 bg-[#111111] border border-white/10 px-4 py-2 rounded hover:bg-white/5 transition-colors">
+                    <button className="flex items-center gap-2 bg-theme border border-theme/10 px-4 py-2 rounded hover:bg-theme/5 transition-colors">
                       <Package size={14} className="text-yellow-400" />
-                      <span className="text-[10px] text-white font-bold tracking-wider">Image</span>
+                      <span className="text-[10px] text-theme font-bold tracking-wider">Image</span>
                     </button>
                   </div>
                 </div>
               </div>
             )}
             {activeTab === 'ai' && (
-               <div className="bg-[#111111] border border-white/10 rounded p-8">
+               <div className="bg-theme border border-theme/10 rounded p-8">
                  <AIManualSystem sku={product.sku || `SKU-KE-${product.id}`} />
                </div>
             )}
             {(activeTab !== 'description' && activeTab !== 'ai') && (
-              <div className="text-gray-500 italic text-sm">Content for {activeTab} will be populated here...</div>
+              <div className="text-theme italic text-sm">Content for {activeTab} will be populated here...</div>
             )}
           </div>
         </div>
 
         {/* Related Products */}
         <div>
-           <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-8">
-             <h2 className="text-2xl font-bold text-white">Related Laboratory Tools</h2>
-             <Link href="/products" className="text-electric-blue text-[10px] font-bold uppercase tracking-wider hover:text-white transition-colors">VIEW ALL</Link>
+           <div className="flex justify-between items-end border-b border-theme/10 pb-4 mb-8">
+             <h2 className="text-2xl font-bold text-theme">Related Laboratory Tools</h2>
+             <Link href="/products" className="text-electric-blue text-[10px] font-bold uppercase tracking-wider hover:text-theme transition-colors">VIEW ALL</Link>
            </div>
            
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -259,9 +259,9 @@ export default function ProductDetailClient() {
                   : `/design/images/${rp.id}.jpeg`;
 
                 return (
-                  <div key={rp.id} className="bg-[#111111] border border-white/10 group flex flex-col relative">
+                  <div key={rp.id} className="bg-theme border border-theme/10 group flex flex-col relative">
                     <div className="absolute top-4 right-4 z-10">
-                      <Heart size={16} className="text-gray-500 hover:text-white cursor-pointer" />
+                      <Heart size={16} className="text-theme hover:text-theme cursor-pointer" />
                     </div>
                     <Link href={`/products/${rp.id}`} className="h-48 flex items-center justify-center p-4 bg-gradient-to-b from-[#1a1a1a] to-[#111111] relative overflow-hidden cursor-pointer">
                       <img 
@@ -276,28 +276,28 @@ export default function ProductDetailClient() {
                         }}
                       />
                     </Link>
-                    <div className="p-6 border-t border-white/5 flex flex-col flex-1">
+                    <div className="p-6 border-t border-theme/5 flex flex-col flex-1">
                       <div className="flex justify-between items-center mb-2">
-                        <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{rp.category || "EQUIPMENT"}</div>
-                        <div className="flex items-center gap-1 bg-[#1a1a1a] px-1.5 py-0.5 rounded border border-white/5">
-                          <span className="text-[8px] font-bold text-gray-400">Brand: </span>
-                          <span className="text-[9px] font-black text-white tracking-widest">{rp.brand || "KE"}</span>
+                        <div className="text-[10px] text-theme font-bold uppercase tracking-wider">{rp.category || "EQUIPMENT"}</div>
+                        <div className="flex items-center gap-1 bg-theme px-1.5 py-0.5 rounded border border-theme/5">
+                          <span className="text-[8px] font-bold text-theme">Brand: </span>
+                          <span className="text-[9px] font-black text-theme tracking-widest">{rp.brand || "KE"}</span>
                         </div>
                       </div>
-                      <Link href={`/products/${rp.id}`} className="text-white text-sm font-bold leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-electric-blue transition-colors cursor-pointer">
+                      <Link href={`/products/${rp.id}`} className="text-theme text-sm font-bold leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-electric-blue transition-colors cursor-pointer">
                         {rp.title}
                       </Link>
                       
                       <div className="flex items-center justify-between mb-6">
                         <div className="text-brand-yellow font-bold">₹{rp.price.toLocaleString()}</div>
-                        <div className="flex items-center gap-1 text-[10px] text-gray-400 font-bold">
+                        <div className="flex items-center gap-1 text-[10px] text-theme font-bold">
                           <Star size={10} className="text-brand-yellow" fill="currentColor" /> {rp.rating}
                         </div>
                       </div>
                       
                       <button 
                         onClick={() => addToCart(rp, 1)}
-                        className="w-full bg-[#1a1a1a] border border-white/10 hover:border-electric-blue hover:text-electric-blue text-white text-[10px] font-bold py-3 uppercase tracking-wider transition-colors"
+                        className="w-full bg-theme border border-theme/10 hover:border-electric-blue hover:text-electric-blue text-theme text-[10px] font-bold py-3 uppercase tracking-wider transition-colors"
                       >
                         ADD TO CART
                       </button>

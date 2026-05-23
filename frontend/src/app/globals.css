@@ -24,7 +24,7 @@
   --foreground: #111111;
   --accent: #fcd34d;
 }
-[data-theme='medical'] {
+[data-theme='blue'] {
   --background: #eef2ff;
   --foreground: #1e3a8a;
   --accent: #fcd34d;
@@ -37,13 +37,17 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), sans-serif;
-  overflow-x: hidden;
-  transition: background 0.3s ease, color 0.3s ease;
-}
+/* Theme utility classes */
+.bg-theme { background-color: var(--background) !important; }
+.text-theme { color: var(--foreground) !important; }
+.border-theme { border-color: var(--accent) !important; }
+  html, body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), sans-serif;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
 
 @utility glass {
   background: var(--color-glass-bg-light);

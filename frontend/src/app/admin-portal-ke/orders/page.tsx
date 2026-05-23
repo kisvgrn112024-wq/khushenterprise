@@ -92,31 +92,31 @@ export default function OrderManagement() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Order Management</h1>
-          <p className="text-gray-400 text-sm">Monitor, filter, and process recent customer equipment orders.</p>
+          <h1 className="text-3xl font-bold text-theme mb-1">Order Management</h1>
+          <p className="text-theme text-sm">Monitor, filter, and process recent customer equipment orders.</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => startDownload("Orders_Report.pdf", "3.2 MB", "PDF Document")} className="flex items-center gap-2 bg-[#8bceff] border border-[#8bceff]/20 hover:bg-[#6ab3f0] text-black text-sm px-4 py-2.5 rounded transition-colors font-bold">
+          <button onClick={() => startDownload("Orders_Report.pdf", "3.2 MB", "PDF Document")} className="flex items-center gap-2 bg-theme border border-theme/20 hover:bg-theme text-theme text-sm px-4 py-2.5 rounded transition-colors font-bold">
             <Download size={16} /> PDF
           </button>
-          <button onClick={() => startDownload("Orders_Export.csv", "1.1 MB", "CSV File")} className="flex items-center gap-2 bg-[#0c1825] border border-[#8bceff]/20 hover:bg-[#112435] text-[#8bceff] text-sm px-4 py-2.5 rounded transition-colors font-bold">
+          <button onClick={() => startDownload("Orders_Export.csv", "1.1 MB", "CSV File")} className="flex items-center gap-2 bg-theme border border-theme/20 hover:bg-theme text-[#8bceff] text-sm px-4 py-2.5 rounded transition-colors font-bold">
             <FileText size={16} /> CSV
           </button>
         </div>
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-[#161616] border border-white/5 rounded-lg p-4 mb-6 flex flex-wrap gap-4 items-center justify-between">
+      <div className="bg-theme border border-theme/5 rounded-lg p-4 mb-6 flex flex-wrap gap-4 items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mr-2">Status:</span>
+          <span className="text-xs font-bold text-theme uppercase tracking-widest mr-2">Status:</span>
           {["All Orders", "Processing", "Shipped", "Delivered", "Cancelled"].map(tab => (
             <button 
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
                 activeTab === tab 
-                  ? "bg-[#8bceff]/10 text-[#8bceff] border border-[#8bceff]/20" 
-                  : "bg-transparent text-gray-400 border border-white/10 hover:bg-white/5"
+                  ? "bg-theme/10 text-[#8bceff] border border-theme/20" 
+                  : "bg-transparent text-theme border border-theme/10 hover:bg-theme/5"
               }`}
             >
               {tab}
@@ -124,22 +124,22 @@ export default function OrderManagement() {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 bg-[#111111] border border-white/5 rounded px-3 py-1.5">
-            <Calendar size={14} className="text-gray-500" />
-            <span className="text-xs text-gray-300">Oct 1</span>
+          <div className="flex items-center gap-2 bg-theme border border-theme/5 rounded px-3 py-1.5">
+            <Calendar size={14} className="text-theme" />
+            <span className="text-xs text-theme">Oct 1</span>
           </div>
-          <span className="text-gray-500">-</span>
-          <div className="flex items-center gap-2 bg-[#111111] border border-white/5 rounded px-3 py-1.5">
-            <Calendar size={14} className="text-gray-500" />
-            <span className="text-xs text-gray-300">Oct 31</span>
+          <span className="text-theme">-</span>
+          <div className="flex items-center gap-2 bg-theme border border-theme/5 rounded px-3 py-1.5">
+            <Calendar size={14} className="text-theme" />
+            <span className="text-xs text-theme">Oct 31</span>
           </div>
         </div>
       </div>
 
       {/* Orders Table */}
-      <div className="bg-[#161616] border border-white/5 rounded-lg overflow-hidden">
+      <div className="bg-theme border border-theme/5 rounded-lg overflow-hidden">
         <table className="w-full text-left text-sm">
-          <thead className="bg-[#161616] text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-white/5">
+          <thead className="bg-theme text-[10px] font-bold text-theme uppercase tracking-wider border-b border-theme/5">
             <tr>
               <th className="p-5">Order ID</th>
               <th className="p-5">Date</th>
@@ -151,40 +151,40 @@ export default function OrderManagement() {
           </thead>
           <tbody className="divide-y divide-white/5">
             {filteredOrders.map((order, idx) => (
-              <tr key={idx} className="hover:bg-white/[0.02] transition-colors relative group">
+              <tr key={idx} className="hover:bg-theme/[0.02] transition-colors relative group">
                 <td className="p-5 font-bold text-[#8bceff]">{order.id}</td>
                 <td className="p-5">
-                  <div className="text-gray-300 mb-0.5">{order.date}</div>
-                  <div className="text-xs text-gray-500">{order.time}</div>
+                  <div className="text-theme mb-0.5">{order.date}</div>
+                  <div className="text-xs text-theme">{order.time}</div>
                 </td>
                 <td className="p-5 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded bg-[#111111] border border-white/5 flex items-center justify-center text-gray-500 shrink-0">
+                  <div className="w-8 h-8 rounded bg-theme border border-theme/5 flex items-center justify-center text-theme shrink-0">
                     {order.type === 'company' ? <Building2 size={14} /> : <User size={14} />}
                   </div>
                   <div>
-                    <div className="text-gray-300 font-medium mb-0.5">{order.customer}</div>
-                    <div className="text-xs text-gray-500">{order.email}</div>
+                    <div className="text-theme font-medium mb-0.5">{order.customer}</div>
+                    <div className="text-xs text-theme">{order.email}</div>
                   </div>
                 </td>
-                <td className="p-5 font-bold text-white">{order.amount}</td>
+                <td className="p-5 font-bold text-theme">{order.amount}</td>
                 <td className="p-5">
                   {order.status === 'Processing' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-[#1f1a11] border border-brand-yellow/20 px-3 py-1 rounded-full text-brand-yellow uppercase">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-brand-yellow/20 px-3 py-1 rounded-full text-brand-yellow uppercase">
                       <Clock size={10} /> {order.status}
                     </span>
                   )}
                   {order.status === 'Shipped' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-[#0c1825] border border-[#8bceff]/20 px-3 py-1 rounded-full text-[#8bceff] uppercase">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-theme/20 px-3 py-1 rounded-full text-[#8bceff] uppercase">
                       <Truck size={10} /> {order.status}
                     </span>
                   )}
                   {order.status === 'Delivered' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-[#0c1810] border border-green-400/20 px-3 py-1 rounded-full text-green-400 uppercase">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-green-400/20 px-3 py-1 rounded-full text-green-400 uppercase">
                       <CheckCircle2 size={10} /> {order.status}
                     </span>
                   )}
                   {order.status === 'Cancelled' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-[#1f1111] border border-[#ff4d4d]/20 px-3 py-1 rounded-full text-[#ff4d4d] uppercase">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-theme/20 px-3 py-1 rounded-full text-[#ff4d4d] uppercase">
                       <XCircle size={10} /> {order.status}
                     </span>
                   )}
@@ -193,7 +193,7 @@ export default function OrderManagement() {
                   <select 
                     value={order.status}
                     onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                    className="bg-[#111111] border border-white/5 text-gray-400 text-xs py-1.5 px-2 rounded outline-none cursor-pointer hover:bg-white/5 transition-colors appearance-none text-center"
+                    className="bg-theme border border-theme/5 text-theme text-xs py-1.5 px-2 rounded outline-none cursor-pointer hover:bg-theme/5 transition-colors appearance-none text-center"
                   >
                     <option value="Processing">Processing</option>
                     <option value="Shipped">Shipped</option>
@@ -207,15 +207,15 @@ export default function OrderManagement() {
         </table>
 
         {/* Pagination */}
-        <div className="p-4 border-t border-white/5 flex justify-between items-center text-xs text-gray-500">
+        <div className="p-4 border-t border-theme/5 flex justify-between items-center text-xs text-theme">
           <div>Showing 1 to {filteredOrders.length} of {orders.length} orders</div>
           <div className="flex gap-1">
-            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">{'<'}</button>
-            <button className="w-6 h-6 flex items-center justify-center bg-[#0c1825] text-[#8bceff] rounded font-bold">1</button>
-            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">2</button>
-            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">3</button>
-            <span className="w-6 h-6 flex items-center justify-center text-gray-600">...</span>
-            <button className="w-6 h-6 flex items-center justify-center hover:text-white transition-colors">{'>'}</button>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors">{'<'}</button>
+            <button className="w-6 h-6 flex items-center justify-center bg-theme text-[#8bceff] rounded font-bold">1</button>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors">2</button>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors">3</button>
+            <span className="w-6 h-6 flex items-center justify-center text-theme">...</span>
+            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors">{'>'}</button>
           </div>
         </div>
       </div>

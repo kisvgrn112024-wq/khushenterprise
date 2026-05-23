@@ -28,25 +28,25 @@ export default function AiChatModal({ isOpen, onClose, productName }: { isOpen: 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-theme/60 backdrop-blur-sm">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="w-full max-w-lg bg-[#050b14] border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden h-[600px] max-h-full"
+            className="w-full max-w-lg bg-theme border border-theme/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden h-[600px] max-h-full"
           >
             {/* Header */}
-            <div className="p-4 border-b border-white/10 bg-midnight-navy flex justify-between items-center">
+            <div className="p-4 border-b border-theme/10 bg-midnight-navy flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center">
                   <Bot size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">AI Product Assistant</h3>
+                  <h3 className="font-bold text-theme text-sm">AI Product Assistant</h3>
                   <p className="text-xs text-green-400 flex items-center gap-1">Online</p>
                 </div>
               </div>
-              <button onClick={onClose} className="text-slate-400 hover:text-white">
+              <button onClick={onClose} className="text-slate-400 hover:text-theme">
                 <X size={20} />
               </button>
             </div>
@@ -55,10 +55,10 @@ export default function AiChatModal({ isOpen, onClose, productName }: { isOpen: 
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex gap-3 max-w-[85%] ${msg.role === "user" ? "self-end ml-auto flex-row-reverse" : "self-start"}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === "bot" ? "bg-purple-500/20 text-purple-400" : "bg-electric-blue text-white"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === "bot" ? "bg-purple-500/20 text-purple-400" : "bg-electric-blue text-theme"}`}>
                     {msg.role === "bot" ? <Bot size={16} /> : <User size={16} />}
                   </div>
-                  <div className={`p-3 rounded-2xl text-sm ${msg.role === "bot" ? "bg-white/5 text-slate-300 rounded-tl-none border border-white/5" : "bg-electric-blue text-white rounded-tr-none"}`}>
+                  <div className={`p-3 rounded-2xl text-sm ${msg.role === "bot" ? "bg-theme/5 text-slate-300 rounded-tl-none border border-theme/5" : "bg-electric-blue text-theme rounded-tr-none"}`}>
                     {msg.text}
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export default function AiChatModal({ isOpen, onClose, productName }: { isOpen: 
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-purple-500/20 text-purple-400">
                     <Bot size={16} />
                   </div>
-                  <div className="p-3 rounded-2xl text-sm bg-white/5 text-slate-300 rounded-tl-none border border-white/5 flex items-center gap-2">
+                  <div className="p-3 rounded-2xl text-sm bg-theme/5 text-slate-300 rounded-tl-none border border-theme/5 flex items-center gap-2">
                     <Loader2 size={16} className="animate-spin text-purple-400" /> AI is thinking...
                   </div>
                 </div>
@@ -76,16 +76,16 @@ export default function AiChatModal({ isOpen, onClose, productName }: { isOpen: 
             </div>
 
             {/* Input */}
-            <div className="p-4 bg-black/40 border-t border-white/10">
+            <div className="p-4 bg-theme/40 border-t border-theme/10">
               <form onSubmit={handleSend} className="flex gap-2">
                 <input 
                   type="text" 
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   placeholder="Ask about specifications, manuals, or usage..." 
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-purple-400 transition-colors"
+                  className="flex-1 bg-theme/5 border border-theme/10 rounded-xl px-4 py-3 text-theme text-sm outline-none focus:border-purple-400 transition-colors"
                 />
-                <button type="submit" disabled={!input.trim() || isTyping} className="bg-purple-500 hover:bg-purple-600 text-white w-12 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50">
+                <button type="submit" disabled={!input.trim() || isTyping} className="bg-purple-500 hover:bg-purple-600 text-theme w-12 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50">
                   <Send size={18} />
                 </button>
               </form>

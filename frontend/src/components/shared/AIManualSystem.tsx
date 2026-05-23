@@ -76,7 +76,7 @@ export default function AIManualSystem({ sku = "SKU-9901X" }: { sku?: string }) 
     <div className="glass-dark rounded-2xl p-8 max-w-3xl mx-auto my-12 border border-neon-cyan/20 box-glow">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-theme flex items-center gap-2">
             <BrainCircuit className="text-neon-cyan" />
             AI Manual Generator
           </h2>
@@ -116,23 +116,23 @@ export default function AIManualSystem({ sku = "SKU-9901X" }: { sku?: string }) 
 
         {manualData && !isGenerating && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-            <div ref={manualRef} className="bg-white text-black p-8 rounded-xl shadow-xl">
-              <div className="border-b-2 border-black pb-4 mb-6 flex justify-between items-center">
+            <div ref={manualRef} className="bg-theme text-theme p-8 rounded-xl shadow-xl">
+              <div className="border-b-2 border-theme pb-4 mb-6 flex justify-between items-center">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-black text-white font-bold flex items-center justify-center rounded-lg text-xl">KE</div>
+                  <div className="w-12 h-12 bg-theme text-theme font-bold flex items-center justify-center rounded-lg text-xl">KE</div>
                   <div>
                     <h1 className="text-2xl font-black">KHUSH ENTERPRISES</h1>
-                    <p className="text-sm font-medium text-gray-600">Scientific Laboratory Equipment</p>
+                    <p className="text-sm font-medium text-theme">Scientific Laboratory Equipment</p>
                   </div>
                 </div>
-                <div className="text-right text-xs text-gray-500 font-medium">
+                <div className="text-right text-xs text-theme font-medium">
                   <p>khushenterprisesupppy@gmail.com</p>
                   <p>+91 9890011762</p>
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold text-black mb-4">Manual: {manualData.title}</h3>
-              <p className="text-xs text-gray-500 mb-6 font-mono">Product ID: {sku}</p>
+              <h3 className="text-xl font-bold text-theme mb-4">Manual: {manualData.title}</h3>
+              <p className="text-xs text-theme mb-6 font-mono">Product ID: {sku}</p>
               
               <div className="bg-red-50 p-4 border-l-4 border-red-500 mb-6">
                 <h4 className="text-red-700 font-bold mb-1">SAFETY PRECAUTIONS</h4>
@@ -143,24 +143,24 @@ export default function AIManualSystem({ sku = "SKU-9901X" }: { sku?: string }) 
                 <h4 className="font-bold border-b border-gray-300 pb-2 mb-3">Protocol / Experiments</h4>
                 <ul className="space-y-2 list-disc pl-5">
                   {manualData.experiments.map((exp: string, idx: number) => (
-                    <li key={idx} className="text-gray-800 text-sm">{exp}</li>
+                    <li key={idx} className="text-theme text-sm">{exp}</li>
                   ))}
                 </ul>
               </div>
               
-              <div className="mt-12 text-center text-[10px] text-gray-400 border-t pt-4">
+              <div className="mt-12 text-center text-[10px] text-theme border-t pt-4">
                 Generated securely via Khush Enterprises AI Core. © {new Date().getFullYear()}
               </div>
             </div>
 
             <div className="pt-4 flex justify-end gap-4 border-t border-slate-800">
-              <button onClick={exportImage} className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors">
+              <button onClick={exportImage} className="flex items-center gap-2 bg-slate-800 text-theme px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors">
                 <ImageIcon size={16} /> Export Image
               </button>
-              <button onClick={exportDOCX} className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors">
+              <button onClick={exportDOCX} className="flex items-center gap-2 bg-slate-800 text-theme px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors">
                 <FileText size={16} /> Export DOCX
               </button>
-              <button onClick={exportPDF} className="flex items-center gap-2 bg-electric-blue text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors shadow-lg">
+              <button onClick={exportPDF} className="flex items-center gap-2 bg-electric-blue text-theme px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors shadow-lg">
                 <Download size={16} /> Export PDF
               </button>
             </div>

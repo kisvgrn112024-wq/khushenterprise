@@ -30,7 +30,7 @@ export default function CartDrawer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsCartOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
+            className="fixed inset-0 bg-theme/60 backdrop-blur-sm z-[60]"
           />
 
           {/* Drawer */}
@@ -39,14 +39,14 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#050b14] border-l border-white/10 z-[70] flex flex-col shadow-2xl"
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-theme border-l border-theme/10 z-[70] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#03060a]">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <div className="p-6 border-b border-theme/10 flex items-center justify-between bg-theme">
+              <h2 className="text-xl font-bold text-theme flex items-center gap-2">
                 Shopping Cart <span className="bg-neon-cyan/20 text-neon-cyan text-xs py-1 px-2 rounded-full">{cart.length}</span>
               </h2>
-              <button onClick={() => setIsCartOpen(false)} className="text-slate-400 hover:text-white transition-colors">
+              <button onClick={() => setIsCartOpen(false)} className="text-slate-400 hover:text-theme transition-colors">
                 <X size={24} />
               </button>
             </div>
@@ -64,8 +64,8 @@ export default function CartDrawer() {
                   const IconComponent = IconMap[item.icon] || Package;
 
                   return (
-                    <div key={item.id} className="flex gap-4 p-4 glass-dark rounded-xl border border-white/5 relative group">
-                      <div className="w-20 h-20 bg-white/5 rounded-lg flex items-center justify-center border border-white/10 relative overflow-hidden">
+                    <div key={item.id} className="flex gap-4 p-4 glass-dark rounded-xl border border-theme/5 relative group">
+                      <div className="w-20 h-20 bg-theme/5 rounded-lg flex items-center justify-center border border-theme/10 relative overflow-hidden">
                         <img 
                           src={`/design/images/${item.id}.jpeg`} 
                           alt={item.title} 
@@ -79,7 +79,7 @@ export default function CartDrawer() {
                       </div>
                       
                       <div className="flex-1 flex flex-col">
-                        <h3 className="text-white text-sm font-medium line-clamp-2 leading-tight mb-2 pr-6">{item.title}</h3>
+                        <h3 className="text-theme text-sm font-medium line-clamp-2 leading-tight mb-2 pr-6">{item.title}</h3>
                         
                         {item.moq && item.quantity >= item.moq && item.bulkPrice ? (
                            <div className="mb-3">
@@ -92,15 +92,15 @@ export default function CartDrawer() {
                         
                         <div className="flex items-center justify-between mt-auto">
                           {/* Quantity Selector */}
-                          <div className="flex items-center gap-3 bg-black/40 rounded-lg px-2 py-1 border border-white/5">
+                          <div className="flex items-center gap-3 bg-theme/40 rounded-lg px-2 py-1 border border-theme/5">
                             <button 
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="text-slate-400 hover:text-white"
+                              className="text-slate-400 hover:text-theme"
                             ><Minus size={14}/></button>
-                            <span className="text-white text-sm w-4 text-center">{item.quantity}</span>
+                            <span className="text-theme text-sm w-4 text-center">{item.quantity}</span>
                             <button 
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="text-slate-400 hover:text-white"
+                              className="text-slate-400 hover:text-theme"
                             ><Plus size={14}/></button>
                           </div>
 
@@ -120,17 +120,17 @@ export default function CartDrawer() {
 
             {/* Footer */}
             {cart.length > 0 && (
-              <div className="p-6 border-t border-white/10 bg-[#03060a]">
+              <div className="p-6 border-t border-theme/10 bg-theme">
                 <div className="flex items-center justify-between text-slate-300 mb-2">
                   <span>Subtotal</span>
-                  <span className="text-white font-medium">₹{cartTotal.toLocaleString()}</span>
+                  <span className="text-theme font-medium">₹{cartTotal.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-300 mb-6 text-sm">
                   <span>Shipping & Taxes</span>
                   <span className="text-slate-500">Calculated at checkout</span>
                 </div>
                 <Link href="/checkout" onClick={() => setIsCartOpen(false)}>
-                  <button className="w-full bg-electric-blue hover:bg-white text-white hover:text-midnight-navy box-glow py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
+                  <button className="w-full bg-electric-blue hover:bg-theme text-theme hover:text-midnight-navy box-glow py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
                     Proceed to Checkout <ArrowRight size={18} />
                   </button>
                 </Link>

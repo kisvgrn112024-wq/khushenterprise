@@ -336,7 +336,7 @@ function PrintContent() {
          </div>
          <button 
            onClick={() => window.print()} 
-           className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded shadow-sm flex items-center gap-2 font-bold text-[10px] uppercase tracking-wider transition-colors cursor-pointer"
+           className="bg-slate-900 hover:bg-slate-800 text-theme px-4 py-2 rounded shadow-sm flex items-center gap-2 font-bold text-[10px] uppercase tracking-wider transition-colors cursor-pointer"
          >
            <Printer size={13} /> Print/Save PDF
          </button>
@@ -351,7 +351,7 @@ function PrintContent() {
                 {/* Top Header */}
                 <div className="flex justify-between items-start border-b border-slate-900 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="bg-slate-900 text-white p-2 rounded">
+                    <div className="bg-slate-900 text-theme p-2 rounded">
                       <Beaker size={24} className="stroke-[2.5]" />
                     </div>
                     <div>
@@ -446,7 +446,7 @@ function PrintContent() {
                     </h2>
                     <p className="text-[8px] text-slate-500 uppercase font-mono tracking-wider">Khush Enterprises • Product Catalogue</p>
                   </div>
-                  <div className="bg-slate-900 text-white px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase font-outfit">
+                  <div className="bg-slate-900 text-theme px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase font-outfit">
                     KE Quality Assured
                   </div>
                 </div>
@@ -459,7 +459,7 @@ function PrintContent() {
                     <div className="flex gap-5">
                       {/* Left: Product Images */}
                       <div className="w-[180px] flex-shrink-0 flex flex-col gap-2">
-                        <div className="w-[180px] h-[160px] border border-slate-200 rounded p-1.5 bg-white flex items-center justify-center overflow-hidden">
+                        <div className="w-[180px] h-[160px] border border-slate-200 rounded p-1.5 bg-theme flex items-center justify-center overflow-hidden">
                           <img 
                             src={getImageUrl(primaryImg1)} 
                             alt={primary.title} 
@@ -470,7 +470,7 @@ function PrintContent() {
                           />
                         </div>
                         <div className="flex gap-2">
-                          <div className="w-[86px] h-[60px] border border-slate-200 rounded p-1 bg-white flex items-center justify-center overflow-hidden">
+                          <div className="w-[86px] h-[60px] border border-slate-200 rounded p-1 bg-theme flex items-center justify-center overflow-hidden">
                             <img 
                               src={getImageUrl(primaryImg2)} 
                               alt="Detail 1" 
@@ -480,7 +480,7 @@ function PrintContent() {
                               }}
                             />
                           </div>
-                          <div className="w-[86px] h-[60px] border border-slate-200 rounded p-1 bg-white flex items-center justify-center overflow-hidden">
+                          <div className="w-[86px] h-[60px] border border-slate-200 rounded p-1 bg-theme flex items-center justify-center overflow-hidden">
                             <img 
                               src={getImageUrl(primaryImg3)} 
                               alt="Detail 2" 
@@ -572,7 +572,7 @@ function PrintContent() {
                   {secondary ? (
                     <div className="h-[95px] flex gap-4 items-center mb-1">
                       {/* Small Image */}
-                      <div className="w-[80px] h-[80px] border border-slate-200 rounded p-1 bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <div className="w-[80px] h-[80px] border border-slate-200 rounded p-1 bg-theme flex items-center justify-center overflow-hidden flex-shrink-0">
                         <img 
                           src={getImageUrl(secondaryImg)} 
                           alt={secondary.title} 

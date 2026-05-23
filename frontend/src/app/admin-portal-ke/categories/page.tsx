@@ -133,10 +133,10 @@ export default function CategoriesPage() {
     <div className="max-w-6xl mx-auto pb-12 text-slate-300">
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/5">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-theme/5">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Category & Purge Center</h1>
-          <p className="text-gray-400 text-sm">Configure laboratory collections, view dynamic inventory stats, and wipe dummy datasets.</p>
+          <h1 className="text-3xl font-bold text-theme mb-1">Category & Purge Center</h1>
+          <p className="text-theme text-sm">Configure laboratory collections, view dynamic inventory stats, and wipe dummy datasets.</p>
         </div>
       </div>
 
@@ -144,32 +144,32 @@ export default function CategoriesPage() {
         
         {/* Left Side: Category List */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-[#161616] border border-white/5 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-6">Active Categories</h2>
+          <div className="bg-theme border border-theme/5 rounded-xl p-6">
+            <h2 className="text-lg font-bold text-theme mb-6">Active Categories</h2>
             
             {categories.length === 0 ? (
-              <div className="text-center py-10 text-gray-500">No categories defined yet.</div>
+              <div className="text-center py-10 text-theme">No categories defined yet.</div>
             ) : (
               <div className="space-y-4">
                 {categories.map((cat, idx) => {
                   const stat = categoryStats.find(s => s.name === cat.name) || { count: 0, percentage: 0 };
                   return (
-                    <div key={idx} className="bg-[#111111] border border-white/5 p-4 rounded-lg flex items-center justify-between hover:border-white/10 transition-colors">
+                    <div key={idx} className="bg-theme border border-theme/5 p-4 rounded-lg flex items-center justify-between hover:border-theme/10 transition-colors">
                       <div className="flex-1 pr-6">
                         <div className="flex items-center gap-3">
-                          <span className="font-bold text-white text-base">{cat.name}</span>
-                          <span className="bg-[#1a1a1a] border border-white/5 text-[10px] text-gray-400 font-bold px-2 py-0.5 rounded-full">
+                          <span className="font-bold text-theme text-base">{cat.name}</span>
+                          <span className="bg-theme border border-theme/5 text-[10px] text-theme font-bold px-2 py-0.5 rounded-full">
                             {stat.count} Live Items
                           </span>
                         </div>
-                        <p className="text-gray-400 text-xs mt-1 leading-relaxed">{cat.description || "No description provided."}</p>
+                        <p className="text-theme text-xs mt-1 leading-relaxed">{cat.description || "No description provided."}</p>
                       </div>
 
                       <div className="flex items-center gap-4">
                         {/* Visibility status */}
                         <button 
                           onClick={() => toggleVisibility(idx)}
-                          className={`p-2 rounded hover:bg-white/5 transition-colors ${cat.visible ? 'text-[#8bceff]' : 'text-gray-500'}`}
+                          className={`p-2 rounded hover:bg-theme/5 transition-colors ${cat.visible ? 'text-[#8bceff]' : 'text-theme'}`}
                           title={cat.visible ? "Visible on Customer Catalog" : "Hidden from Customer Catalog"}
                         >
                           {cat.visible ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -178,7 +178,7 @@ export default function CategoriesPage() {
                         {/* Delete button */}
                         <button 
                           onClick={() => handleDeleteCategory(cat.name)}
-                          className="p-2 text-gray-500 hover:text-[#ff4d4d] hover:bg-[#ff4d4d]/5 rounded transition-colors"
+                          className="p-2 text-theme hover:text-[#ff4d4d] hover:bg-theme/5 rounded transition-colors"
                           title="Delete Category"
                         >
                           <Trash2 size={18} />
@@ -196,53 +196,53 @@ export default function CategoriesPage() {
         <div className="space-y-8">
           
           {/* Add Category Form */}
-          <div className="bg-[#161616] border border-white/5 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+          <div className="bg-theme border border-theme/5 rounded-xl p-6">
+            <h2 className="text-lg font-bold text-theme mb-6 flex items-center gap-2">
               <Plus size={18} className="text-[#8bceff]" /> Add New Category
             </h2>
             <form onSubmit={handleAddCategory} className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Category Name <span className="text-red-500">*</span></label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Category Name <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={newName} 
                   onChange={e => setNewName(e.target.value)}
                   placeholder="e.g. Molecular Diagnostics"
-                  className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2 text-white text-sm outline-none focus:border-[#8bceff] transition-colors"
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-theme text-sm outline-none focus:border-theme transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Description (Optional)</label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Description (Optional)</label>
                 <textarea 
                   value={newDesc} 
                   onChange={e => setNewDesc(e.target.value)}
                   placeholder="Summarize the products in this collection..."
-                  className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2 text-white text-xs outline-none focus:border-[#8bceff] h-20 resize-none transition-colors"
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-theme text-xs outline-none focus:border-theme h-20 resize-none transition-colors"
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-[#111111] rounded border border-white/5">
+              <div className="flex items-center justify-between p-3 bg-theme rounded border border-theme/5">
                 <div>
-                  <span className="text-white font-bold text-xs">Visible on Catalog</span>
-                  <p className="text-[10px] text-gray-500">Show or hide on storefront</p>
+                  <span className="text-theme font-bold text-xs">Visible on Catalog</span>
+                  <p className="text-[10px] text-theme">Show or hide on storefront</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setNewVisible(!newVisible)}
                   className={`w-12 h-6 rounded-full border transition-all relative ${
-                    newVisible ? "bg-[#0c1825] border-[#8bceff]/30" : "bg-black border-white/5"
+                    newVisible ? "bg-theme border-theme/30" : "bg-theme border-theme/5"
                   }`}
                 >
                   <div className={`w-4 h-4 rounded-full absolute top-1 transition-all ${
-                    newVisible ? "right-1 bg-[#8bceff]" : "left-1 bg-gray-600"
+                    newVisible ? "right-1 bg-theme" : "left-1 bg-theme"
                   }`}></div>
                 </button>
               </div>
 
               <button 
                 type="submit"
-                className="w-full bg-[#8bceff] hover:bg-[#6ab3f0] text-black font-bold text-sm py-2 rounded transition-colors"
+                className="w-full bg-theme hover:bg-theme text-theme font-bold text-sm py-2 rounded transition-colors"
               >
                 Create Category
               </button>
@@ -250,16 +250,16 @@ export default function CategoriesPage() {
           </div>
 
           {/* Dynamic Pie/Distribution Chart */}
-          <div className="bg-[#161616] border border-white/5 rounded-xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <div className="bg-theme border border-theme/5 rounded-xl p-6">
+            <h2 className="text-lg font-bold text-theme mb-4 flex items-center gap-2">
               <BarChart2 size={18} className="text-[#8bceff]" /> Inventory Distribution
             </h2>
             
             <div className="flex items-center justify-center relative my-6">
-              <div className="w-40 h-40 rounded-full border-4 border-[#111111] bg-[#1a1a1a] flex flex-col items-center justify-center shadow-lg relative overflow-hidden">
+              <div className="w-40 h-40 rounded-full border-4 border-theme bg-theme flex flex-col items-center justify-center shadow-lg relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-tr from-electric-blue/10 to-transparent animate-pulse pointer-events-none"></div>
-                <div className="text-3xl font-black text-white z-10">{totalActiveCount}</div>
-                <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest z-10">Active Items</div>
+                <div className="text-3xl font-black text-theme z-10">{totalActiveCount}</div>
+                <div className="text-[9px] font-bold text-theme uppercase tracking-widest z-10">Active Items</div>
               </div>
             </div>
 
@@ -267,24 +267,24 @@ export default function CategoriesPage() {
               {categoryStats.map((stat, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="text-white flex items-center gap-1.5">
+                    <span className="text-theme flex items-center gap-1.5">
                       <span className={`w-2.5 h-2.5 rounded-sm ${
-                        idx === 0 ? 'bg-[#8bceff]' :
-                        idx === 1 ? 'bg-[#ffc658]' :
-                        idx === 2 ? 'bg-[#82ca9d]' :
-                        idx === 3 ? 'bg-[#8884d8]' : 'bg-gray-400'
+                        idx === 0 ? 'bg-theme' :
+                        idx === 1 ? 'bg-theme' :
+                        idx === 2 ? 'bg-theme' :
+                        idx === 3 ? 'bg-theme' : 'bg-theme'
                       }`}></span>
                       {stat.name}
                     </span>
-                    <span className="text-gray-400">{stat.percentage}% ({stat.count})</span>
+                    <span className="text-theme">{stat.percentage}% ({stat.count})</span>
                   </div>
-                  <div className="w-full bg-[#111111] h-1.5 rounded-full overflow-hidden border border-white/5">
+                  <div className="w-full bg-theme h-1.5 rounded-full overflow-hidden border border-theme/5">
                     <div 
                       className={`h-full ${
-                        idx === 0 ? 'bg-[#8bceff]' :
-                        idx === 1 ? 'bg-[#ffc658]' :
-                        idx === 2 ? 'bg-[#82ca9d]' :
-                        idx === 3 ? 'bg-[#8884d8]' : 'bg-gray-400'
+                        idx === 0 ? 'bg-theme' :
+                        idx === 1 ? 'bg-theme' :
+                        idx === 2 ? 'bg-theme' :
+                        idx === 3 ? 'bg-theme' : 'bg-theme'
                       }`}
                       style={{ width: `${stat.percentage}%` }}
                     ></div>
@@ -295,17 +295,17 @@ export default function CategoriesPage() {
           </div>
 
           {/* Database Purge Center */}
-          <div className="bg-[#1a0f0f] border border-red-500/10 rounded-xl p-6">
-            <h2 className="text-md font-bold text-white mb-2 flex items-center gap-2">
+          <div className="bg-theme border border-red-500/10 rounded-xl p-6">
+            <h2 className="text-md font-bold text-theme mb-2 flex items-center gap-2">
               <ShieldAlert size={18} className="text-[#ff4d4d]" /> Secure Purge Command
             </h2>
-            <p className="text-xs text-gray-400 leading-relaxed mb-4">
+            <p className="text-xs text-theme leading-relaxed mb-4">
               Purges all initial placeholder items (original dummy stocks) from the local store and remote server database in a single sweep.
             </p>
             <button 
               onClick={handleDataPurge}
               disabled={isWiping}
-              className="w-full bg-[#ff4d4d]/10 hover:bg-[#ff4d4d]/20 text-[#ff4d4d] border border-[#ff4d4d]/20 font-bold text-xs py-2.5 rounded transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
+              className="w-full bg-theme/10 hover:bg-theme/20 text-[#ff4d4d] border border-theme/20 font-bold text-xs py-2.5 rounded transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
             >
               {isWiping ? "Executing Purge..." : "Wipe Database Placeholders"}
             </button>

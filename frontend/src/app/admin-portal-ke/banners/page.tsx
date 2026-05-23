@@ -202,44 +202,44 @@ export default function BannersMarketing() {
       
       {/* Banner Modal Overlay */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-          <div className="bg-[#161616] border border-white/10 rounded-xl p-6 w-[550px] shadow-2xl">
+        <div className="fixed inset-0 bg-theme/80 flex items-center justify-center z-50">
+          <div className="bg-theme border border-theme/10 rounded-xl p-6 w-[550px] shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-theme">
                 {modalMode === "add" ? "Create New Banner Campaign" : "Edit Campaign Placement"}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-white"><X size={20} /></button>
+              <button onClick={() => setIsModalOpen(false)} className="text-theme hover:text-theme"><X size={20} /></button>
             </div>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Banner Title <span className="text-red-500">*</span></label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Banner Title <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   placeholder="e.g. Q4 Chemistry Glassware Restock Offer"
-                  className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-sm outline-none focus:border-[#8bceff]" 
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme" 
                 />
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Target link URL</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Target link URL</label>
                   <input 
                     type="text" 
                     value={link}
                     onChange={e => setLink(e.target.value)}
                     placeholder="e.g. /products"
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-sm outline-none focus:border-[#8bceff]" 
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme" 
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Placement Row</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Placement Row</label>
                   <select 
                     value={placement}
                     onChange={e => setPlacement(e.target.value)}
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-sm outline-none focus:border-[#8bceff] appearance-none" 
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme appearance-none" 
                   >
                     <option value="Homepage Hero">Homepage Hero</option>
                     <option value="Featured Row">Featured Row</option>
@@ -250,32 +250,32 @@ export default function BannersMarketing() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Start Date</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Start Date</label>
                   <input 
                     type="date" 
                     value={startDate}
                     onChange={e => setStartDate(e.target.value)}
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-gray-300 text-sm outline-none focus:border-[#8bceff] [color-scheme:dark]" 
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme [color-scheme:dark]" 
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">End Date</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">End Date</label>
                   <input 
                     type="date" 
                     value={endDate}
                     onChange={e => setEndDate(e.target.value)}
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-gray-300 text-sm outline-none focus:border-[#8bceff] [color-scheme:dark]" 
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme [color-scheme:dark]" 
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Default Status</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Default Status</label>
                   <select
                     value={status}
                     onChange={e => setStatus(e.target.value as any)}
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-sm outline-none focus:border-[#8bceff]"
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme"
                   >
                     <option value="active">Active (Visible Now)</option>
                     <option value="scheduled">Scheduled (Future Activation)</option>
@@ -285,22 +285,22 @@ export default function BannersMarketing() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Banner Asset (PNG / JPEG) <span className="text-red-500">*</span></label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Banner Asset (PNG / JPEG) <span className="text-red-500">*</span></label>
                 <div 
-                  className="border-2 border-dashed border-white/10 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500 hover:border-[#8bceff]/50 hover:text-[#8bceff] transition-colors cursor-pointer bg-[#111111] relative overflow-hidden h-40"
+                  className="border-2 border-dashed border-theme/10 rounded-lg p-6 flex flex-col items-center justify-center text-theme hover:border-theme/50 hover:text-[#8bceff] transition-colors cursor-pointer bg-theme relative overflow-hidden h-40"
                   onClick={() => document.getElementById("banner-upload")?.click()}
                 >
                   {isUploading ? (
                     <div className="flex flex-col items-center justify-center">
                       <Loader2 className="animate-spin text-[#8bceff] mb-2" size={24} />
-                      <span className="text-xs text-gray-400 font-bold">Uploading file payload...</span>
+                      <span className="text-xs text-theme font-bold">Uploading file payload...</span>
                     </div>
                   ) : image ? (
                     <img src={getImageUrl(image)} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
                     <>
                       <ImageIcon size={24} className="mb-2" />
-                      <span className="text-xs font-bold text-center">Click to upload 1920x1080 image<br/><span className="text-[10px] mt-1 text-gray-600">Supports PNG and JPG</span></span>
+                      <span className="text-xs font-bold text-center">Click to upload 1920x1080 image<br/><span className="text-[10px] mt-1 text-theme">Supports PNG and JPG</span></span>
                     </>
                   )}
                   <input 
@@ -314,9 +314,9 @@ export default function BannersMarketing() {
               </div>
             </div>
             
-            <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-white/5">
-              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-bold text-gray-400 hover:text-white transition-colors">Cancel</button>
-              <button onClick={handleSaveBanner} className="px-6 py-2 bg-[#8bceff] hover:bg-[#6ab3f0] text-black font-bold text-sm rounded transition-colors flex items-center gap-2">
+            <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-theme/5">
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-bold text-theme hover:text-theme transition-colors">Cancel</button>
+              <button onClick={handleSaveBanner} className="px-6 py-2 bg-theme hover:bg-theme text-theme font-bold text-sm rounded transition-colors flex items-center gap-2">
                 <Save size={16} /> Save & Publish
               </button>
             </div>
@@ -325,36 +325,36 @@ export default function BannersMarketing() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/5">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-theme/5">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Banners & Marketing</h1>
-          <p className="text-gray-400 text-sm">Deploy high-impact homepage slideshows, seasonal restock deals, and category highlights.</p>
+          <h1 className="text-3xl font-bold text-theme mb-1">Banners & Marketing</h1>
+          <p className="text-theme text-sm">Deploy high-impact homepage slideshows, seasonal restock deals, and category highlights.</p>
         </div>
-        <button onClick={openAddModal} className="bg-[#8bceff] hover:bg-[#6ab3f0] text-black font-bold px-4 py-2.5 rounded text-sm flex items-center gap-2 transition-colors cursor-pointer">
+        <button onClick={openAddModal} className="bg-theme hover:bg-theme text-theme font-bold px-4 py-2.5 rounded text-sm flex items-center gap-2 transition-colors cursor-pointer">
           <Plus size={16} strokeWidth={2.5} /> Deploy New Banner
         </button>
       </div>
 
       {banners.length === 0 ? (
-        <div className="text-center py-20 bg-[#161616] border border-white/5 rounded-xl text-gray-500">
+        <div className="text-center py-20 bg-theme border border-theme/5 rounded-xl text-theme">
           No banners active. Click "Deploy New Banner" to begin!
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {banners.map((b) => (
-            <div key={b.id} className="bg-[#161616] border border-white/5 rounded-xl overflow-hidden flex flex-col hover:border-white/10 transition-colors">
-              <div className="relative h-48 bg-[#111111]">
+            <div key={b.id} className="bg-theme border border-theme/5 rounded-xl overflow-hidden flex flex-col hover:border-theme/10 transition-colors">
+              <div className="relative h-48 bg-theme">
                 <img src={getImageUrl(b.image)} alt={b.title} className="w-full h-full object-cover" />
                 <div className="absolute top-4 right-4 flex gap-2">
-                  <span className={`flex items-center gap-1.5 text-[10px] font-bold tracking-widest px-3 py-1 rounded-full text-white backdrop-blur-md ${
-                    b.status === "active" ? "bg-[#0c1825] border border-[#8bceff]/20 text-[#8bceff]" :
-                    b.status === "scheduled" ? "bg-[#1f1a11] border border-brand-yellow/20 text-brand-yellow" :
-                    "bg-black/60 border border-white/20 text-gray-400"
+                  <span className={`flex items-center gap-1.5 text-[10px] font-bold tracking-widest px-3 py-1 rounded-full text-theme backdrop-blur-md ${
+                    b.status === "active" ? "bg-theme border border-theme/20 text-[#8bceff]" :
+                    b.status === "scheduled" ? "bg-theme border border-brand-yellow/20 text-brand-yellow" :
+                    "bg-theme/60 border border-theme/20 text-theme"
                   }`}>
                     <div className={`w-1.5 h-1.5 rounded-full ${
-                      b.status === "active" ? "bg-[#8bceff]" :
+                      b.status === "active" ? "bg-theme" :
                       b.status === "scheduled" ? "bg-brand-yellow" :
-                      "bg-gray-400"
+                      "bg-theme"
                     }`}></div>
                     {b.status.toUpperCase()}
                   </span>
@@ -362,11 +362,11 @@ export default function BannersMarketing() {
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-white mb-1.5">{b.title}</h2>
-                  <p className="text-xs text-gray-400 mb-4 font-mono">Row: {b.placement} | URL: {b.link}</p>
+                  <h2 className="text-lg font-bold text-theme mb-1.5">{b.title}</h2>
+                  <p className="text-xs text-theme mb-4 font-mono">Row: {b.placement} | URL: {b.link}</p>
                 </div>
-                <div className="pt-4 border-t border-white/5 flex justify-between items-center mt-auto">
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                <div className="pt-4 border-t border-theme/5 flex justify-between items-center mt-auto">
+                  <div className="flex items-center gap-2 text-xs text-theme">
                     <Calendar size={13} /> {b.startDate} to {b.endDate}
                   </div>
                   <div className="flex items-center gap-3">
@@ -375,15 +375,15 @@ export default function BannersMarketing() {
                       onClick={() => toggleBannerStatus(b.id)}
                       className={`text-xs px-2 py-0.5 rounded border transition-colors ${
                         b.status === 'active' 
-                          ? 'bg-[#8bceff]/10 text-[#8bceff] border-[#8bceff]/20 hover:bg-[#8bceff]/20' 
-                          : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10'
+                          ? 'bg-theme/10 text-[#8bceff] border-theme/20 hover:bg-theme/20' 
+                          : 'bg-theme/5 text-theme border-theme/10 hover:bg-theme/10'
                       }`}
                       title="Toggle Active/Draft Status"
                     >
                       {b.status === 'active' ? 'Disable' : 'Publish Live'}
                     </button>
-                    <button onClick={() => openEditModal(b)} className="text-gray-400 hover:text-white transition-colors" title="Edit Campaign"><Edit2 size={15} /></button>
-                    <button onClick={() => handleDeleteBanner(b.id)} className="text-gray-400 hover:text-[#ff4d4d] transition-colors" title="Delete Campaign"><Trash2 size={15} /></button>
+                    <button onClick={() => openEditModal(b)} className="text-theme hover:text-theme transition-colors" title="Edit Campaign"><Edit2 size={15} /></button>
+                    <button onClick={() => handleDeleteBanner(b.id)} className="text-theme hover:text-[#ff4d4d] transition-colors" title="Delete Campaign"><Trash2 size={15} /></button>
                   </div>
                 </div>
               </div>

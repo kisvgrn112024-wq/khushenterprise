@@ -490,7 +490,7 @@ function BulkOrdersContent() {
   }, [selectedSector, selectedSubSector, selectedSchoolLab]);
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-gray-300 pb-24 selection:bg-brand-yellow/30">
+    <div className="min-h-screen bg-theme text-theme pb-24 selection:bg-brand-yellow/30">
       
       {/* Background Grids & Decorative Glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -515,7 +515,7 @@ function BulkOrdersContent() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-50 bg-[#121620] border border-brand-yellow/40 text-white px-5 py-3 rounded-lg shadow-[0_10px_30px_rgba(252,211,77,0.15)] flex items-center gap-3 text-xs max-w-sm"
+            className="fixed bottom-6 right-6 z-50 bg-theme border border-brand-yellow/40 text-theme px-5 py-3 rounded-lg shadow-[0_10px_30px_rgba(252,211,77,0.15)] flex items-center gap-3 text-xs max-w-sm"
           >
             <CheckCircle2 size={18} className="text-brand-yellow shrink-0" />
             <div>
@@ -529,21 +529,21 @@ function BulkOrdersContent() {
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         
         {/* ── SECTOR OPTION BAR (TOP TABS) ── */}
-        <div className="pt-8 pb-4 border-b border-white/5">
+        <div className="pt-8 pb-4 border-b border-theme/5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-left">
               <span className="text-[10px] text-brand-yellow font-black tracking-widest uppercase">Wholesale Segment Selection</span>
-              <h2 className="text-lg font-bold text-white tracking-tight mt-0.5">Select Your Procurement Category</h2>
+              <h2 className="text-lg font-bold text-theme tracking-tight mt-0.5">Select Your Procurement Category</h2>
             </div>
             
             {/* Top segment options */}
-            <div className="flex bg-black/60 p-1 border border-white/10 rounded-lg">
+            <div className="flex bg-theme/60 p-1 border border-theme/10 rounded-lg">
   <button 
     onClick={() => setSelectedSector("b2b")}
     className={`px-4 py-2 text-xs font-black tracking-wider uppercase rounded-md transition-all cursor-pointer ${
       selectedSector === "b2b" 
-        ? "bg-brand-yellow text-black shadow-lg" 
-        : "text-gray-400 hover:text-white"
+        ? "bg-brand-yellow text-theme shadow-lg" 
+        : "text-theme hover:text-theme"
     }`}
   >
     💼 B2B Business
@@ -552,8 +552,8 @@ function BulkOrdersContent() {
     onClick={() => setSelectedSector("institutional")}
     className={`px-4 py-2 text-xs font-black tracking-wider uppercase rounded-md transition-all cursor-pointer ${
       selectedSector === "institutional" 
-        ? "bg-brand-yellow text-black shadow-lg" 
-        : "text-gray-400 hover:text-white"
+        ? "bg-brand-yellow text-theme shadow-lg" 
+        : "text-theme hover:text-theme"
     }`}
   >
     🏫 Institutional Sector
@@ -562,8 +562,8 @@ function BulkOrdersContent() {
     onClick={() => setSelectedSector("commercial")}
     className={`px-4 py-2 text-xs font-black tracking-wider uppercase rounded-md transition-all cursor-pointer ${
       selectedSector === "commercial" 
-        ? "bg-brand-yellow text-black shadow-lg" 
-        : "text-gray-400 hover:text-white"
+        ? "bg-brand-yellow text-theme shadow-lg" 
+        : "text-theme hover:text-theme"
     }`}
   >
     🏭 Commercial Labs
@@ -575,9 +575,9 @@ function BulkOrdersContent() {
 
           {/* ── SUB-SECTOR OPTION BAR FOR INSTITUTIONAL ── */}
           {selectedSector === "institutional" && (
-            <div className="mt-4 pt-4 pb-2 border-t border-white/5 flex flex-wrap items-center gap-3 animate-in fade-in slide-in-from-top-1 duration-300">
-              <span className="text-[10px] text-gray-500 font-black tracking-widest uppercase mr-1">Sub-Sector:</span>
-              <div className="flex bg-black/40 p-1 border border-white/5 rounded-md gap-1">
+            <div className="mt-4 pt-4 pb-2 border-t border-theme/5 flex flex-wrap items-center gap-3 animate-in fade-in slide-in-from-top-1 duration-300">
+              <span className="text-[10px] text-theme font-black tracking-widest uppercase mr-1">Sub-Sector:</span>
+              <div className="flex bg-theme/40 p-1 border border-theme/5 rounded-md gap-1">
                 <button
                   onClick={() => {
                     setSelectedSubSector("schools");
@@ -585,8 +585,8 @@ function BulkOrdersContent() {
                   }}
                   className={`px-3.5 py-1.5 text-[11px] font-black tracking-wider uppercase rounded transition-all cursor-pointer flex items-center gap-1.5 ${
                     selectedSubSector === "schools"
-                      ? "bg-[#e5a93b] text-black shadow-md font-extrabold"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                      ? "bg-theme text-theme shadow-md font-extrabold"
+                      : "text-theme hover:text-theme hover:bg-theme/5"
                   }`}
                 >
                   <GraduationCap size={13} /> Schools
@@ -595,8 +595,8 @@ function BulkOrdersContent() {
                   onClick={() => setSelectedSubSector("colleges")}
                   className={`px-3.5 py-1.5 text-[11px] font-black tracking-wider uppercase rounded transition-all cursor-pointer flex items-center gap-1.5 ${
                     selectedSubSector === "colleges"
-                      ? "bg-[#e5a93b] text-black shadow-md font-extrabold"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                      ? "bg-theme text-theme shadow-md font-extrabold"
+                      : "text-theme hover:text-theme hover:bg-theme/5"
                   }`}
                 >
                   <FlaskConical size={13} /> Colleges
@@ -605,8 +605,8 @@ function BulkOrdersContent() {
                   onClick={() => setSelectedSubSector("research")}
                   className={`px-3.5 py-1.5 text-[11px] font-black tracking-wider uppercase rounded transition-all cursor-pointer flex items-center gap-1.5 ${
                     selectedSubSector === "research"
-                      ? "bg-[#e5a93b] text-black shadow-md font-extrabold"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                      ? "bg-theme text-theme shadow-md font-extrabold"
+                      : "text-theme hover:text-theme hover:bg-theme/5"
                   }`}
                 >
                   <Microscope size={13} /> Research Labs
@@ -618,8 +618,8 @@ function BulkOrdersContent() {
           {/* ── SCHOOL LAB SUB-PARTS SELECTOR ── */}
           {selectedSector === "institutional" && selectedSubSector === "schools" && (
             <div className="mt-2 pt-2 pb-2 flex flex-wrap items-center gap-3 animate-in fade-in slide-in-from-top-1 duration-300">
-              <span className="text-[10px] text-gray-500 font-black tracking-widest uppercase mr-1">School Division:</span>
-              <div className="flex bg-black/20 p-1 border border-white/5 rounded gap-1 flex-wrap">
+              <span className="text-[10px] text-theme font-black tracking-widest uppercase mr-1">School Division:</span>
+              <div className="flex bg-theme/20 p-1 border border-theme/5 rounded gap-1 flex-wrap">
                 {[
                   { id: "biology", label: "Biology Lab" },
                   { id: "chemistry", label: "Chemistry Lab" },
@@ -631,8 +631,8 @@ function BulkOrdersContent() {
                     onClick={() => setSelectedSchoolLab(lab.id as any)}
                     className={`px-3 py-1 text-[10px] font-bold uppercase rounded tracking-wider transition-all cursor-pointer ${
                       selectedSchoolLab === lab.id
-                        ? "bg-white/10 text-white font-extrabold border border-white/10"
-                        : "text-gray-500 hover:text-gray-300"
+                        ? "bg-theme/10 text-theme font-extrabold border border-theme/10"
+                        : "text-theme hover:text-theme"
                     }`}
                   >
                     {lab.label}
@@ -643,7 +643,7 @@ function BulkOrdersContent() {
           )}
 
         {/* ── HERO BANNER (ADAPTIVE BASED ON TAB) ── */}
-        <section className="py-12 lg:py-16 border-b border-white/5">
+        <section className="py-12 lg:py-16 border-b border-theme/5">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Content */}
@@ -653,19 +653,19 @@ function BulkOrdersContent() {
                 {sectorData.subtitle}
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-theme leading-[1.08] tracking-tight">
                 {sectorData.title.split("/")[0]} <br />
                 <span className="text-brand-yellow">Wholesale Sourcing</span>
               </h1>
               
-              <p className="text-gray-400 text-sm font-light leading-relaxed max-w-2xl">
+              <p className="text-theme text-sm font-light leading-relaxed max-w-2xl">
                 {sectorData.desc}
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
                 
                 <a href="#catalogue-section">
-                  <button className="bg-transparent text-gray-300 hover:text-white px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider transition-all border border-white/10 hover:border-white/20 cursor-pointer">
+                  <button className="bg-transparent text-theme hover:text-theme px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider transition-all border border-theme/10 hover:border-theme/20 cursor-pointer">
                     View Dynamic Catalogues
                   </button>
                 </a>
@@ -674,7 +674,7 @@ function BulkOrdersContent() {
 
             {/* Right Graphic Panel (Blueprint Image) */}
             <div className="lg:col-span-5 flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-md aspect-[4/3] rounded-xl overflow-hidden border border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.6)] bg-[#0d1017] p-2 group">
+              <div className="relative w-full max-w-md aspect-[4/3] rounded-xl overflow-hidden border border-theme/10 shadow-[0_15px_40px_rgba(0,0,0,0.6)] bg-theme p-2 group">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-transparent z-10"></div>
                 <div className="absolute inset-0 bg-brand-yellow/[0.03] mix-blend-overlay z-10 rounded-xl"></div>
                 <img 
@@ -684,7 +684,7 @@ function BulkOrdersContent() {
                 />
                 
                 {/* Tech specifications label */}
-                <div className="absolute bottom-4 left-4 z-20 font-mono text-[9px] text-gray-500 bg-black/75 px-3 py-1.5 rounded border border-white/5 space-y-0.5">
+                <div className="absolute bottom-4 left-4 z-20 font-mono text-[9px] text-theme bg-theme/75 px-3 py-1.5 rounded border border-theme/5 space-y-0.5">
                   <div>ACC COMPLIANCE: {selectedSector.toUpperCase()}-APPROVED</div>
                   <div>DISCOUNT TIER: {sectorData.discountTiers[2].discount} CAP</div>
                   <div className="text-brand-yellow font-bold">MINIMUM ORDER: {sectorData.moqText}</div>
@@ -696,18 +696,18 @@ function BulkOrdersContent() {
         </section>
 
         {/* ── SECTION: FREQUENTLY SOURCED IN BULK (RESTORED OLD ITEMS) ── */}
-        <section className="py-12 border-b border-white/5">
+        <section className="py-12 border-b border-theme/5">
           <div className="text-left mb-8">
             <span className="text-[10px] text-brand-yellow font-bold tracking-widest uppercase">Verified Standard Inventory</span>
-            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mt-1">Frequently Sourced in Bulk</h2>
-            <p className="text-gray-500 text-xs mt-1">
+            <h2 className="text-2xl md:text-3xl font-black text-theme tracking-tight mt-1">Frequently Sourced in Bulk</h2>
+            <p className="text-theme text-xs mt-1">
               High-volume static inventory lines requested regularly by laboratories and academies. Fully interactive — click Add to Quote.
             </p>
           </div>
 
-          <div className="w-full overflow-x-auto bg-[#0b0e14] border border-white/5 rounded-xl shadow-2xl">
+          <div className="w-full overflow-x-auto bg-theme border border-theme/5 rounded-xl shadow-2xl">
             <table className="w-full text-left text-xs whitespace-nowrap">
-              <thead className="text-[10px] uppercase bg-black/50 text-gray-500 font-black tracking-wider border-b border-white/5">
+              <thead className="text-[10px] uppercase bg-theme/50 text-theme font-black tracking-wider border-b border-theme/5">
                 <tr>
                   <th className="px-6 py-4">SKU Code</th>
                   <th className="px-6 py-4">Product Description</th>
@@ -720,16 +720,16 @@ function BulkOrdersContent() {
               </thead>
               <tbody className="divide-y divide-white/5 font-medium">
                 {restoredItems.map((item) => (
-                  <tr key={item.sku} className="hover:bg-white/[0.01] transition-colors">
+                  <tr key={item.sku} className="hover:bg-theme/[0.01] transition-colors">
                     <td className="px-6 py-4 text-brand-yellow font-mono">{item.sku}</td>
                     <td className="px-6 py-4">
-                      <div className="text-white text-xs font-bold">{item.title}</div>
-                      <div className="text-gray-500 text-[10px] font-light font-sans max-w-sm truncate">{item.desc}</div>
+                      <div className="text-theme text-xs font-bold">{item.title}</div>
+                      <div className="text-theme text-[10px] font-light font-sans max-w-sm truncate">{item.desc}</div>
                     </td>
-                    <td className="px-6 py-4 text-gray-400">{item.category}</td>
-                    <td className="px-6 py-4 text-white font-mono">{item.minQty} pcs</td>
+                    <td className="px-6 py-4 text-theme">{item.category}</td>
+                    <td className="px-6 py-4 text-theme font-mono">{item.minQty} pcs</td>
                     <td className="px-6 py-4">
-                      <span className="text-gray-500 line-through text-[10px] mr-1.5">₹{item.regPrice.toLocaleString("en-IN")}</span>
+                      <span className="text-theme line-through text-[10px] mr-1.5">₹{item.regPrice.toLocaleString("en-IN")}</span>
                       <span className="text-brand-yellow font-bold">₹{item.bulkPrice.toLocaleString("en-IN")}</span>
                     </td>
                     <td className="px-6 py-4">
@@ -740,7 +740,7 @@ function BulkOrdersContent() {
                     <td className="px-6 py-4 text-center">
                       <button 
                         onClick={() => handleAddRestoredToQuote(item)}
-                        className="bg-brand-yellow hover:bg-[#e6b10f] text-black font-black text-[9px] px-3.5 py-1.5 rounded tracking-wider uppercase transition-all transform active:scale-95 cursor-pointer"
+                        className="bg-brand-yellow hover:bg-theme text-theme font-black text-[9px] px-3.5 py-1.5 rounded tracking-wider uppercase transition-all transform active:scale-95 cursor-pointer"
                       >
                         Add {item.minQty} Units
                       </button>
@@ -753,12 +753,12 @@ function BulkOrdersContent() {
         </section>
 
         {/* ── DYNAMIC CATALOGUE (INCLUDES ALL ACTIVE PRODUCTS FROM ADMIN) ── */}
-        <section id="catalogue-section" className="py-12 border-b border-white/5">
+        <section id="catalogue-section" className="py-12 border-b border-theme/5">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
             <div className="text-left">
               <span className="text-[10px] text-brand-yellow font-bold tracking-widest uppercase">Admin Inventory Synchronization</span>
-              <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mt-1">Live Store Wholesale Catalogues</h2>
-              <p className="text-gray-500 text-xs mt-1">All active items managed by your store administrator.</p>
+              <h2 className="text-2xl md:text-3xl font-black text-theme tracking-tight mt-1">Live Store Wholesale Catalogues</h2>
+              <p className="text-theme text-xs mt-1">All active items managed by your store administrator.</p>
             </div>
             
             <Link href="/products" className="text-brand-yellow hover:text-yellow-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors shrink-0">
@@ -768,8 +768,8 @@ function BulkOrdersContent() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {catalogProducts.length === 0 ? (
-              <div className="col-span-full bg-[#0b0e14] border border-white/5 rounded-xl p-8 text-center space-y-2 text-gray-500">
-                <Package size={36} className="mx-auto text-gray-700" />
+              <div className="col-span-full bg-theme border border-theme/5 rounded-xl p-8 text-center space-y-2 text-theme">
+                <Package size={36} className="mx-auto text-theme" />
                 <p className="text-xs">No live active products identified. Fill items inside Admin Portal first.</p>
               </div>
             ) : (
@@ -780,7 +780,7 @@ function BulkOrdersContent() {
                 const isOutOfStock = (prod.stock || 0) === 0;
 
                 return (
-                  <div key={prod.id} className="bg-[#0b0e14] border border-white/5 hover:border-brand-yellow/30 p-5 rounded-xl flex flex-col justify-between group transition-all duration-300">
+                  <div key={prod.id} className="bg-theme border border-theme/5 hover:border-brand-yellow/30 p-5 rounded-xl flex flex-col justify-between group transition-all duration-300">
                     <div>
                       <div className="flex justify-between items-center mb-4">
                         <span className="px-2 py-0.5 bg-brand-yellow/10 border border-brand-yellow/20 text-brand-yellow text-[9px] font-bold uppercase rounded">MIN. MOQ: {moq} units</span>
@@ -792,39 +792,39 @@ function BulkOrdersContent() {
                       </div>
 
                       {/* Graphic/Image display */}
-                      <div className="bg-[#0e111a] rounded-lg mb-4 h-36 border border-white/5 relative overflow-hidden flex items-center justify-center">
+                      <div className="bg-theme rounded-lg mb-4 h-36 border border-theme/5 relative overflow-hidden flex items-center justify-center">
                         {prod.images && prod.images[0] ? (
                           <img src={getImageUrl(prod.images[0])} alt={prod.title} className="w-full h-full object-contain opacity-80 mix-blend-screen p-2 transform group-hover:scale-105 transition-transform duration-500" />
                         ) : (
-                          <Package size={48} className="text-gray-700 transform group-hover:scale-105 transition-transform duration-500" strokeWidth={1} />
+                          <Package size={48} className="text-theme transform group-hover:scale-105 transition-transform duration-500" strokeWidth={1} />
                         )}
                       </div>
 
-                      <div className="text-[9px] text-gray-500 font-mono tracking-wider uppercase mb-1">SKU: {sku}</div>
-                      <h3 className="text-white text-sm font-bold leading-snug group-hover:text-brand-yellow transition-colors mb-2 line-clamp-1">{prod.title}</h3>
-                      <p className="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">{prod.description}</p>
+                      <div className="text-[9px] text-theme font-mono tracking-wider uppercase mb-1">SKU: {sku}</div>
+                      <h3 className="text-theme text-sm font-bold leading-snug group-hover:text-brand-yellow transition-colors mb-2 line-clamp-1">{prod.title}</h3>
+                      <p className="text-theme text-xs leading-relaxed mb-4 line-clamp-2">{prod.description}</p>
                     </div>
 
-                    <div className="pt-4 border-t border-white/5 space-y-3">
+                    <div className="pt-4 border-t border-theme/5 space-y-3">
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div>
-                          <span className="text-gray-500 block text-[9px] uppercase font-semibold">Store Price</span>
-                          <span className="text-gray-400 line-through">₹{(prod.originalPrice || prod.price).toLocaleString("en-IN")}</span>
+                          <span className="text-theme block text-[9px] uppercase font-semibold">Store Price</span>
+                          <span className="text-theme line-through">₹{(prod.originalPrice || prod.price).toLocaleString("en-IN")}</span>
                         </div>
                         <div>
                           <span className="text-brand-yellow block text-[9px] uppercase font-bold">Wholesale Price</span>
-                          <span className="text-white font-extrabold text-sm">₹{bulkPrice.toLocaleString("en-IN")}</span>
+                          <span className="text-theme font-extrabold text-sm">₹{bulkPrice.toLocaleString("en-IN")}</span>
                         </div>
                       </div>
                       
-                      <div className="text-[10px] text-gray-500 bg-[#0f121d] px-3 py-1.5 rounded border border-white/5 flex justify-between font-mono">
+                      <div className="text-[10px] text-theme bg-theme px-3 py-1.5 rounded border border-theme/5 flex justify-between font-mono">
                         <span>Tier 2 (200+ units):</span>
                         <span className="text-brand-yellow font-bold">₹{Math.round(bulkPrice * 0.9).toLocaleString("en-IN")}</span>
                       </div>
 
                       <button 
                         onClick={() => handleAddToQuote(prod, moq)}
-                        className="w-full bg-[#121620] hover:bg-brand-yellow hover:text-black border border-white/10 hover:border-brand-yellow font-bold text-xs py-2.5 rounded transition-all flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                        className="w-full bg-theme hover:bg-brand-yellow hover:text-theme border border-theme/10 hover:border-brand-yellow font-bold text-xs py-2.5 rounded transition-all flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
                       >
                         <Plus size={14} /> Add to Quote
                       </button>
@@ -843,23 +843,23 @@ function BulkOrdersContent() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <Award size={18} className="text-brand-yellow" />
-                  <h3 className="text-sm font-black text-white uppercase tracking-wider">GST Tax Invoicing & Input Credit</h3>
+                  <h3 className="text-sm font-black text-theme uppercase tracking-wider">GST Tax Invoicing & Input Credit</h3>
                 </div>
-                <p className="text-gray-400 text-xs font-light max-w-2xl leading-relaxed">
+                <p className="text-theme text-xs font-light max-w-2xl leading-relaxed">
                   Provide your company/institution GSTIN details to receive a GST compliant B2B tax invoice. Claim up to 18% tax input credit automatically routed to your ledger.
                 </p>
               </div>
 
               {/* Tax Invoice Toggle */}
-              <div className="flex items-center gap-3 shrink-0 bg-black/40 px-4 py-2.5 rounded border border-white/10">
+              <div className="flex items-center gap-3 shrink-0 bg-theme/40 px-4 py-2.5 rounded border border-theme/10">
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input 
                     type="checkbox"
                     checked={gstRequest}
                     onChange={(e) => setGstRequest(e.target.checked)}
-                    className="w-4 h-4 rounded text-brand-yellow accent-brand-yellow bg-transparent border-white/10 cursor-pointer"
+                    className="w-4 h-4 rounded text-brand-yellow accent-brand-yellow bg-transparent border-theme/10 cursor-pointer"
                   />
-                  <span className="text-xs text-white font-bold uppercase tracking-wider">Request GST Invoice</span>
+                  <span className="text-xs text-theme font-bold uppercase tracking-wider">Request GST Invoice</span>
                 </label>
               </div>
             </div>
@@ -871,11 +871,11 @@ function BulkOrdersContent() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden mt-6 pt-6 border-t border-white/5"
+                  className="overflow-hidden mt-6 pt-6 border-t border-theme/5"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+                      <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-2">
                         GST Registered Company Legal Name
                       </label>
                       <input 
@@ -883,11 +883,11 @@ function BulkOrdersContent() {
                         placeholder="e.g. KHUSH ENTERPRISES PRIVATE LIMITED"
                         value={gstCompany}
                         onChange={(e) => setGstCompany(e.target.value)}
-                        className="bg-[#0e121a] border border-white/10 focus:border-brand-yellow/50 text-xs text-white px-4 py-3 rounded w-full outline-none transition-colors font-bold uppercase tracking-wider"
+                        className="bg-theme border border-theme/10 focus:border-brand-yellow/50 text-xs text-theme px-4 py-3 rounded w-full outline-none transition-colors font-bold uppercase tracking-wider"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+                      <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-2">
                         GSTIN Registration Number (15-Digit)
                       </label>
                       <input 
@@ -896,13 +896,13 @@ function BulkOrdersContent() {
                         placeholder="e.g. 06AAAAA1111A1Z1"
                         value={gstin}
                         onChange={(e) => setGstin(e.target.value.toUpperCase())}
-                        className="bg-[#0e121a] border border-white/10 focus:border-brand-yellow/50 text-xs text-white px-4 py-3 rounded w-full outline-none transition-colors font-mono font-bold tracking-widest uppercase"
+                        className="bg-theme border border-theme/10 focus:border-brand-yellow/50 text-xs text-theme px-4 py-3 rounded w-full outline-none transition-colors font-mono font-bold tracking-widest uppercase"
                       />
-                      <span className="text-[9px] text-gray-500 font-mono mt-1 block">Valid Format: 2-Digit State Code + 10-Character PAN + 3-Character Entity ID</span>
+                      <span className="text-[9px] text-theme font-mono mt-1 block">Valid Format: 2-Digit State Code + 10-Character PAN + 3-Character Entity ID</span>
                     </div>
                   </div>
                   
-                  <div className="mt-4 flex items-center gap-2 bg-[#0e121a] border border-brand-yellow/10 rounded px-4 py-2.5 text-[10px] text-gray-400 font-medium">
+                  <div className="mt-4 flex items-center gap-2 bg-theme border border-brand-yellow/10 rounded px-4 py-2.5 text-[10px] text-theme font-medium">
                     <ShieldCheck size={14} className="text-brand-yellow shrink-0" />
                     <span>✓ Details locked. GSTIN details will automatically synchronize with your B2B inquiry payload.</span>
                   </div>
@@ -916,19 +916,19 @@ function BulkOrdersContent() {
         <section className="py-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* LEFT: Quick Entry Column */}
-          <div className="lg:col-span-7 bg-[#0b0e14] border border-white/5 rounded-xl p-6 lg:p-8 flex flex-col justify-between shadow-2xl">
+          <div className="lg:col-span-7 bg-theme border border-theme/5 rounded-xl p-6 lg:p-8 flex flex-col justify-between shadow-2xl">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <ClipboardList size={18} className="text-brand-yellow" />
-                <h2 className="text-xl font-black text-white tracking-tight">Bulk Order Quick Entry Grid</h2>
+                <h2 className="text-xl font-black text-theme tracking-tight">Bulk Order Quick Entry Grid</h2>
               </div>
-              <p className="text-gray-500 text-xs mb-6">Enter SKUs and desired quantities directly to configure your quote request.</p>
+              <p className="text-theme text-xs mb-6">Enter SKUs and desired quantities directly to configure your quote request.</p>
 
               <form onSubmit={handleRequestQuoteSubmit} className="space-y-4">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-white/10 text-gray-500 uppercase tracking-wider font-bold">
+                      <tr className="border-b border-theme/10 text-theme uppercase tracking-wider font-bold">
                         <th className="pb-3 w-10 text-center">Active</th>
                         <th className="pb-3 pl-2">SKU / Part Code</th>
                         <th className="pb-3 w-32 pl-4">Qty</th>
@@ -937,13 +937,13 @@ function BulkOrdersContent() {
                     </thead>
                     <tbody className="divide-y divide-white/5">
                       {quickRows.map((row) => (
-                        <tr key={row.id} className="hover:bg-white/[0.01]">
+                        <tr key={row.id} className="hover:bg-theme/[0.01]">
                           <td className="py-3 text-center">
                             <input 
                               type="checkbox" 
                               checked={row.active}
                               onChange={(e) => handleRowChange(row.id, "active", e.target.checked)}
-                              className="accent-brand-yellow rounded border-white/10 bg-transparent cursor-pointer"
+                              className="accent-brand-yellow rounded border-theme/10 bg-transparent cursor-pointer"
                             />
                           </td>
                           <td className="py-2 pl-2">
@@ -952,7 +952,7 @@ function BulkOrdersContent() {
                               placeholder="e.g. BKR-250-GL" 
                               value={row.sku}
                               onChange={(e) => handleRowChange(row.id, "sku", e.target.value)}
-                              className="bg-[#0e121a] border border-white/10 focus:border-brand-yellow/50 text-xs text-white px-3 py-2 rounded w-full outline-none transition-colors font-mono uppercase"
+                              className="bg-theme border border-theme/10 focus:border-brand-yellow/50 text-xs text-theme px-3 py-2 rounded w-full outline-none transition-colors font-mono uppercase"
                             />
                           </td>
                           <td className="py-2 pl-4">
@@ -962,14 +962,14 @@ function BulkOrdersContent() {
                               placeholder="1"
                               value={row.qty}
                               onChange={(e) => handleRowChange(row.id, "qty", parseInt(e.target.value) || 0)}
-                              className="bg-[#0e121a] border border-white/10 focus:border-brand-yellow/50 text-xs text-white px-3 py-2 rounded w-full outline-none transition-colors font-mono font-bold"
+                              className="bg-theme border border-theme/10 focus:border-brand-yellow/50 text-xs text-theme px-3 py-2 rounded w-full outline-none transition-colors font-mono font-bold"
                             />
                           </td>
                           <td className="py-2 text-center">
                             <button 
                               type="button"
                               onClick={() => handleRemoveRow(row.id)}
-                              className="text-gray-500 hover:text-red-400 transition-colors p-1"
+                              className="text-theme hover:text-red-400 transition-colors p-1"
                               title="Delete Row"
                             >
                               <Trash2 size={14} />
@@ -981,18 +981,18 @@ function BulkOrdersContent() {
                   </table>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-white/5">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-theme/5">
                   <button 
                     type="button" 
                     onClick={handleAddRow}
-                    className="px-4 py-2.5 border border-white/10 hover:border-brand-yellow/50 text-gray-300 hover:text-white rounded text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    className="px-4 py-2.5 border border-theme/10 hover:border-brand-yellow/50 text-theme hover:text-theme rounded text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <Plus size={14} /> Add SKU Row
                   </button>
                   
                   <button 
                     type="submit" 
-                    className="flex-1 bg-brand-yellow hover:bg-[#e6b10f] text-black font-black text-xs py-2.5 rounded flex items-center justify-center gap-1.5 transition-all transform active:scale-95 cursor-pointer uppercase tracking-wider"
+                    className="flex-1 bg-brand-yellow hover:bg-theme text-theme font-black text-xs py-2.5 rounded flex items-center justify-center gap-1.5 transition-all transform active:scale-95 cursor-pointer uppercase tracking-wider"
                   >
                     Initiate Quote <ArrowRight size={14} />
                   </button>
@@ -1000,7 +1000,7 @@ function BulkOrdersContent() {
                   <button 
                     type="button"
                     onClick={handleWhatsAppQuote}
-                    className="bg-[#25D366] hover:bg-[#20ba5a] text-white font-extrabold text-xs px-4 py-2.5 rounded flex items-center justify-center gap-1.5 transition-all transform active:scale-95 cursor-pointer uppercase tracking-wider shadow-[0_0_15px_rgba(37,211,102,0.2)]"
+                    className="bg-theme hover:bg-theme text-theme font-extrabold text-xs px-4 py-2.5 rounded flex items-center justify-center gap-1.5 transition-all transform active:scale-95 cursor-pointer uppercase tracking-wider shadow-[0_0_15px_rgba(37,211,102,0.2)]"
                   >
                     <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.227 5.227 0 00-.571-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
@@ -1013,23 +1013,23 @@ function BulkOrdersContent() {
 
             {/* Quote Cart preview list */}
             {quoteCart.length > 0 && (
-              <div className="mt-8 bg-[#0f131f] border border-brand-yellow/10 rounded-lg p-4">
+              <div className="mt-8 bg-theme border border-brand-yellow/10 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-[10px] text-brand-yellow font-bold uppercase tracking-widest flex items-center gap-1">
                     <Info size={11} /> Configured Basket ({quoteCart.length} items)
                   </span>
                   <button 
                     onClick={() => saveQuoteCart([])}
-                    className="text-[10px] text-gray-500 hover:text-red-400 transition-colors uppercase font-semibold"
+                    className="text-[10px] text-theme hover:text-red-400 transition-colors uppercase font-semibold"
                   >
                     Clear Cart
                   </button>
                 </div>
                 <div className="max-h-24 overflow-y-auto space-y-1.5 pr-2">
                   {quoteCart.map((item, idx) => (
-                    <div key={idx} className="flex justify-between text-xs text-gray-400">
+                    <div key={idx} className="flex justify-between text-xs text-theme">
                       <span className="line-clamp-1">{item.product.title}</span>
-                      <span className="font-mono text-white font-bold shrink-0">{item.qty} units</span>
+                      <span className="font-mono text-theme font-bold shrink-0">{item.qty} units</span>
                     </div>
                   ))}
                 </div>
@@ -1041,15 +1041,15 @@ function BulkOrdersContent() {
           <div className="lg:col-span-5 space-y-6">
             
             {/* Guidelines Card */}
-            <div className="bg-[#0b0e14] border border-white/5 rounded-xl p-6 shadow-2xl space-y-6 text-left">
+            <div className="bg-theme border border-theme/5 rounded-xl p-6 shadow-2xl space-y-6 text-left">
               
               {/* Import Guidelines */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <BookOpen size={16} className="text-brand-yellow" strokeWidth={2.5} />
-                  <h3 className="text-sm font-black text-white uppercase tracking-wider">{sectorData.guidelines.title}</h3>
+                  <h3 className="text-sm font-black text-theme uppercase tracking-wider">{sectorData.guidelines.title}</h3>
                 </div>
-                <p className="text-gray-400 text-xs leading-relaxed font-light">
+                <p className="text-theme text-xs leading-relaxed font-light">
                   {sectorData.guidelines.desc}
                 </p>
               </div>
@@ -1058,9 +1058,9 @@ function BulkOrdersContent() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <ShieldCheck size={16} className="text-brand-yellow" />
-                  <h3 className="text-sm font-black text-white uppercase tracking-wider">Compliance & Standards</h3>
+                  <h3 className="text-sm font-black text-theme uppercase tracking-wider">Compliance & Standards</h3>
                 </div>
-                <p className="text-gray-400 text-xs leading-relaxed font-light">
+                <p className="text-theme text-xs leading-relaxed font-light">
                   All scientific equipment adheres strictly to international ISO 9001:2015. Quality testing reports and technical certificates of compliance provided upon shipment.
                 </p>
               </div>
@@ -1069,13 +1069,13 @@ function BulkOrdersContent() {
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-2">
                   <Layers size={16} className="text-brand-yellow" />
-                  <h3 className="text-sm font-black text-white uppercase tracking-wider">Tiered Discounts ({selectedSector.toUpperCase()})</h3>
+                  <h3 className="text-sm font-black text-theme uppercase tracking-wider">Tiered Discounts ({selectedSector.toUpperCase()})</h3>
                 </div>
                 
                 <div className="space-y-2">
                   {sectorData.discountTiers.map((tier, idx) => (
-                    <div key={idx} className="flex justify-between text-xs border-b border-white/5 pb-1">
-                      <span className="text-gray-500">{tier.label}</span>
+                    <div key={idx} className="flex justify-between text-xs border-b border-theme/5 pb-1">
+                      <span className="text-theme">{tier.label}</span>
                       <span className="text-brand-yellow font-bold font-mono">{tier.discount}</span>
                     </div>
                   ))}
@@ -1086,18 +1086,18 @@ function BulkOrdersContent() {
 
             {/* Direct Assistance helpline */}
             <div className="bg-gradient-to-r from-brand-yellow/10 via-brand-yellow/5 to-transparent border border-brand-yellow/15 rounded-xl p-6 text-left">
-              <h3 className="text-white font-bold text-sm mb-1">Direct Help Desk Sourcing</h3>
-              <p className="text-gray-500 text-xs mb-4">Require customized product configurations or custom logistics parameters?</p>
+              <h3 className="text-theme font-bold text-sm mb-1">Direct Help Desk Sourcing</h3>
+              <p className="text-theme text-xs mb-4">Require customized product configurations or custom logistics parameters?</p>
               <div className="font-mono text-xs space-y-1.5">
                 <div className="flex justify-between items-start">
-                  <span className="text-gray-500">HELPLINES:</span>
+                  <span className="text-theme">HELPLINES:</span>
                   <div className="text-right">
-                    <div className="text-white font-bold">+91 98900 11762</div>
-                    <div className="text-white font-bold">+91 97294 57762</div>
+                    <div className="text-theme font-bold">+91 98900 11762</div>
+                    <div className="text-theme font-bold">+91 97294 57762</div>
                   </div>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">EMAIL:</span>
+                  <span className="text-theme">EMAIL:</span>
                   <span className="text-brand-yellow font-bold hover:underline cursor-pointer">khushenterprisesupppy@gmail.com</span>
                 </div>
               </div>
@@ -1114,7 +1114,7 @@ function BulkOrdersContent() {
 
 export default function BulkOrdersPage() {
   return (
-    <Suspense fallback={<div className="text-white text-center py-20 bg-[#0a0a0a] min-h-screen">Loading Bulk Sourcing...</div>}>
+    <Suspense fallback={<div className="text-theme text-center py-20 bg-theme min-h-screen">Loading Bulk Sourcing...</div>}>
       <BulkOrdersContent />
     </Suspense>
   );

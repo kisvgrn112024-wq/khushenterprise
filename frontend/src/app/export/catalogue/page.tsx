@@ -116,13 +116,13 @@ export default function ExportCataloguePage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex">
+    <div className="min-h-screen bg-theme text-theme flex">
 
       {/* ── Sidebar ─────────────────────────────────── */}
-      <aside className="hidden md:flex flex-col w-56 bg-[#0d0d0d] border-r border-white/5 sticky top-[73px] h-[calc(100vh-73px)] pt-6 pb-10 px-3 overflow-y-auto">
+      <aside className="hidden md:flex flex-col w-56 bg-theme border-r border-theme/5 sticky top-[73px] h-[calc(100vh-73px)] pt-6 pb-10 px-3 overflow-y-auto">
         <div className="mb-8 px-3">
           <div className="text-brand-yellow text-[10px] font-black tracking-widest uppercase">Export Hub</div>
-          <div className="text-gray-600 text-[9px] tracking-wider mt-0.5">Khush Global Logistics</div>
+          <div className="text-theme text-[9px] tracking-wider mt-0.5">Khush Global Logistics</div>
         </div>
 
         <nav className="flex-1 space-y-1">
@@ -130,7 +130,7 @@ export default function ExportCataloguePage() {
             <Link
               key={item.label}
               href={item.href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-gray-500 hover:text-white hover:bg-white/5 transition-all"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-theme hover:text-theme hover:bg-theme/5 transition-all"
             >
               <item.icon size={15} />
               {item.label}
@@ -145,9 +145,9 @@ export default function ExportCataloguePage() {
         </nav>
 
         <div className="mt-6 px-3 space-y-2">
-          <div className="text-gray-600 text-[9px] uppercase tracking-widest font-bold mb-2">Quick Links</div>
-          <Link href="/reviews"    className="flex items-center gap-2 text-gray-600 hover:text-gray-400 text-[10px] transition-colors"><Star size={10} /> Ratings</Link>
-          <Link href="/contact-us" className="flex items-center gap-2 text-gray-600 hover:text-gray-400 text-[10px] transition-colors"><Globe size={10} /> Support</Link>
+          <div className="text-theme text-[9px] uppercase tracking-widest font-bold mb-2">Quick Links</div>
+          <Link href="/reviews"    className="flex items-center gap-2 text-theme hover:text-theme text-[10px] transition-colors"><Star size={10} /> Ratings</Link>
+          <Link href="/contact-us" className="flex items-center gap-2 text-theme hover:text-theme text-[10px] transition-colors"><Globe size={10} /> Support</Link>
         </div>
       </aside>
 
@@ -155,14 +155,14 @@ export default function ExportCataloguePage() {
       <div className="flex-1 flex flex-col min-w-0">
 
         {/* Page header */}
-        <div className="border-b border-white/5 bg-[#0d0d0d] px-6 py-5">
+        <div className="border-b border-theme/5 bg-theme px-6 py-5">
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <div className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Export Hub</div>
-              <h1 className="text-2xl md:text-3xl font-black text-white">
+              <div className="text-theme text-[10px] font-bold uppercase tracking-widest mb-1">Export Hub</div>
+              <h1 className="text-2xl md:text-3xl font-black text-theme">
                 Export <span className="text-brand-yellow">Catalogues</span>
               </h1>
-              <p className="text-gray-500 text-xs mt-1">
+              <p className="text-theme text-xs mt-1">
                 Download and reference precision laboratory product matrices.
                 All catalogues are curated or auto-synced by the KE admin team.
               </p>
@@ -171,12 +171,12 @@ export default function ExportCataloguePage() {
               <button
                 onClick={load}
                 title="Refresh"
-                className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white px-4 py-2.5 rounded text-[10px] font-bold uppercase tracking-wider transition-all"
+                className="flex items-center gap-2 bg-theme/5 hover:bg-theme/10 border border-theme/10 text-theme hover:text-theme px-4 py-2.5 rounded text-[10px] font-bold uppercase tracking-wider transition-all"
               >
                 <RefreshCw size={12} /> Refresh
               </button>
               <Link href="/export/enquiry">
-                <button className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-black px-5 py-2.5 rounded text-[10px] font-black uppercase tracking-wider transition-colors whitespace-nowrap">
+                <button className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-theme px-5 py-2.5 rounded text-[10px] font-black uppercase tracking-wider transition-colors whitespace-nowrap">
                   <FileQuestion size={12} /> Send Enquiry
                 </button>
               </Link>
@@ -185,16 +185,16 @@ export default function ExportCataloguePage() {
         </div>
 
         {/* Filters */}
-        <div className="px-6 py-4 border-b border-white/5 bg-[#0a0a0a] flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-center">
+        <div className="px-6 py-4 border-b border-theme/5 bg-theme flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-center">
           {/* Search */}
           <div className="relative min-w-[200px] max-w-sm flex-1">
-            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search catalogues..."
-              className="w-full bg-[#111] border border-white/10 rounded pl-8 pr-3 py-2 text-xs text-white placeholder-gray-600 outline-none focus:border-white/25 transition-colors"
+              className="w-full bg-theme border border-theme/10 rounded pl-8 pr-3 py-2 text-xs text-theme placeholder-gray-600 outline-none focus:border-theme/25 transition-colors"
             />
           </div>
 
@@ -207,7 +207,7 @@ export default function ExportCataloguePage() {
                 className={`px-3 py-1.5 rounded border text-[10px] font-bold uppercase tracking-wider transition-all ${
                   dept === d
                     ? "bg-brand-yellow/15 border-brand-yellow/40 text-brand-yellow"
-                    : "border-white/10 text-gray-500 hover:border-white/20 hover:text-gray-300"
+                    : "border-theme/10 text-theme hover:border-theme/20 hover:text-theme"
                 }`}
               >
                 {d}
@@ -220,7 +220,7 @@ export default function ExportCataloguePage() {
         <div className="flex-1 px-6 py-6">
 
           {loading ? (
-            <div className="flex items-center justify-center py-24 text-gray-600">
+            <div className="flex items-center justify-center py-24 text-theme">
               <RefreshCw size={20} className="animate-spin mr-2" /> Loading catalogues...
             </div>
           ) : filtered.length === 0 ? (
@@ -229,9 +229,9 @@ export default function ExportCataloguePage() {
               animate={{ opacity: 1 }}
               className="text-center py-24"
             >
-              <FileText size={40} className="mx-auto mb-4 text-gray-700" />
-              <p className="text-gray-600 font-bold text-sm mb-1">No catalogues available</p>
-              <p className="text-gray-700 text-xs max-w-xs mx-auto">
+              <FileText size={40} className="mx-auto mb-4 text-theme" />
+              <p className="text-theme font-bold text-sm mb-1">No catalogues available</p>
+              <p className="text-theme text-xs max-w-xs mx-auto">
                 {catalogues.length === 0
                   ? "The admin hasn't published any catalogues yet. Check back soon or contact support."
                   : "No catalogues match your search. Try adjusting the filters."}
@@ -251,10 +251,10 @@ export default function ExportCataloguePage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: Math.min(i * 0.06, 0.4), duration: 0.35 }}
-                    className="group bg-[#111] border border-white/5 rounded-xl overflow-hidden hover:border-brand-yellow/25 transition-all hover:shadow-[0_0_24px_rgba(252,211,77,0.07)] flex flex-col"
+                    className="group bg-theme border border-theme/5 rounded-xl overflow-hidden hover:border-brand-yellow/25 transition-all hover:shadow-[0_0_24px_rgba(252,211,77,0.07)] flex flex-col"
                   >
                     {/* Cover image */}
-                    <div className="relative h-48 bg-[#0d0d0d] overflow-hidden">
+                    <div className="relative h-48 bg-theme overflow-hidden">
                       {cat.image ? (
                         <img
                           src={cat.image}
@@ -263,13 +263,13 @@ export default function ExportCataloguePage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <FileText size={40} className="text-gray-700" />
+                          <FileText size={40} className="text-theme" />
                         </div>
                       )}
 
                       {/* Version badge */}
                       <div className="absolute top-3 left-3">
-                        <span className="text-[9px] font-black tracking-widest text-brand-yellow border border-brand-yellow/20 bg-black/80 px-2 py-0.5 rounded uppercase backdrop-blur-sm">
+                        <span className="text-[9px] font-black tracking-widest text-brand-yellow border border-brand-yellow/20 bg-theme/80 px-2 py-0.5 rounded uppercase backdrop-blur-sm">
                           {cat.version}
                         </span>
                       </div>
@@ -286,7 +286,7 @@ export default function ExportCataloguePage() {
                       </div>
 
                       {/* Dept icon */}
-                      <div className="absolute bottom-3 right-3 bg-black/60 border border-white/10 backdrop-blur-md p-2 rounded-full">
+                      <div className="absolute bottom-3 right-3 bg-theme/60 border border-theme/10 backdrop-blur-md p-2 rounded-full">
                         <DeptIcon dept={cat.department} />
                       </div>
                     </div>
@@ -296,15 +296,15 @@ export default function ExportCataloguePage() {
                       <div className="text-brand-yellow text-[9px] font-black uppercase tracking-widest mb-1.5">
                         {cat.department}
                       </div>
-                      <h3 className="text-white font-bold text-lg mb-2 group-hover:text-brand-yellow transition-colors leading-snug line-clamp-2">
+                      <h3 className="text-theme font-bold text-lg mb-2 group-hover:text-brand-yellow transition-colors leading-snug line-clamp-2">
                         {cat.title}
                       </h3>
-                      <p className="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-3">
+                      <p className="text-theme text-xs leading-relaxed mb-4 line-clamp-3">
                         {cat.description}
                       </p>
 
                       {/* Meta row */}
-                      <div className="flex justify-between items-center text-[9px] font-mono text-gray-600 border-t border-white/5 pt-3 mb-4">
+                      <div className="flex justify-between items-center text-[9px] font-mono text-theme border-t border-theme/5 pt-3 mb-4">
                         <span className="flex items-center gap-1"><FileText size={9} /> {cat.fileName}</span>
                         <span className="text-brand-yellow font-bold">{cat.stockCount} copies</span>
                       </div>
@@ -314,7 +314,7 @@ export default function ExportCataloguePage() {
                         <div className="mb-4">
                           <button
                             onClick={() => setExpanded(isOpen ? null : cat.id)}
-                            className="flex items-center justify-between w-full text-[10px] text-gray-500 hover:text-gray-300 transition-colors mb-2 font-bold uppercase tracking-wider"
+                            className="flex items-center justify-between w-full text-[10px] text-theme hover:text-theme transition-colors mb-2 font-bold uppercase tracking-wider"
                           >
                             <span>{catProducts.length} Products Included</span>
                             <ChevronRight
@@ -330,7 +330,7 @@ export default function ExportCataloguePage() {
                               className="space-y-1 max-h-36 overflow-y-auto pr-1"
                             >
                               {catProducts.map((p) => (
-                                <li key={p.id} className="text-[10px] text-gray-500 border border-white/5 rounded px-2 py-1.5 flex justify-between bg-white/[0.02]">
+                                <li key={p.id} className="text-[10px] text-theme border border-theme/5 rounded px-2 py-1.5 flex justify-between bg-theme/[0.02]">
                                   <span className="truncate mr-2">{p.title}</span>
                                   <span className="text-brand-yellow font-bold shrink-0">
                                     ₹{p.price?.toLocaleString("en-IN")}
@@ -354,7 +354,7 @@ export default function ExportCataloguePage() {
                         </a>
                         <Link
                           href="/export/enquiry"
-                          className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 text-[10px] font-bold rounded uppercase tracking-wider transition-colors"
+                          className="px-4 py-2.5 bg-theme/5 hover:bg-theme/10 text-theme hover:text-theme border border-theme/10 text-[10px] font-bold rounded uppercase tracking-wider transition-colors"
                         >
                           Enquire
                         </Link>
@@ -375,13 +375,13 @@ export default function ExportCataloguePage() {
               className="mt-10 bg-gradient-to-r from-brand-yellow/10 via-brand-yellow/5 to-transparent border border-brand-yellow/15 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4"
             >
               <div>
-                <h4 className="text-white font-black text-base mb-1">Need a custom catalogue for your region?</h4>
-                <p className="text-gray-500 text-xs">
+                <h4 className="text-theme font-black text-base mb-1">Need a custom catalogue for your region?</h4>
+                <p className="text-theme text-xs">
                   Request custom packaging formats, regional pricing, or branded export documentation.
                 </p>
               </div>
               <Link href="/export/enquiry">
-                <button className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-black px-6 py-3 rounded text-[10px] font-black uppercase tracking-wider transition-colors whitespace-nowrap">
+                <button className="flex items-center gap-2 bg-brand-yellow hover:bg-yellow-400 text-theme px-6 py-3 rounded text-[10px] font-black uppercase tracking-wider transition-colors whitespace-nowrap">
                   Create Custom Quote →
                 </button>
               </Link>
@@ -390,11 +390,11 @@ export default function ExportCataloguePage() {
         </div>
 
         {/* Footer strip */}
-        <div className="px-6 py-4 border-t border-white/5 text-[9px] text-gray-700 font-mono flex flex-wrap gap-4">
+        <div className="px-6 py-4 border-t border-theme/5 text-[9px] text-theme font-mono flex flex-wrap gap-4">
           <span>© 2024 Khush Enterprises. Managed by Ishan Malhotra &amp; Vikas Malhotra.</span>
-          <Link href="/contact-us"    className="hover:text-gray-500 transition-colors">WhatsApp Contact</Link>
-          <Link href="/certifications" className="hover:text-gray-500 transition-colors">Logistics Certifications</Link>
-          <Link href="/about-us"      className="hover:text-gray-500 transition-colors">Terms of Export</Link>
+          <Link href="/contact-us"    className="hover:text-theme transition-colors">WhatsApp Contact</Link>
+          <Link href="/certifications" className="hover:text-theme transition-colors">Logistics Certifications</Link>
+          <Link href="/about-us"      className="hover:text-theme transition-colors">Terms of Export</Link>
         </div>
       </div>
     </div>

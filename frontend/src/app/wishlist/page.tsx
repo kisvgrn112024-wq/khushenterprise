@@ -17,10 +17,10 @@ export default function WishlistPage() {
   const wishlistProducts = allProducts.filter(p => wishlist.includes(p.id));
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-theme py-12">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex items-center gap-4 mb-8">
-          <Link href="/" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-500 hover:text-slate-900 shadow-sm transition-colors border border-gray-100">
+          <Link href="/" className="w-10 h-10 rounded-full bg-theme flex items-center justify-center text-slate-500 hover:text-slate-900 shadow-sm transition-colors border border-gray-100">
             <ArrowLeft size={18} />
           </Link>
           <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
@@ -29,7 +29,7 @@ export default function WishlistPage() {
         </div>
 
         {wishlistProducts.length === 0 ? (
-          <div className="bg-white rounded-2xl p-16 text-center border border-gray-100 shadow-sm">
+          <div className="bg-theme rounded-2xl p-16 text-center border border-gray-100 shadow-sm">
             <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
               <Heart size={40} className="text-red-300" />
             </div>
@@ -37,7 +37,7 @@ export default function WishlistPage() {
             <p className="text-slate-500 mb-8 max-w-md mx-auto">
               You haven't saved any products yet. Browse our catalogue and click the heart icon to save items for later.
             </p>
-            <Link href="/products" className="inline-flex items-center justify-center px-8 py-3 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors">
+            <Link href="/products" className="inline-flex items-center justify-center px-8 py-3 bg-slate-900 text-theme font-medium rounded-lg hover:bg-slate-800 transition-colors">
               Browse Products
             </Link>
           </div>
@@ -46,12 +46,12 @@ export default function WishlistPage() {
             {wishlistProducts.map(product => {
               const IconComponent = IconMap[product.icon] || Package;
               return (
-                <div key={product.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden flex flex-col group hover:shadow-lg transition-shadow">
+                <div key={product.id} className="bg-theme rounded-xl border border-gray-100 overflow-hidden flex flex-col group hover:shadow-lg transition-shadow">
                   {/* Image Area */}
-                  <div className="relative bg-gray-50 h-56 flex items-center justify-center overflow-hidden">
+                  <div className="relative bg-theme h-56 flex items-center justify-center overflow-hidden">
                     <button 
                       onClick={() => toggleWishlist(product.id)}
-                      className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 shadow-sm transition-colors z-10"
+                      className="absolute top-3 right-3 w-8 h-8 bg-theme rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 shadow-sm transition-colors z-10"
                       title="Remove from wishlist"
                     >
                       <Trash2 size={16} />
@@ -86,7 +86,7 @@ export default function WishlistPage() {
                       </div>
                       <button 
                         onClick={() => addToCart(product)}
-                        className="w-10 h-10 bg-slate-900 text-white rounded-lg flex items-center justify-center hover:bg-slate-800 transition-colors transform active:scale-95"
+                        className="w-10 h-10 bg-slate-900 text-theme rounded-lg flex items-center justify-center hover:bg-slate-800 transition-colors transform active:scale-95"
                         title="Add to cart"
                       >
                         <ShoppingCart size={18} />

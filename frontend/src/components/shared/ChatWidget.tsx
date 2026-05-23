@@ -21,7 +21,7 @@ export default function ChatWidget() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleWhatsAppClick}
-        className="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,211,102,0.5)] box-glow relative z-50 group"
+        className="w-16 h-16 bg-theme rounded-full flex items-center justify-center text-theme shadow-[0_0_20px_rgba(37,211,102,0.5)] box-glow relative z-50 group"
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
@@ -34,9 +34,9 @@ export default function ChatWidget() {
         </svg>
         
         {/* Tooltip */}
-        <div className="absolute right-full mr-4 bg-white text-black font-bold text-sm px-4 py-2 rounded-lg whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+        <div className="absolute right-full mr-4 bg-theme text-theme font-bold text-sm px-4 py-2 rounded-lg whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
           Chat with Us
-          <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-4 h-4 bg-white rotate-45"></div>
+          <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-4 h-4 bg-theme rotate-45"></div>
         </div>
       </motion.button>
     </div>

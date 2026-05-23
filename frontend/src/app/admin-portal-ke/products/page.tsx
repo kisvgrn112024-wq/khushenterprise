@@ -111,43 +111,43 @@ export default function AdminProductsPage() {
     <div className="max-w-6xl mx-auto pb-12 text-slate-300">
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/5">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-theme/5">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Products Inventory</h1>
-          <p className="text-gray-400 text-sm">Review wholesale pricing grids, catalog mappings, and live stock tracking tables.</p>
+          <h1 className="text-3xl font-bold text-theme mb-1">Products Inventory</h1>
+          <p className="text-theme text-sm">Review wholesale pricing grids, catalog mappings, and live stock tracking tables.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme pointer-events-none" />
             <input 
               type="text" 
               placeholder="Search SKU, Product Name..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-[#111111] border border-white/10 focus:border-[#8bceff]/50 text-xs text-white pl-8 pr-4 py-2.5 rounded w-64 outline-none transition-colors" 
+              className="bg-theme border border-theme/10 focus:border-theme/50 text-xs text-theme pl-8 pr-4 py-2.5 rounded w-64 outline-none transition-colors" 
             />
           </div>
-          <Link href="/admin-portal-ke/products/bulk" className="bg-[#1a1a1a] hover:bg-[#2a2a2a] text-white border border-white/10 font-bold px-5 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-wider cursor-pointer">
+          <Link href="/admin-portal-ke/products/bulk" className="bg-theme hover:bg-theme text-theme border border-theme/10 font-bold px-5 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-wider cursor-pointer">
             <FileSpreadsheet size={16} /> Bulk Listing
           </Link>
-          <Link href="/admin-portal-ke/products/add" className="bg-brand-yellow hover:bg-[#e6a800] text-black font-bold px-5 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-wider cursor-pointer">
+          <Link href="/admin-portal-ke/products/add" className="bg-brand-yellow hover:bg-theme text-theme font-bold px-5 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-wider cursor-pointer">
             <Plus size={16} strokeWidth={2.5} /> Add Product
           </Link>
         </div>
       </div>
 
       {/* Inventory Table Container */}
-      <div className="bg-[#161616] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
+      <div className="bg-theme border border-theme/5 rounded-xl overflow-hidden shadow-2xl">
         
         {/* Controls Row */}
-        <div className="p-4 border-b border-white/5 flex justify-between items-center bg-[#111111] flex-wrap gap-4">
+        <div className="p-4 border-b border-theme/5 flex justify-between items-center bg-theme flex-wrap gap-4">
           <div className="flex flex-wrap gap-3">
             <div className="relative">
-              <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme pointer-events-none" />
               <select 
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="bg-[#161616] border border-white/5 hover:bg-white/5 text-gray-300 text-xs pl-8 pr-8 py-2 rounded transition-colors appearance-none outline-none cursor-pointer"
+                className="bg-theme border border-theme/5 hover:bg-theme/5 text-theme text-xs pl-8 pr-8 py-2 rounded transition-colors appearance-none outline-none cursor-pointer"
               >
                 <option value="All Categories">All Categories</option>
                 {categories.map((c, idx) => (
@@ -159,7 +159,7 @@ export default function AdminProductsPage() {
             <select 
               value={stockFilter}
               onChange={(e) => setStockFilter(e.target.value)}
-              className="bg-[#161616] border border-white/5 hover:bg-white/5 text-gray-300 text-xs px-4 py-2 rounded transition-colors appearance-none outline-none cursor-pointer"
+              className="bg-theme border border-theme/5 hover:bg-theme/5 text-theme text-xs px-4 py-2 rounded transition-colors appearance-none outline-none cursor-pointer"
             >
               <option value="All">All Stock Levels</option>
               <option value="In">In Stock (&gt; 0)</option>
@@ -169,7 +169,7 @@ export default function AdminProductsPage() {
           </div>
           
           <div className="flex items-center gap-4">
-            <span className="text-xs text-gray-500 font-mono">{filteredProducts.length} items catalogued</span>
+            <span className="text-xs text-theme font-mono">{filteredProducts.length} items catalogued</span>
             <button onClick={handleDownload} className="text-[#8bceff] hover:text-[#6ab3f0] transition-colors flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider" title="Download Excel List">
               <Download size={15} /> Export CSV
             </button>
@@ -179,9 +179,9 @@ export default function AdminProductsPage() {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-[#111111] text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-white/5">
+            <thead className="bg-theme text-[10px] font-bold text-theme uppercase tracking-widest border-b border-theme/5">
               <tr>
-                <th className="p-4 w-10 text-center"><input type="checkbox" className="accent-[#8bceff] rounded border-white/10 bg-transparent focus:ring-0" /></th>
+                <th className="p-4 w-10 text-center"><input type="checkbox" className="accent-[#8bceff] rounded border-theme/10 bg-transparent focus:ring-0" /></th>
                 <th className="p-4">Product Info</th>
                 <th className="p-4">SKU / Model</th>
                 <th className="p-4">Assigned Category</th>
@@ -194,7 +194,7 @@ export default function AdminProductsPage() {
             <tbody className="divide-y divide-white/5">
               {filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-12 text-center text-gray-500 text-xs">
+                  <td colSpan={8} className="p-12 text-center text-theme text-xs">
                     No active product inventories match your filter queries.
                   </td>
                 </tr>
@@ -206,10 +206,10 @@ export default function AdminProductsPage() {
                   const displayImg = prod.imageUrl || (prod.images && prod.images[0]) || "";
 
                   return (
-                    <tr key={prod.id} className="hover:bg-white/[0.01] transition-colors">
-                      <td className="p-4 text-center"><input type="checkbox" className="accent-[#8bceff] rounded border-white/10 bg-transparent focus:ring-0" /></td>
+                    <tr key={prod.id} className="hover:bg-theme/[0.01] transition-colors">
+                      <td className="p-4 text-center"><input type="checkbox" className="accent-[#8bceff] rounded border-theme/10 bg-transparent focus:ring-0" /></td>
                       <td className="p-4 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded bg-[#111111] border border-white/5 flex items-center justify-center shrink-0 overflow-hidden">
+                        <div className="w-12 h-12 rounded bg-theme border border-theme/5 flex items-center justify-center shrink-0 overflow-hidden">
                           {displayImg ? (
                             <img src={getImageUrl(displayImg)} alt={prod.title} className="w-full h-full object-cover opacity-80" />
                           ) : (
@@ -217,18 +217,18 @@ export default function AdminProductsPage() {
                           )}
                         </div>
                         <div>
-                          <div className="text-white font-bold text-sm mb-0.5 leading-snug">{prod.title}</div>
-                          <div className="text-[10px] text-gray-500 font-mono">Brand: {prod.brand || "Khush Enterprises"}</div>
+                          <div className="text-theme font-bold text-sm mb-0.5 leading-snug">{prod.title}</div>
+                          <div className="text-[10px] text-theme font-mono">Brand: {prod.brand || "Khush Enterprises"}</div>
                         </div>
                       </td>
-                      <td className="p-4 text-gray-400 text-xs font-mono">{prod.sku || `KE-${prod.id.slice(-4).toUpperCase()}`}</td>
-                      <td className="p-4 text-gray-400 text-xs">{prod.category || "General Lab"}</td>
+                      <td className="p-4 text-theme text-xs font-mono">{prod.sku || `KE-${prod.id.slice(-4).toUpperCase()}`}</td>
+                      <td className="p-4 text-theme text-xs">{prod.category || "General Lab"}</td>
                       <td className="p-4">
-                        <span className="px-2 py-1 rounded bg-[#0c1825] border border-[#8bceff]/20 text-[#8bceff] text-[10px] font-mono uppercase">
+                        <span className="px-2 py-1 rounded bg-theme border border-theme/20 text-[#8bceff] text-[10px] font-mono uppercase">
                           {prod.catalog || "Lab Essentials Guide"}
                         </span>
                       </td>
-                      <td className="p-4 text-right text-white font-extrabold font-mono text-xs">
+                      <td className="p-4 text-right text-theme font-extrabold font-mono text-xs">
                         ₹{prod.price?.toLocaleString("en-IN") || "0"}
                       </td>
                       <td className="p-4 text-center">
@@ -245,10 +245,10 @@ export default function AdminProductsPage() {
                       </td>
                       <td className="p-4 text-center">
                         <div className="flex items-center justify-center gap-3">
-                          <Link href={`/admin-portal-ke/products/add?id=${prod.id}`} className="text-gray-400 hover:text-white transition-colors" title="Edit Profile">
+                          <Link href={`/admin-portal-ke/products/add?id=${prod.id}`} className="text-theme hover:text-theme transition-colors" title="Edit Profile">
                             <Edit2 size={15} />
                           </Link>
-                          <button onClick={() => handleDeleteProduct(prod.id)} className="text-gray-500 hover:text-red-400 transition-colors" title="Delete Product">
+                          <button onClick={() => handleDeleteProduct(prod.id)} className="text-theme hover:text-red-400 transition-colors" title="Delete Product">
                             <Trash2 size={15} />
                           </button>
                         </div>
@@ -262,10 +262,10 @@ export default function AdminProductsPage() {
         </div>
 
         {/* Pagination footer */}
-        <div className="p-4 border-t border-white/5 flex justify-between items-center text-xs text-gray-500 bg-[#111111]">
+        <div className="p-4 border-t border-theme/5 flex justify-between items-center text-xs text-theme bg-theme">
           <div>Showing 1 to {filteredProducts.length} entries</div>
           <div className="flex gap-2">
-            <button className="px-2 py-1 rounded border border-white/5 bg-[#161616] text-[#8bceff] text-[10px] font-bold">1</button>
+            <button className="px-2 py-1 rounded border border-theme/5 bg-theme text-[#8bceff] text-[10px] font-bold">1</button>
           </div>
         </div>
 

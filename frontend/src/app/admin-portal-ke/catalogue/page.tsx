@@ -204,82 +204,82 @@ export default function CatalogueManagement() {
       
       {/* Modal Layout */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#161616] border border-white/10 rounded-xl p-6 w-[600px] max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="fixed inset-0 bg-theme/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-theme border border-theme/10 rounded-xl p-6 w-[600px] max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-theme">
                 {modalMode === "add" ? "Create Dynamic Catalogue" : "Modify Catalogue Setup"}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-white"><X size={20} /></button>
+              <button onClick={() => setIsModalOpen(false)} className="text-theme hover:text-theme"><X size={20} /></button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Catalogue Title <span className="text-red-500">*</span></label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Catalogue Title <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   placeholder="e.g. Premium Chemistry Ware Guide"
-                  className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-sm outline-none focus:border-[#8bceff]" 
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme" 
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Catalogue Brief Description <span className="text-red-500">*</span></label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Catalogue Brief Description <span className="text-red-500">*</span></label>
                 <textarea 
                   value={description}
                   onChange={e => setDescription(e.target.value)}
                   rows={2}
                   placeholder="Summarize the inventory contents for clinical purchasing managers..."
-                  className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-xs outline-none focus:border-[#8bceff] resize-none" 
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-xs outline-none focus:border-theme resize-none" 
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Stock Count (Physical Booklets)</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Stock Count (Physical Booklets)</label>
                   <input 
                     type="number" 
                     value={stockCount}
                     onChange={e => setStockCount(parseInt(e.target.value) || 0)}
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2.5 text-white text-sm outline-none focus:border-[#8bceff]" 
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme" 
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Cover Banner Asset</label>
+                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Cover Banner Asset</label>
                   <input 
                     type="file" 
                     accept="image/*"
                     onChange={handleImageUpload}
-                    className="w-full bg-[#111111] border border-white/5 rounded px-3 py-2 text-xs text-gray-400 outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-white/10 file:text-white cursor-pointer" 
+                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-xs text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
                   />
                 </div>
               </div>
 
               {/* Manual vs Auto Sync Selection Toggle */}
-              <div className="bg-[#111111] border border-white/5 rounded-lg p-4">
+              <div className="bg-theme border border-theme/5 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h3 className="text-xs font-bold text-white">Enable Auto-Sync by Category</h3>
-                    <p className="text-[10px] text-gray-500">Automatically aggregates products under matching category lines.</p>
+                    <h3 className="text-xs font-bold text-theme">Enable Auto-Sync by Category</h3>
+                    <p className="text-[10px] text-theme">Automatically aggregates products under matching category lines.</p>
                   </div>
                   <button 
                     type="button" 
                     onClick={() => setAutoSync(!autoSync)} 
                     className="text-[#8bceff] hover:text-[#6ab3f0] transition-colors"
                   >
-                    {autoSync ? <ToggleRight size={32} /> : <ToggleLeft size={32} className="text-gray-600" />}
+                    {autoSync ? <ToggleRight size={32} /> : <ToggleLeft size={32} className="text-theme" />}
                   </button>
                 </div>
 
                 {autoSync ? (
                   <div>
-                    <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Target Sync Category</label>
+                    <label className="block text-[9px] font-bold text-theme uppercase tracking-widest mb-1">Target Sync Category</label>
                     <select 
                       value={selectedCategory} 
                       onChange={e => setSelectedCategory(e.target.value)}
-                      className="w-full bg-[#161616] border border-white/5 rounded px-2.5 py-2 text-white text-xs outline-none"
+                      className="w-full bg-theme border border-theme/5 rounded px-2.5 py-2 text-theme text-xs outline-none"
                     >
                       {categories.map((c, idx) => (
                         <option key={idx} value={c}>{c}</option>
@@ -288,17 +288,17 @@ export default function CatalogueManagement() {
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Manual Items Curation (Checklist)</label>
-                    <div className="max-h-32 overflow-y-auto space-y-2 border border-white/5 p-2 rounded bg-[#161616]">
+                    <label className="block text-[9px] font-bold text-theme uppercase tracking-widest mb-1.5">Manual Items Curation (Checklist)</label>
+                    <div className="max-h-32 overflow-y-auto space-y-2 border border-theme/5 p-2 rounded bg-theme">
                       {products.map((p) => (
-                        <label key={p.id} className="flex items-center gap-2 text-[11px] text-gray-300 hover:text-white cursor-pointer">
+                        <label key={p.id} className="flex items-center gap-2 text-[11px] text-theme hover:text-theme cursor-pointer">
                           <input 
                             type="checkbox" 
                             checked={selectedProductIds.includes(p.id)}
                             onChange={() => handleProductCheckbox(p.id)}
-                            className="rounded border-white/10 text-[#8bceff] focus:ring-0 bg-transparent"
+                            className="rounded border-theme/10 text-[#8bceff] focus:ring-0 bg-transparent"
                           />
-                          <span>{p.title} <span className="text-gray-500">({p.sku})</span></span>
+                          <span>{p.title} <span className="text-theme">({p.sku})</span></span>
                         </label>
                       ))}
                     </div>
@@ -307,9 +307,9 @@ export default function CatalogueManagement() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-white/5">
-              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-bold text-gray-400 hover:text-white">Cancel</button>
-              <button onClick={handleSaveCatalogue} className="px-6 py-2 bg-[#8bceff] hover:bg-[#6ab3f0] text-black font-bold text-sm rounded flex items-center gap-2">
+            <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-theme/5">
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-bold text-theme hover:text-theme">Cancel</button>
+              <button onClick={handleSaveCatalogue} className="px-6 py-2 bg-theme hover:bg-theme text-theme font-bold text-sm rounded flex items-center gap-2">
                 <Save size={16} /> Deploy Dynamic Catalogue
               </button>
             </div>
@@ -318,12 +318,12 @@ export default function CatalogueManagement() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/5">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-theme/5">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Dynamic Catalogue Engine</h1>
-          <p className="text-gray-400 text-sm">Deploy automated category-linked booklets or manually curated PDF matrix guides for clinical buyers.</p>
+          <h1 className="text-3xl font-bold text-theme mb-1">Dynamic Catalogue Engine</h1>
+          <p className="text-theme text-sm">Deploy automated category-linked booklets or manually curated PDF matrix guides for clinical buyers.</p>
         </div>
-        <button onClick={handleOpenAdd} className="bg-brand-yellow hover:bg-[#e6a800] text-black font-bold px-6 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-widest cursor-pointer">
+        <button onClick={handleOpenAdd} className="bg-brand-yellow hover:bg-theme text-theme font-bold px-6 py-2.5 rounded text-sm flex items-center gap-2 transition-colors uppercase tracking-widest cursor-pointer">
           <Plus size={16} strokeWidth={2.5} /> Deploy New Catalogue
         </button>
       </div>
@@ -331,14 +331,14 @@ export default function CatalogueManagement() {
       {/* Catalogues Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {catalogues.map((cat) => (
-          <div key={cat.id} className="bg-[#161616] border border-white/5 rounded-xl overflow-hidden flex flex-col hover:border-white/10 transition-colors">
-            <div className="relative h-48 bg-[#0a0a0a]">
+          <div key={cat.id} className="bg-theme border border-theme/5 rounded-xl overflow-hidden flex flex-col hover:border-theme/10 transition-colors">
+            <div className="relative h-48 bg-theme">
               <img src={getImageUrl(cat.image)} alt={cat.title} className="w-full h-full object-cover opacity-80" />
               <div className="absolute top-4 right-4 flex gap-1.5">
-                <span className="text-[9px] font-extrabold tracking-widest bg-[#0c1825] border border-[#8bceff]/20 px-2 py-0.5 rounded text-[#8bceff] backdrop-blur-md uppercase">
+                <span className="text-[9px] font-extrabold tracking-widest bg-theme border border-theme/20 px-2 py-0.5 rounded text-[#8bceff] backdrop-blur-md uppercase">
                   {cat.version}
                 </span>
-                <span className={`text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded text-white backdrop-blur-md uppercase ${
+                <span className={`text-[9px] font-extrabold tracking-widest px-2 py-0.5 rounded text-theme backdrop-blur-md uppercase ${
                   cat.autoSync ? "bg-green-950/80 border border-green-500/20 text-green-400" : "bg-purple-950/80 border border-purple-500/20 text-purple-400"
                 }`}>
                   {cat.autoSync ? "Auto-Sync" : "Curated"}
@@ -349,12 +349,12 @@ export default function CatalogueManagement() {
             <div className="p-6 flex-1 flex flex-col justify-between">
               <div>
                 <div className="text-[10px] font-bold text-[#8bceff] tracking-widest uppercase mb-1.5">{cat.department}</div>
-                <h2 className="text-xl font-bold text-white mb-2 leading-snug">{cat.title}</h2>
-                <p className="text-xs text-gray-400 mb-4 line-clamp-2 leading-relaxed">{cat.description}</p>
+                <h2 className="text-xl font-bold text-theme mb-2 leading-snug">{cat.title}</h2>
+                <p className="text-xs text-theme mb-4 line-clamp-2 leading-relaxed">{cat.description}</p>
               </div>
 
-              <div className="space-y-2 border-t border-white/5 pt-4">
-                <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="space-y-2 border-t border-theme/5 pt-4">
+                <div className="flex items-center justify-between text-xs text-theme">
                   <div className="flex items-center gap-1.5"><FileText size={13} /> {cat.fileName}</div>
                   <span className="font-bold text-brand-yellow">{cat.stockCount} Printed</span>
                 </div>
@@ -365,20 +365,20 @@ export default function CatalogueManagement() {
                   href={`/print?file=${encodeURIComponent(cat.fileName)}&catId=${cat.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="col-span-2 bg-[#8bceff]/10 hover:bg-[#8bceff]/20 text-[#8bceff] border border-[#8bceff]/20 text-[10px] font-bold uppercase tracking-widest py-2 rounded text-center transition-colors"
+                  className="col-span-2 bg-theme/10 hover:bg-theme/20 text-[#8bceff] border border-theme/20 text-[10px] font-bold uppercase tracking-widest py-2 rounded text-center transition-colors"
                 >
                   Print PDF
                 </a>
                 <button 
                   onClick={() => handleOpenEdit(cat)}
-                  className="bg-[#111111] hover:bg-white/5 text-white border border-white/5 text-[10px] font-bold uppercase tracking-widest py-2 rounded transition-colors"
+                  className="bg-theme hover:bg-theme/5 text-theme border border-theme/5 text-[10px] font-bold uppercase tracking-widest py-2 rounded transition-colors"
                 >
                   Edit
                 </button>
               </div>
               <button 
                 onClick={() => handleDeleteCatalogue(cat.id)}
-                className="mt-3 text-[9px] text-gray-600 hover:text-red-400 uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1"
+                className="mt-3 text-[9px] text-theme hover:text-red-400 uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1"
               >
                 <Trash2 size={10} /> Delete Catalogue
               </button>
