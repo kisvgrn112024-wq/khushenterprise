@@ -136,10 +136,10 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full bg-theme border-b border-theme/5 sticky top-0 z-50">
+    <header className="w-full bg-theme border-b border-theme/5 sticky top-0 z-50 overflow-x-hidden">
       <div className="container mx-auto px-4 lg:px-8 py-4">
         {/* Top Row: Logo, Search, Icons */}
-        <div className="flex items-center justify-between gap-6 mb-4">
+        <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-6 mb-4">
           {/* Logo */}
           <Link href="/" className={`flex-shrink-0 flex items-center ${viewMode === 'mobile' ? 'gap-1.5 max-w-[120px]' : 'gap-1.5 md:gap-3 max-w-[120px] sm:max-w-none'}`}>
             <img src="/logo.png" alt="KE" className={`object-contain ${viewMode === 'mobile' ? 'w-6 h-6' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9'}`} />
@@ -219,7 +219,7 @@ export default function Header() {
 
           {/* Icons & Mobile controls */}
           {/* Icons & Mobile controls */}
-          <div className={`flex items-center text-theme flex-shrink-0 ${viewMode === 'mobile' ? 'gap-1.5 ml-1' : 'gap-1.5 sm:gap-3.5 md:gap-6 ml-1'}`}>
+          <div className={`flex items-center text-theme ${viewMode === 'mobile' ? 'gap-1 flex-shrink' : 'gap-1.5 sm:gap-3.5 md:gap-6 flex-shrink-0'}`}>
             {/* Search Icon (Mobile View Only) */}
             <button
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
