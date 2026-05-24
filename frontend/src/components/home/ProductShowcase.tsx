@@ -88,14 +88,14 @@ export default function ProductShowcase({
               <button className="material-symbols-outlined p-1 text-on-surface-variant hover:text-on-surface">view_list</button>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mobile:gap-2">
             {products.map((product) => (
               <div key={product.id} className="bg-cargo-slate border border-outline-variant hover:border-warning-amber transition-all group overflow-hidden flex flex-col">
                 <div className="relative aspect-square overflow-hidden bg-black">
                   <img
                     alt={product.title}
                     src={getImageUrl(product.images?.[0]) || `/design/images/${product.id}.jpeg`}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 mobile:object-contain"
                   />
                   {product.tag && (
                     <span className="absolute top-4 left-4 bg-industry-red text-white text-[10px] font-data-display px-2 py-0.5 tracking-tighter">
@@ -106,14 +106,14 @@ export default function ProductShowcase({
                 </div>
                 <div className="p-5 flex flex-col flex-grow">
                   <span className="font-label-caps text-[10px] text-on-surface-variant mb-1">{product.category?.toUpperCase() || 'GENERAL'}</span>
-                  <h3 className="font-headline-md text-lg mb-2 group-hover:text-warning-amber transition-colors">{product.title}</h3>
+                  <h3 className="font-headline-md text-lg mb-2 group-hover:text-warning-amber transition-colors mobile:text-base">{product.title}</h3>
                   <div className="flex items-baseline gap-2 mb-6">
-                    <span className="font-data-display text-lg text-on-surface">₹{product.price.toLocaleString()}</span>
+                    <span className="font-data-display text-lg text-on-surface mobile:text-base">₹{product.price.toLocaleString()}</span>
                     <span className="text-[10px] text-on-surface-variant uppercase">INR / UNIT</span>
                   </div>
                   <div className="mt-auto grid grid-cols-2 gap-2">
-                    <button className="bg-warning-amber text-harbor-navy font-label-caps text-[11px] py-3 clipped-corner hover:bg-white transition-colors">ADD TO CART</button>
-                    <button className="border border-outline-variant hover:border-on-surface text-on-surface font-label-caps text-[11px] py-3 clipped-corner transition-colors">QUOTE REQ</button>
+                    <button className="bg-warning-amber text-harbor-navy font-label-caps text-[11px] py-3 clipped-corner hover:bg-white transition-colors mobile:py-2 mobile:text-[9px]">ADD TO CART</button>
+                    <button className="border border-outline-variant hover:border-on-surface text-on-surface font-label-caps text-[11px] py-3 clipped-corner transition-colors mobile:py-2 mobile:text-[9px]">QUOTE REQ</button>
                   </div>
                 </div>
               </div>

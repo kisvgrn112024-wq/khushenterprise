@@ -197,69 +197,12 @@ export default function UnifiedAdminPortal() {
         });
       });
 
-      // Add static dummy fallback inquiries if list is empty
-      if (merged.length === 0) {
-        const dummy: GeneralInquiry[] = [
-          {
-            id: "RFQ-SCH-902",
-            clientName: "Dr. Arpan Mehta",
-            sector: "School",
-            subSector: "Chemistry Lab",
-            items: "15x Spectrometer V4, 50x Glassware Sets",
-            value: 84200,
-            status: "Pending",
-            submittedAt: new Date(Date.now() - 3600000 * 4).toISOString(),
-            contactEmail: "a.mehta@xavier.edu",
-            contactPhone: "+91 97294 57762",
-            location: "St. Xavier Research Wing",
-            message: "Require high-grade chemical glassware and digital testing models."
-          },
-          {
-            id: "RFQ-COL-905",
-            clientName: "Dean Sarah Jenkins",
-            sector: "College",
-            subSector: "Biochemistry",
-            items: "5x Cryo-Storage Units, 2x Autoclaves",
-            value: 142500,
-            status: "Under Review",
-            submittedAt: new Date(Date.now() - 3600000 * 26).toISOString(),
-            contactEmail: "jenkins.s@biogen-solutions.org",
-            contactPhone: "+91 98900 11762",
-            location: "BioGen Solutions Ltd",
-            message: "Sourcing temperature control laboratory chambers."
-          },
-          {
-            id: "RFQ-RES-401",
-            clientName: "Dr. Rajesh Kumar",
-            sector: "Research",
-            items: "1x High-Resolution Electron Microscope X-9",
-            value: 285000,
-            status: "Approved",
-            submittedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-            contactEmail: "r.kumar@aiims.gov.in",
-            contactPhone: "+91 97294 57762",
-            location: "National AIIMS Hospital",
-            message: "Procuring microscope assembly setup."
-          },
-          {
-            id: "RFQ-COM-101",
-            clientName: "Pooja Hegde (Lab Director)",
-            sector: "Commercial",
-            items: "Commercial soil and nutrient profile evaluation",
-            value: 12000,
-            status: "Pending",
-            submittedAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-            contactEmail: "pooja.h@soiltestinglabs.co.in",
-            contactPhone: "+91 96541 23654",
-            location: "Agro Soil Care Labs",
-            message: "Need regular heavy metal testing kits."
-          }
-        ];
-        localStorage.setItem("ke_b2b_inquiries", JSON.stringify(dummy));
-        setInquiries(dummy);
-      } else {
-        setInquiries(merged);
-      }
+        // If no inquiries exist, keep list empty
+        if (merged.length === 0) {
+          setInquiries([]);
+        } else {
+          setInquiries(merged);
+        }
 
       // Initialize Research Assets
       const storedAssets = JSON.parse(localStorage.getItem("ke_research_assets") || "[]");
