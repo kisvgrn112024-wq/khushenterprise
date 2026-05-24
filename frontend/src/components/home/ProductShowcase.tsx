@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { getImageUrl } from '@/lib/products';
+import { Filter, X } from 'lucide-react';
 
 interface ProductShowcaseProps {
-  products: any[]; // product objects from useProducts
+  products: any[];
   categories: string[];
   selectedCategory: string;
   setSelectedCategory: (cat: string) => void;
@@ -21,11 +22,24 @@ export default function ProductShowcase({
   setFilters,
   viewMode,
 }: ProductShowcaseProps) {
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
   return (
     <section className="py-16 container mx-auto px-4 lg:px-8">
       <div className={`flex gap-10 ${viewMode === 'mobile' ? 'flex-col' : 'flex-col lg:flex-row'}`}>
+        
+        {/* Mobile Filter Toggle Button */}
+        <div className={`w-full flex items-center justify-between bg-theme/40 p-4 rounded-xl border border-theme/10 ${viewMode === 'mobile' ? 'block' : 'lg:hidden'}`}>
+          <div className="font-bold text-theme flex items-center gap-2">
+            <Filter size={18} /> Filters & Categories
+          </div>
+          <button onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)} className="text-xs bg-theme/20 px-3 py-1.5 rounded font-semibold border border-theme/10 text-theme hover:bg-theme/30">
+            {isMobileFilterOpen ? "Hide" : "Show"}
+          </button>
+        </div>
+
         {/* Sidebar */}
-        <aside className={`w-full shrink-0 space-y-8 bg-theme/40 p-6 rounded-xl border border-theme/5 h-fit ${viewMode === 'mobile' ? '' : 'lg:w-64'}`}>
+        <aside className={`w-full shrink-0 space-y-8 bg-theme/40 p-6 rounded-xl border border-theme/5 h-fit ${viewMode === 'mobile' ? (isMobileFilterOpen ? 'block' : 'hidden') : 'hidden lg:block lg:w-64'}`}>
           {/* Categories */}
           <div>
             <h3 className="text-xs font-black uppercase tracking-widest text-[#8bceff] mb-4 pb-2 border-b border-theme/5">Categories</h3>

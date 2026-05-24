@@ -218,11 +218,11 @@ export default function Header() {
             </button>
 
             {/* Live Chat link shortcut */}
-            <Link href="/my-orders" className="hover:text-[#8bceff] transition-colors relative" title="Consignment Assistant Desk">
+            <Link href="/my-orders" className={`hover:text-[#8bceff] transition-colors relative ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`} title="Consignment Assistant Desk">
               <BotMessageSquare size={20} />
             </Link>
             
-            <Link href="/wishlist" className="hover:text-theme transition-colors relative">
+            <Link href="/wishlist" className={`hover:text-theme transition-colors relative ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}>
               <Heart size={20} className={wishlist.length > 0 ? "fill-white text-theme" : ""} />
               {wishlist.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-brand-yellow text-theme font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{wishlist.length}</span>
@@ -235,9 +235,9 @@ export default function Header() {
                  <span className="absolute -top-2 -right-2 bg-brand-yellow text-theme font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{cart.reduce((a,c) => a + c.quantity, 0)}</span>
                )}
             </button>
-            <div className="ml-4"><ThemeSwitcher /></div>
+            <div className={`ml-4 ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}><ThemeSwitcher /></div>
             
-            <div className="relative group cursor-pointer hover:text-theme">
+            <div className={`relative group cursor-pointer hover:text-theme ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}>
               <div className="flex items-center gap-1">
                 <User size={20} />
                 {userSession && <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20 font-bold max-w-[80px] truncate">{userSession.name}</span>}
@@ -298,6 +298,15 @@ export default function Header() {
                 >
                   <Mic size={16} />
                 </button>
+                <button 
+                  type="button" 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-theme hover:text-theme p-1 rounded hover:bg-theme/5"
+                  title="Visual Camera Search"
+                >
+                  {isAiAnalyzing ? <Loader2 size={16} className="animate-spin text-[#8bceff]" /> : <Camera size={16} />}
+                </button>
+                <div className="w-[1px] h-4 bg-theme/10"></div>
                 <button type="submit" className="text-theme hover:text-theme">
                   <Search size={18} />
                 </button>
@@ -393,7 +402,7 @@ export default function Header() {
             <div className="flex items-center justify-between pb-4 border-b border-theme/5 mb-6">
               <div className="flex items-center gap-2">
                 <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
-                <span className="text-xs font-black text-theme tracking-widest uppercase">Navigation</span>
+                <span className="text-xs font-black text-theme tracking-widest uppercase">Menu</span>
               </div>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -401,6 +410,30 @@ export default function Header() {
               >
                 <X size={20} />
               </button>
+            </div>
+
+            {/* Mobile User, Theme & Utilities */}
+            <div className="flex flex-col gap-3 pb-4 mb-4 border-b border-theme/5">
+              <div className="flex items-center justify-between">
+                <div className="scale-90 origin-left"><ThemeSwitcher /></div>
+                <Link href="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
+                  <Heart size={16} className={wishlist.length > 0 ? "fill-theme" : ""} /> Wishlist ({wishlist.length})
+                </Link>
+              </div>
+              
+              <Link href="/my-orders" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
+                <BotMessageSquare size={16} /> Assistant Desk
+              </Link>
+              
+              {userSession ? (
+                <div className="flex items-center gap-2 text-xs font-semibold text-theme text-green-500 bg-green-500/10 px-2 py-1 rounded">
+                  <User size={16} /> {userSession.name}
+                </div>
+              ) : (
+                <Link href="/account/login" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
+                  <User size={16} /> Login / Register
+                </Link>
+              )}
             </div>
 
             <nav className="flex flex-col gap-3 text-xs font-semibold uppercase tracking-wider text-theme">

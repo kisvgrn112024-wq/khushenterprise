@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Filter, X } from "lucide-react";
 import { Product, getImageUrl } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
@@ -42,6 +43,8 @@ function ProductsContent() {
   const generateAIManual = (productName: string) => {
     window.open(`/print?file=${encodeURIComponent('AI_Generated_Manual_' + productName.replace(/\s+/g, '_') + '.pdf')}`, '_blank');
   };
+
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-theme font-sans text-theme pb-20">
@@ -86,8 +89,18 @@ function ProductsContent() {
         {/* Main Content Layout */}
         <div className="flex flex-col md:flex-row gap-10 items-start">
           
+          {/* Mobile Filter Toggle */}
+          <div className="w-full flex items-center justify-between md:hidden bg-theme/40 p-4 rounded-xl border border-theme/10">
+            <div className="font-bold text-theme flex items-center gap-2">
+              <Filter size={18} /> Filters
+            </div>
+            <button onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)} className="text-xs bg-theme/20 px-3 py-1.5 rounded font-semibold border border-theme/10 text-theme">
+              {isMobileFilterOpen ? "Hide" : "Show"}
+            </button>
+          </div>
+
           {/* Sidebar */}
-          <aside className="w-full md:w-64 flex-shrink-0 space-y-10">
+          <aside className={`w-full md:w-64 flex-shrink-0 space-y-10 ${isMobileFilterOpen ? 'block' : 'hidden md:block'}`}>
             {/* Price Range */}
             <div>
               <h3 className="text-[10px] font-bold text-theme uppercase tracking-widest mb-6">Price Range</h3>
