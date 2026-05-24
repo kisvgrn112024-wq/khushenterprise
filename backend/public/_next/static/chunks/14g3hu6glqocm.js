@@ -1,0 +1,110 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,99838,e=>{"use strict";let t=(0,e.i(17381).default)("globe",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["path",{d:"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20",key:"13o1zl"}],["path",{d:"M2 12h20",key:"9i4pu4"}]]);e.s(["Globe",0,t],99838)},35184,e=>{"use strict";let t=(0,e.i(17381).default)("award",[["path",{d:"m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526",key:"1yiouv"}],["circle",{cx:"12",cy:"8",r:"6",key:"1vp47v"}]]);e.s(["Award",0,t],35184)},40980,e=>{"use strict";let t=(0,e.i(17381).default)("arrow-left",[["path",{d:"m12 19-7-7 7-7",key:"1l729n"}],["path",{d:"M19 12H5",key:"x3x0zl"}]]);e.s(["ArrowLeft",0,t],40980)},86215,e=>{"use strict";var t=e.i(48277),s=e.i(30668),a=e.i(96086),l=e.i(17381);let r=(0,l.default)("beaker",[["path",{d:"M4.5 3h15",key:"c7n0jr"}],["path",{d:"M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3",key:"m1uhx7"}],["path",{d:"M6 14h12",key:"4cwo0f"}]]),i=(0,l.default)("printer",[["path",{d:"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2",key:"143wyd"}],["path",{d:"M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6",key:"1itne7"}],["rect",{x:"6",y:"14",width:"12",height:"8",rx:"1",key:"1ue0tg"}]]);var n=e.i(40980),c=e.i(35184),o=e.i(99838),d=e.i(3119),x=e.i(88506),p=e.i(96388);let m=e=>{if(!e)return"";if(e.startsWith("http://")||e.startsWith("https://")||e.startsWith("data:"))return e;let t="localhost"===window.location.hostname||"127.0.0.1"===window.location.hostname?`http://${window.location.hostname}:5000`:"";return`${t}${e}`};function u(){let e=(0,a.useSearchParams)(),l=e.get("file")||"document.pdf",u=e.get("catId"),f=decodeURIComponent(l),[h,g]=(0,s.useState)(null),[b,j]=(0,s.useState)([]),[w,N]=(0,s.useState)([]),[y,v]=(0,s.useState)({}),[k,S]=(0,s.useState)(!0);(0,s.useEffect)(()=>{var e;let t,s,a,l;S(!0);let r=localStorage.getItem("ke_catalogues"),i=(r?JSON.parse(r):[]).find(e=>e.id===u);g(i||null);let n=localStorage.getItem("ke_products"),c=n?JSON.parse(n):(0,p.getProducts)(),o=[];j(o=i?i.autoSync?c.filter(e=>e.category===i.category&&"inactive"!==e.product_status):c.filter(e=>(i.selectedProductIds?.includes(e.id)||e.catalog_id===i.id)&&"inactive"!==e.product_status):c.filter(e=>"inactive"!==e.product_status).slice(0,12));let d=(e=o,s={},(t=[]).push({type:"cover",pageNum:1}),a={},e.forEach(e=>{let t=e.category||"General Scientific Apparatus";a[t]||(a[t]=[]),a[t].push(e)}),l=2,Object.keys(a).sort().forEach((e,r)=>{s[e]=l;let i=a[e];for(let s=0;s<i.length;s+=2)t.push({type:"product-page",categoryName:e,categoryIndex:r+1,primary:i[s],secondary:i[s+1]||null,pageNum:l}),l++}),{pages:t,categoryPageMap:s});N(d.pages),v(d.categoryPageMap),S(!1)},[u]),(0,s.useEffect)(()=>{if(w.length>0){let e=setTimeout(()=>{window.print()},1500);return()=>clearTimeout(e)}},[w]);let C=h?.title||"OFFICIAL PRODUCT CATALOGUE",P=h?.description||"Precision apparatus, surgical orthopedic supports, and clinical diagnostics reference matrix.",E=new Date().toLocaleDateString("en-IN",{month:"long",year:"numeric"}).toUpperCase(),I=`VOL. ${new Date().getFullYear()} / 1`;return k?(0,t.jsxs)("div",{className:"min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center font-sans",children:[(0,t.jsx)("div",{className:"animate-spin rounded-full h-10 w-10 border-4 border-slate-900 border-t-transparent mb-4"}),(0,t.jsx)("p",{className:"text-sm font-bold uppercase tracking-wider",children:"Generating Dynamic Catalog Templates..."})]}):(0,t.jsxs)("div",{className:"print-view-container min-h-screen text-slate-900 font-sans print-body",children:[(0,t.jsx)("style",{dangerouslySetInnerHTML:{__html:`
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+        .print-view-container {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .font-outfit {
+          font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+        }
+
+        .font-mono {
+          font-family: 'Fira Code', monospace;
+        }
+
+        /* Screen Simulated View */
+        @media screen {
+          .print-body {
+            background-color: #f8fafc; /* Slate 50 */
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+          }
+          .a4-page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            position: relative;
+            box-sizing: border-box;
+            padding: 16mm 18mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+        }
+
+        /* Print View */
+        @media print {
+          .print-hidden {
+            display: none !important;
+          }
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          .print-body {
+            padding: 0 !important;
+            background: none !important;
+          }
+          .a4-page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 !important;
+            padding: 16mm 18mm !important;
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            page-break-after: always;
+            page-break-inside: avoid;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+        }
+
+        /* Table of Contents Dots */
+        .toc-list {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+        .toc-item {
+          display: flex;
+          align-items: flex-end;
+          margin-bottom: 14px;
+          font-size: 13px;
+        }
+        .toc-name {
+          font-weight: 700;
+          color: #1e293b; /* Slate 800 */
+          padding-right: 8px;
+          background: white;
+          font-family: 'Outfit', sans-serif;
+          letter-spacing: -0.01em;
+        }
+        .toc-dots {
+          flex-grow: 1;
+          border-bottom: 2px dotted #cbd5e1; /* Slate 300 */
+          margin-bottom: 3px;
+        }
+        .toc-page {
+          font-family: 'Fira Code', monospace;
+          font-weight: 700;
+          color: #0f172a; /* Slate 900 */
+          padding-left: 8px;
+          background: white;
+        }
+      `}}),(0,t.jsxs)("div",{className:"print-hidden w-full max-w-[210mm] flex justify-between items-center mb-8 pb-4 border-b border-slate-200",children:[(0,t.jsxs)("button",{onClick:()=>window.close(),className:"text-xs font-bold text-slate-500 hover:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer",children:[(0,t.jsx)(n.ArrowLeft,{size:14})," Close Preview"]}),(0,t.jsxs)("div",{className:"text-xs text-slate-600 font-semibold font-outfit",children:["Document Frame: ",(0,t.jsx)("strong",{className:"text-slate-900 font-bold",children:h?.title||f})]}),(0,t.jsxs)("button",{onClick:()=>window.print(),className:"bg-slate-900 hover:bg-slate-800 text-theme px-4 py-2 rounded shadow-sm flex items-center gap-2 font-bold text-[10px] uppercase tracking-wider transition-colors cursor-pointer",children:[(0,t.jsx)(i,{size:13})," Print/Save PDF"]})]}),(0,t.jsx)("div",{className:"flex flex-col items-center w-full",children:w.map((e,s)=>{if("cover"===e.type)return(0,t.jsxs)("div",{className:"a4-page relative flex flex-col justify-between",id:"page-1",children:[(0,t.jsxs)("div",{className:"flex justify-between items-start border-b border-slate-900 pb-4",children:[(0,t.jsxs)("div",{className:"flex items-center gap-3",children:[(0,t.jsx)("div",{className:"bg-slate-900 text-theme p-2 rounded",children:(0,t.jsx)(r,{size:24,className:"stroke-[2.5]"})}),(0,t.jsxs)("div",{children:[(0,t.jsx)("h1",{className:"text-xl font-black tracking-tight leading-none text-slate-900 font-outfit",children:"KHUSH ENTERPRISES"}),(0,t.jsx)("p",{className:"text-[8px] uppercase tracking-widest text-slate-500 font-bold mt-1 font-outfit",children:"Laboratory Infrastructure & Ortho Aids"})]})]}),(0,t.jsxs)("div",{className:"text-right",children:[(0,t.jsx)("p",{className:"text-[10px] font-extrabold text-slate-800 tracking-wider uppercase font-outfit",children:"Official Product Catalogue"}),(0,t.jsxs)("p",{className:"text-[9px] text-slate-500 font-mono mt-0.5",children:[I," | ",E]})]})]}),(0,t.jsxs)("div",{className:"my-auto flex flex-col items-center w-full",children:[(0,t.jsx)("div",{className:"w-full h-[240px] relative overflow-hidden rounded border border-slate-200 mb-6 bg-slate-50 flex items-center justify-center",children:(0,t.jsx)("img",{src:(()=>{if(h?.image)return m(h.image);let e=b.find(e=>e.images&&e.images.length>0);return e?m(e.images[0]):"https://images.unsplash.com/photo-1576086213369-97a306dca665?auto=format&fit=crop&w=800&q=80"})(),alt:"Catalogue Cover",className:"w-full h-full object-cover",onError:e=>{e.currentTarget.src="https://images.unsplash.com/photo-1576086213369-97a306dca665?auto=format&fit=crop&w=800&q=80"}})}),(0,t.jsxs)("div",{className:"text-center max-w-xl mx-auto",children:[(0,t.jsx)("div",{className:"inline-block bg-slate-100 text-slate-800 text-[9px] font-black tracking-widest px-3 py-1 rounded-full uppercase mb-4 font-outfit",children:"Portfolio Reference Matrix"}),(0,t.jsx)("h2",{className:"text-3xl font-black text-slate-900 tracking-tight uppercase leading-tight font-outfit",children:C}),(0,t.jsx)("p",{className:"text-xs text-slate-500 mt-3 leading-relaxed max-w-lg mx-auto",children:P})]}),(0,t.jsx)("div",{className:"w-16 h-1 bg-slate-900 mx-auto my-8"}),(0,t.jsxs)("div",{className:"w-full max-w-md mx-auto",children:[(0,t.jsx)("h3",{className:"text-[10px] font-black text-slate-900 tracking-widest uppercase mb-4 text-center font-outfit",children:"TABLE OF CONTENTS"}),0===Object.keys(y).length?(0,t.jsx)("p",{className:"text-xs text-center text-slate-400 italic",children:"No category mappings found in current export."}):(0,t.jsx)("ul",{className:"toc-list",children:Object.keys(y).map((e,s)=>(0,t.jsxs)("li",{className:"toc-item",children:[(0,t.jsxs)("span",{className:"toc-name",children:[String(s+1).padStart(2,"0"),".0 ",e.toUpperCase()]}),(0,t.jsx)("span",{className:"toc-dots"}),(0,t.jsxs)("span",{className:"toc-page",children:["PAGE ",String(y[e]).padStart(2,"0")]})]},e))})]})]}),(0,t.jsxs)("div",{className:"border-t border-slate-200 pt-4 flex justify-between items-center text-[8px] font-mono text-slate-500 uppercase tracking-wider",children:[(0,t.jsxs)("div",{className:"flex gap-4",children:[(0,t.jsxs)("span",{className:"flex items-center gap-1",children:[(0,t.jsx)(o.Globe,{size:9})," khushenterprises.com"]}),(0,t.jsxs)("span",{className:"flex items-center gap-1",children:[(0,t.jsx)(d.Mail,{size:9})," sales@khushenterprises.com"]}),(0,t.jsxs)("span",{className:"flex items-center gap-1",children:[(0,t.jsx)(x.Phone,{size:9})," +91 97294 57762"]})]}),(0,t.jsx)("div",{children:"PAGE 01"})]})]},s);{let a,l,{categoryName:r,categoryIndex:i,primary:n,secondary:p,pageNum:u}=e,f=n.images?.[0]||"",h=n.images?.[1]||n.images?.[0]||"",g=n.images?.[2]||n.images?.[0]||"",b=p?.images?.[0]||"";return(0,t.jsxs)("div",{className:"a4-page relative flex flex-col justify-between",id:`page-${u}`,children:[(0,t.jsxs)("div",{className:"flex justify-between items-center border-b-2 border-slate-900 pb-2 mb-4",children:[(0,t.jsxs)("div",{children:[(0,t.jsxs)("h2",{className:"text-xs font-black tracking-tight text-slate-900 uppercase font-outfit",children:[i,".0 ",r?.toUpperCase()]}),(0,t.jsx)("p",{className:"text-[8px] text-slate-500 uppercase font-mono tracking-wider",children:"Khush Enterprises • Product Catalogue"})]}),(0,t.jsx)("div",{className:"bg-slate-900 text-theme px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase font-outfit",children:"KE Quality Assured"})]}),(0,t.jsxs)("div",{className:"flex-grow flex flex-col justify-between",children:[(0,t.jsxs)("div",{className:"flex flex-col flex-grow justify-start",children:[(0,t.jsxs)("div",{className:"flex gap-5",children:[(0,t.jsxs)("div",{className:"w-[180px] flex-shrink-0 flex flex-col gap-2",children:[(0,t.jsx)("div",{className:"w-[180px] h-[160px] border border-slate-200 rounded p-1.5 bg-theme flex items-center justify-center overflow-hidden",children:(0,t.jsx)("img",{src:m(f),alt:n.title,className:"w-full h-full object-contain",onError:e=>{e.currentTarget.src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"}})}),(0,t.jsxs)("div",{className:"flex gap-2",children:[(0,t.jsx)("div",{className:"w-[86px] h-[60px] border border-slate-200 rounded p-1 bg-theme flex items-center justify-center overflow-hidden",children:(0,t.jsx)("img",{src:m(h),alt:"Detail 1",className:"w-full h-full object-contain",onError:e=>{e.currentTarget.src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"}})}),(0,t.jsx)("div",{className:"w-[86px] h-[60px] border border-slate-200 rounded p-1 bg-theme flex items-center justify-center overflow-hidden",children:(0,t.jsx)("img",{src:m(g),alt:"Detail 2",className:"w-full h-full object-contain",onError:e=>{e.currentTarget.src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"}})})]})]}),(0,t.jsxs)("div",{className:"flex-grow flex flex-col justify-between min-h-[228px]",children:[(0,t.jsxs)("div",{children:[(0,t.jsxs)("div",{className:"flex gap-1.5 mb-1.5 flex-wrap",children:[(0,t.jsx)("span",{className:`text-[7px] font-black px-1.5 py-0.5 rounded tracking-wider uppercase font-outfit ${n.stock>0?"bg-emerald-100 text-emerald-800":"bg-amber-100 text-amber-800"}`,children:n.stock>0?"IN STOCK":"PRE-ORDER"}),(0,t.jsxs)("span",{className:"bg-slate-100 text-slate-800 text-[7px] font-black px-1.5 py-0.5 rounded tracking-wider uppercase flex items-center gap-0.5 font-outfit",children:[(0,t.jsx)(c.Award,{size:8,className:"stroke-[2]"})," ISO 9001"]}),n.tag&&(0,t.jsx)("span",{className:"bg-blue-100 text-blue-800 text-[7px] font-black px-1.5 py-0.5 rounded tracking-wider uppercase font-outfit",children:n.tag})]}),(0,t.jsx)("h3",{className:"text-sm font-bold text-slate-900 leading-tight font-outfit",children:n.title}),(0,t.jsxs)("p",{className:"text-[8px] text-slate-400 font-mono mt-0.5",children:["SKU: ",n.sku||`KE-${n.id.toUpperCase()}`]}),(0,t.jsx)("p",{className:"text-[10px] text-slate-500 leading-relaxed mt-2 text-justify line-clamp-3",children:n.description})]}),(0,t.jsxs)("div",{className:"border border-slate-350 rounded bg-slate-50 p-2 mt-2",children:[(0,t.jsxs)("div",{className:"grid grid-cols-2 gap-2 text-center",children:[(0,t.jsxs)("div",{className:"border-r border-slate-200 pr-1",children:[(0,t.jsx)("p",{className:"text-[7px] uppercase tracking-wider text-slate-400 font-bold",children:"Standard Price"}),(0,t.jsxs)("p",{className:"text-xs font-black text-slate-950 mt-0.5",children:["₹",n.price?.toLocaleString("en-IN")||"0"]})]}),(0,t.jsxs)("div",{className:"pl-1",children:[(0,t.jsxs)("p",{className:"text-[7px] uppercase tracking-wider text-slate-400 font-bold",children:["Bulk Rate (MOQ: ",n.moq||5,")"]}),(0,t.jsxs)("p",{className:"text-xs font-black text-emerald-700 mt-0.5",children:["₹",n.bulkPrice?n.bulkPrice.toLocaleString("en-IN"):Math.round(.9*n.price).toLocaleString("en-IN")]})]})]}),(0,t.jsx)("p",{className:"text-[7px] text-center text-slate-400 font-bold mt-1 uppercase tracking-tight",children:"Excluding 18% GST • Standard Delivery Clearance Applies"})]})]})]}),(0,t.jsxs)("div",{className:"mt-4",children:[(0,t.jsx)("h4",{className:"text-[9px] font-black text-slate-800 tracking-wider uppercase mb-1.5 border-b border-slate-200 pb-0.5 font-outfit",children:"TECHNICAL SPECIFICATIONS"}),(0,t.jsx)("div",{className:"grid grid-cols-2 gap-x-6 gap-y-1 text-[9px] font-medium text-slate-700",children:[{label:"Manufacturer",value:n.brand||"Khush Enterprises"},{label:"Model / SKU",value:n.sku||`KE-${n.id.slice(-6).toUpperCase()}`},{label:"Compliance",value:"ISO 9001:2015, CE Compliant"},{label:"Material Grade",value:(a=(n.title||"").toLowerCase(),(n.description||"").toLowerCase(),(l=(n.category||"").toLowerCase()).includes("ortho")||l.includes("surgical")||a.includes("collar")||a.includes("belt")||a.includes("support")?"Medical Grade Neoprene & Ortho Polyethylene":a.includes("glass")||a.includes("flask")||a.includes("beaker")||l.includes("ml")?"Borosilicate 3.3 Lab Glass (ASTM E438)":a.includes("microscope")?"Optical Glass & Die-Cast Aluminum Alloy":a.includes("scale")||a.includes("balance")?"Brushed Stainless Steel & ABS Enclosure":a.includes("pipette")?"PVDF & Autoclavable Polymer Compound":"Premium Laboratory Grade Material")},{label:"Pack Configuration",value:(e=>{let t=(e.title||"").toLowerCase();if(t.includes("set of")){let e=t.match(/set of\s*(\d+)/);return e?`Pack of ${e[1]} Units`:"Custom Set"}return e.moq&&e.moq>1?`Standard Bulk Case (MOQ: ${e.moq})`:"Single Unit (Individual Box)"})(n)},{label:"Availability Status",value:n.stock>0?`In Stock (${n.stock} units)`:"Pre-Order (14 Days)"}].map((e,s)=>(0,t.jsxs)("div",{className:"flex justify-between py-0.5 border-b border-slate-100",children:[(0,t.jsx)("span",{className:"text-slate-400 font-bold",children:e.label}),(0,t.jsx)("span",{className:"text-slate-900 font-mono text-right truncate max-w-[170px]",children:e.value})]},s))})]})]}),(0,t.jsx)("div",{className:"border-t border-dashed border-slate-300 my-4"}),p?(0,t.jsxs)("div",{className:"h-[95px] flex gap-4 items-center mb-1",children:[(0,t.jsx)("div",{className:"w-[80px] h-[80px] border border-slate-200 rounded p-1 bg-theme flex items-center justify-center overflow-hidden flex-shrink-0",children:(0,t.jsx)("img",{src:m(b),alt:p.title,className:"w-full h-full object-contain",onError:e=>{e.currentTarget.src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"}})}),(0,t.jsxs)("div",{className:"flex-grow flex flex-col justify-between h-full py-0.5",children:[(0,t.jsxs)("div",{children:[(0,t.jsxs)("div",{className:"flex justify-between items-start",children:[(0,t.jsxs)("div",{children:[(0,t.jsx)("h3",{className:"text-xs font-bold text-slate-950 leading-none font-outfit",children:p.title}),(0,t.jsxs)("p",{className:"text-[8px] text-slate-400 font-mono mt-0.5",children:["SKU: ",p.sku||`KE-${p.id.toUpperCase()}`]})]}),(0,t.jsxs)("div",{className:"text-right",children:[(0,t.jsx)("p",{className:"text-[7px] uppercase tracking-wider text-slate-400 font-bold",children:"Wholesale Price"}),(0,t.jsxs)("p",{className:"text-xs font-black text-slate-950 leading-none mt-0.5",children:["₹",p.price?.toLocaleString("en-IN")||"0"]})]})]}),(0,t.jsx)("p",{className:"text-[9px] text-slate-500 mt-1 leading-normal line-clamp-2 text-justify",children:p.description})]}),(0,t.jsxs)("div",{className:"flex justify-between items-center text-[7px] font-bold text-slate-400 uppercase tracking-wider",children:[(0,t.jsxs)("span",{children:["Minimum Order Quantity: ",p.moq||5," units"]}),(0,t.jsxs)("span",{className:"flex items-center gap-0.5 text-slate-500",children:[(0,t.jsx)(c.Award,{size:8})," ISO Certified"]})]})]})]}):(0,t.jsx)("div",{className:"h-[95px] flex items-center justify-center border border-dashed border-slate-100 rounded text-[8px] text-slate-300 uppercase tracking-widest font-black mb-1",children:"End of Section"})]}),(0,t.jsxs)("div",{className:"border-t border-slate-200 pt-4 flex justify-between items-center text-[8px] font-mono text-slate-500 uppercase tracking-wider mt-2",children:[(0,t.jsxs)("div",{className:"flex gap-4",children:[(0,t.jsxs)("span",{className:"flex items-center gap-1",children:[(0,t.jsx)(o.Globe,{size:9})," khushenterprises.com"]}),(0,t.jsxs)("span",{className:"flex items-center gap-1",children:[(0,t.jsx)(d.Mail,{size:9})," sales@khushenterprises.com"]}),(0,t.jsxs)("span",{className:"flex items-center gap-1",children:[(0,t.jsx)(x.Phone,{size:9})," +91 97294 57762"]})]}),(0,t.jsxs)("div",{children:["PAGE ",String(u).padStart(2,"0")]})]})]},s)}})})]})}e.s(["default",0,function(){return(0,t.jsx)(s.Suspense,{fallback:(0,t.jsx)("div",{className:"min-h-screen bg-slate-50 text-slate-800 p-10 flex items-center justify-center font-bold font-sans",children:"Loading Catalog Templates..."}),children:(0,t.jsx)(u,{})})}],86215)}]);

@@ -15,17 +15,6 @@ export default function MainLayoutWrapper({ children }: { children: React.ReactN
 
   const isAdminRoute = pathname ? (pathname.startsWith("/admin-portal-ke") || pathname === "/secure-portal-access") : false;
 
-  if (!isInitialized) {
-    return (
-      <div className="min-h-screen bg-theme text-theme flex items-center justify-center font-sans">
-        <div className="flex flex-col items-center gap-3">
-          <span className="w-8 h-8 rounded-full border-2 border-t-[#8bceff] border-theme/10 animate-spin"></span>
-          <span className="text-xs uppercase tracking-widest text-theme font-bold">Initializing Layout...</span>
-        </div>
-      </div>
-    );
-  }
-
   // Bypass storefront layout wrapper for admin portal and login routes
   if (isAdminRoute) {
     return <>{children}</>;

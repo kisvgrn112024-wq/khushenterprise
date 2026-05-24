@@ -1,2 +1,2 @@
-:HL["/_next/static/chunks/0q315xrf5t2nn.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"products","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"glassware_culture_tube_30_ml_set_of_20_2","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"AsRQ4TDzcvqzEyulPn-Sd"}
+:HL["/_next/static/chunks/0j5y9lwjhx8wi.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"products","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"glassware_culture_tube_30_ml_set_of_20_2","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"7t7SBXZHbbxTEqunRKV2u"}
