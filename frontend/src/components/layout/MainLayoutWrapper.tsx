@@ -34,7 +34,7 @@ export default function MainLayoutWrapper({ children }: { children: React.ReactN
             ? "max-w-full bg-theme relative overflow-x-hidden min-h-screen"
             : viewMode === "desktop"
               ? "min-w-[1280px] overflow-x-auto bg-theme"
-              : "max-w-full md:max-w-[480px] mx-auto bg-theme min-h-screen shadow-[0_0_50px_rgba(0,255,255,0.08)] border-x border-theme/5 relative overflow-x-hidden"
+              : "max-w-full md:max-w-[600px] mx-auto bg-theme min-h-screen shadow-[0_0_50px_rgba(0,255,255,0.08)] border-x border-theme/5 relative overflow-x-hidden"
         }`}
       >
         <Header />
