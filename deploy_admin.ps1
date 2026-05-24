@@ -49,10 +49,8 @@ FTP_PROTO=$ftpProto
 
 # 2. Choose deployment mode
 Write-Host ""
-Write-Host "Select deployment mode:" -ForegroundColor Cyan
-Write-Host " [1] Upload Admin Portal & Static Chunks ONLY (Fast & ultra-safe)" -ForegroundColor Yellow
-Write-Host " [2] Upload Entire Website (Updates storefront too, but preserves uploads folder)" -ForegroundColor Yellow
-$mode = Read-Host "Enter option (1 or 2)"
+Write-Host "Deploy mode: Full site upload (option 2)" -ForegroundColor Cyan
+$mode = "2"
 
 if ($mode -ne "1" -and $mode -ne "2") {
     Write-Host "Invalid option selected. Aborting." -ForegroundColor Red
@@ -94,9 +92,8 @@ $allFiles = Get-ChildItem -Path $outDir -Recurse -File
 $filesToUpload = @()
 
 foreach ($file in $allFiles) {
-    $relPath = Resolve-Path $file.FullName -Relative -RelativeTo $outDir
-    # Remove leading .\ or ./
-    $relPath = $relPath -replace "^\.\\", "" -replace "^\./", ""
+    # Compute relative path by stripping the output directory prefix
+    $relPath = $file.FullName.Substring($outDir.Length + 1)
     # Normalize slashes to forward slashes for FTP
     $remoteRelPath = $relPath -replace "\\", "/"
 
@@ -141,6 +138,7 @@ foreach ($item in $filesToUpload) {
     # --ftp-create-dirs automatically creates missing remote subfolders
     $curlArgs = @(
         "--ftp-create-dirs",
+        "--ftp-pasv",
         "-T", $localPath,
         $remoteUrl,
         "--user", "${ftpUser}:${ftpPass}",

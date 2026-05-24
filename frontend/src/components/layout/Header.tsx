@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { Search, Heart, ShoppingCart, User, Mic, Camera, Loader2, BotMessageSquare, Menu, X, ChevronDown } from "lucide-react";
+import { Search, Heart, ShoppingCart, User, Mic, Camera, Loader2, BotMessageSquare, Menu, X, ChevronDown, BookOpen, Package, Star, Award, Mail, Globe, Shield } from "lucide-react";
 import { getProducts } from "@/lib/products";
 import { useStore } from "@/context/StoreContext";
 import { useViewMode } from "@/context/ViewModeContext";

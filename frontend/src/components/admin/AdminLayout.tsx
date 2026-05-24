@@ -43,18 +43,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { icon: Globe, label: "Export Central", href: "/admin-portal-ke/export-controller" },
   ];
 
+  const isProduction = process.env.NODE_ENV === "production";
+
   return (
     <DownloadProvider>
       <div className="w-full min-h-screen bg-theme flex flex-col font-sans">
-        {/* Sticky top layout toggle bar */}
-        <ViewToggleBar />
+        {/* Sticky top layout toggle bar - only shown in development mode */}
+        {!isProduction && <ViewToggleBar />}
 
-        {/* Main layout container */}
+        {/* Main layout container - fully responsive in production, simulated in development */}
         <div
           className={`flex-grow flex flex-col w-full transition-all duration-300 ${
-            viewMode === "desktop"
-              ? "min-w-[1280px] overflow-x-auto bg-theme"
-              : "max-w-full md:max-w-[480px] mx-auto bg-theme min-h-screen shadow-[0_0_50px_rgba(0,255,255,0.08)] border-x border-theme/5 relative overflow-x-hidden"
+            isProduction
+              ? "max-w-full bg-theme relative overflow-x-hidden min-h-screen"
+              : viewMode === "desktop"
+                ? "min-w-[1280px] overflow-x-auto bg-theme"
+                : "max-w-full md:max-w-[480px] mx-auto bg-theme min-h-screen shadow-[0_0_50px_rgba(0,255,255,0.08)] border-x border-theme/5 relative overflow-x-hidden"
           }`}
         >
           <div className="relative flex flex-1 h-screen overflow-hidden text-theme bg-theme">

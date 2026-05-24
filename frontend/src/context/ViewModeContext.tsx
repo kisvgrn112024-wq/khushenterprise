@@ -16,17 +16,35 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
   const [viewMode, setViewModeState] = useState<ViewMode>("desktop");
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // Check if we are running in the final website/production environment
+  const isProduction = process.env.NODE_ENV === "production";
+
   useEffect(() => {
-    const savedMode = localStorage.getItem("ke_view_mode") as ViewMode | null;
-    if (savedMode === "desktop" || savedMode === "mobile") {
-      setViewModeState(savedMode);
-    } else {
-      // Fallback based on initial window size
-      const isMobileScreen = window.innerWidth < 768;
-      setViewModeState(isMobileScreen ? "mobile" : "desktop");
-    }
+    const handleResize = () => {
+      const isMobileScreen = window.innerWidth < 1024; // 1024px is standard lg breakpoint for header nav
+      
+      if (isProduction) {
+        // In production, always match screen width dynamically
+        setViewModeState(isMobileScreen ? "mobile" : "desktop");
+      } else {
+        // In development, allow manual simulation toggle from localStorage if saved
+        const savedMode = localStorage.getItem("ke_view_mode") as ViewMode | null;
+        if (savedMode === "desktop" || savedMode === "mobile") {
+          setViewModeState(savedMode);
+        } else {
+          setViewModeState(isMobileScreen ? "mobile" : "desktop");
+        }
+      }
+    };
+
+    // Initialize
+    handleResize();
     setIsInitialized(true);
-  }, []);
+
+    // Listen for real window size changes
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isProduction]);
 
   // Update viewport meta tags and body classes dynamically
   useEffect(() => {
@@ -39,20 +57,29 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
       document.head.appendChild(meta);
     }
 
-    if (viewMode === "desktop") {
-      meta.setAttribute("content", "width=1280, initial-scale=0.3, shrink-to-fit=no");
-      document.documentElement.classList.add("forced-desktop");
-      document.documentElement.classList.remove("forced-mobile");
-    } else {
+    if (isProduction) {
+      // Production is fully responsive, standard mobile viewport
       meta.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5");
-      document.documentElement.classList.add("forced-mobile");
-      document.documentElement.classList.remove("forced-desktop");
+      document.documentElement.classList.remove("forced-desktop", "forced-mobile");
+    } else {
+      // Development mode simulator controls
+      if (viewMode === "desktop") {
+        meta.setAttribute("content", "width=1280, initial-scale=0.3, shrink-to-fit=no");
+        document.documentElement.classList.add("forced-desktop");
+        document.documentElement.classList.remove("forced-mobile");
+      } else {
+        meta.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5");
+        document.documentElement.classList.add("forced-mobile");
+        document.documentElement.classList.remove("forced-desktop");
+      }
     }
-  }, [viewMode, isInitialized]);
+  }, [viewMode, isInitialized, isProduction]);
 
   const setViewMode = (mode: ViewMode) => {
     setViewModeState(mode);
-    localStorage.setItem("ke_view_mode", mode);
+    if (!isProduction) {
+      localStorage.setItem("ke_view_mode", mode);
+    }
   };
 
   return (
