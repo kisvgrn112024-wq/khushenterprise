@@ -23,7 +23,9 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isMobileBulkOpen, setIsMobileBulkOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Read user login status
@@ -32,6 +34,17 @@ export default function Header() {
       setUserSession(JSON.parse(saved));
     }
   }, [pathname]);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const searchResults = searchQuery.length > 1 
     ? getProducts().filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 5)
@@ -238,26 +251,26 @@ export default function Header() {
             </button>
             <div className={`${viewMode === 'mobile' ? 'ml-0.5 scale-[0.65]' : 'ml-0.5 sm:ml-4 scale-[0.65] sm:scale-100'} origin-center`}><ThemeSwitcher /></div>
             
-            <div className="relative group cursor-pointer hover:text-theme">
-              <div className={`flex items-center ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-0.5 sm:gap-1'}`}>
+            <div ref={profileRef} className="relative cursor-pointer" onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)} onMouseEnter={() => viewMode !== 'mobile' && setIsProfileDropdownOpen(true)} onMouseLeave={() => viewMode !== 'mobile' && setIsProfileDropdownOpen(false)}>
+              <div className={`flex items-center hover:text-theme ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-0.5 sm:gap-1'}`}>
                 <User className={viewMode === 'mobile' ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
                 {userSession && <span className={`bg-green-500/10 text-green-400 px-1 py-0.5 rounded border border-green-500/20 font-bold truncate ${viewMode === 'mobile' ? 'text-[8px] max-w-[50px] block' : 'text-[8px] sm:text-[10px] max-w-[50px] sm:max-w-[80px] hidden sm:block'}`}>{userSession.name}</span>}
               </div>
               
               {/* Dropdown menu */}
-              <div className="absolute top-full mt-2 right-0 w-48 bg-theme border border-theme/10 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-2">
+              <div className={`absolute top-full mt-2 right-0 w-48 bg-theme border border-theme/10 rounded shadow-xl transition-all z-50 p-2 ${isProfileDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
                 {!userSession ? (
                   <>
-                    <Link href="/account/login" className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Login / Register</Link>
+                    <Link href="/account/login" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Login / Register</Link>
                     <div className="h-[1px] bg-theme/5 my-1"></div>
-                    <Link href="/secure-portal-access" className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Admin Portal</Link>
+                    <Link href="/secure-portal-access" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Admin Portal</Link>
                   </>
                 ) : (
                   <>
                     <div className="px-2 py-1.5 text-[10px] font-bold text-theme uppercase border-b border-theme/5 mb-1">{userSession.org}</div>
-                    <Link href="/my-orders" className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Consignment Status</Link>
+                    <Link href="/my-orders" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Consignment Status</Link>
                     <div className="h-[1px] bg-theme/5 my-1"></div>
-                    <Link href="/secure-portal-access" className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Admin Portal</Link>
+                    <Link href="/secure-portal-access" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Admin Portal</Link>
                   </>
                 )}
               </div>
@@ -265,7 +278,7 @@ export default function Header() {
 
             {/* Hamburger Button (Mobile View Only) */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setIsProfileDropdownOpen(false); }}
               className={`hover:text-[#8bceff] transition-colors p-0.5 cursor-pointer ${
                 viewMode === "mobile" ? "block" : "md:hidden block"
               }`}
@@ -316,8 +329,8 @@ export default function Header() {
           </div>
         )}
 
-        {/* Navigation Links (Desktop & Horizontally Scrollable on Mobile) */}
-        <nav className={`${viewMode === "mobile" ? "flex overflow-x-auto whitespace-nowrap pb-2 hide-scrollbar justify-start" : "flex md:justify-center overflow-x-auto md:overflow-visible whitespace-nowrap pb-2 md:pb-0 hide-scrollbar justify-start"} items-center gap-5 sm:gap-8 text-[9px] sm:text-xs font-semibold text-theme uppercase tracking-wider mt-1 px-1`}>
+        {/* Navigation Links (Desktop md+ only - Mobile uses hamburger drawer) */}
+        <nav className={`${viewMode === "mobile" ? "hidden" : "hidden md:flex md:justify-center md:overflow-visible whitespace-nowrap pb-2 md:pb-0 hide-scrollbar"} items-center gap-5 sm:gap-8 text-[9px] sm:text-xs font-semibold text-theme uppercase tracking-wider mt-1 px-1`}>
           <Link href="/catalogue" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow text-theme pb-1 flex-shrink-0">Catalogue</Link>
           
           {/* Bulk Orders Dropdown */}
@@ -415,29 +428,43 @@ export default function Header() {
 
             {/* Mobile User, Theme & Utilities */}
             <div className="flex flex-col gap-3 pb-4 mb-4 border-b border-theme/5">
+              {/* Theme Switcher — prominently displayed */}
               <div className="flex items-center justify-between">
-                <div className="scale-90 origin-left"><ThemeSwitcher /></div>
+                <span className="text-[10px] font-bold text-theme uppercase tracking-wider">Theme</span>
+                <div className="scale-90 origin-right"><ThemeSwitcher /></div>
+              </div>
+
+              <div className="flex items-center justify-between gap-2">
                 <Link href="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
-                  <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${wishlist.length > 0 ? "fill-theme" : ""}`} /> Wishlist ({wishlist.length})
+                  <Heart className={`w-4 h-4 ${wishlist.length > 0 ? "fill-theme" : ""}`} /> Wishlist {wishlist.length > 0 && `(${wishlist.length})`}
                 </Link>
+                <button onClick={() => { setIsCartOpen(true); setIsMobileMenuOpen(false); }} className="flex items-center gap-2 text-xs font-semibold text-theme">
+                  <ShoppingCart className="w-4 h-4" /> Cart {cart.length > 0 && `(${cart.reduce((a,c) => a + c.quantity, 0)})`}
+                </button>
               </div>
               
               <Link href="/my-orders" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
-                <BotMessageSquare className="w-4 h-4 sm:w-5 sm:h-5" /> Assistant Desk
+                <BotMessageSquare className="w-4 h-4" /> Assistant Desk
               </Link>
               
+              {/* Profile / Login */}
               {userSession ? (
-                <div className="flex items-center gap-2 text-xs font-semibold text-theme text-green-500 bg-green-500/10 px-2 py-1 rounded">
-                  <User className="w-4 h-4 sm:w-5 sm:h-5" /> {userSession.name}
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-green-400 bg-green-500/10 px-2 py-1.5 rounded">
+                    <User className="w-4 h-4" /> {userSession.name}
+                    {userSession.org && <span className="text-[9px] text-green-300/70 ml-auto">{userSession.org}</span>}
+                  </div>
+                  <Link href="/my-orders" onClick={() => setIsMobileMenuOpen(false)} className="text-xs font-semibold text-theme pl-2 hover:text-theme">Consignment Status</Link>
                 </div>
               ) : (
                 <Link href="/account/login" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
-                  <User className="w-4 h-4 sm:w-5 sm:h-5" /> Login / Register
+                  <User className="w-4 h-4" /> Login / Register
                 </Link>
               )}
             </div>
 
             <nav className="flex flex-col gap-3 text-xs font-semibold uppercase tracking-wider text-theme">
+              <div className="text-[10px] font-bold text-theme/50 uppercase tracking-widest mb-1">Navigation</div>
               <Link 
                 href="/catalogue" 
                 onClick={() => setIsMobileMenuOpen(false)}
