@@ -102,7 +102,7 @@ export default function ProductShowcase({
               <button className="material-symbols-outlined p-1 text-on-surface-variant hover:text-on-surface">view_list</button>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mobile:gap-2">
+          <div className={`grid ${viewMode === 'mobile' ? 'grid-cols-2 gap-3' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
             {products.map((product) => (
               <div key={product.id} className="bg-cargo-slate border border-outline-variant hover:border-warning-amber transition-all group overflow-hidden flex flex-col">
                 <div className="relative aspect-square overflow-hidden bg-black">
@@ -112,22 +112,22 @@ export default function ProductShowcase({
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 mobile:object-contain"
                   />
                   {product.tag && (
-                    <span className="absolute top-4 left-4 bg-industry-red text-white text-[10px] font-data-display px-2 py-0.5 tracking-tighter">
+                    <span className={`absolute top-2 left-2 sm:top-4 sm:left-4 bg-industry-red text-white font-data-display tracking-tighter ${viewMode === 'mobile' ? 'text-[8px] px-1.5 py-0.5' : 'text-[10px] px-2 py-0.5'}`}>
                       {product.tag}
                     </span>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <div className="p-5 flex flex-col flex-grow">
-                  <span className="font-label-caps text-[10px] text-on-surface-variant mb-1">{product.category?.toUpperCase() || 'GENERAL'}</span>
-                  <h3 className="font-headline-md text-lg mb-2 group-hover:text-warning-amber transition-colors mobile:text-base">{product.title}</h3>
-                  <div className="flex items-baseline gap-2 mb-6">
-                    <span className="font-data-display text-lg text-on-surface mobile:text-base">₹{product.price.toLocaleString()}</span>
-                    <span className="text-[10px] text-on-surface-variant uppercase">INR / UNIT</span>
+                <div className={`flex flex-col flex-grow ${viewMode === 'mobile' ? 'p-3' : 'p-5'}`}>
+                  <span className={`font-label-caps text-on-surface-variant mb-1 ${viewMode === 'mobile' ? 'text-[8px]' : 'text-[10px]'}`}>{product.category?.toUpperCase() || 'GENERAL'}</span>
+                  <h3 className={`font-headline-md group-hover:text-warning-amber transition-colors line-clamp-2 ${viewMode === 'mobile' ? 'text-[11px] mb-1 leading-tight' : 'text-lg mb-2'}`}>{product.title}</h3>
+                  <div className={`flex items-baseline gap-1 sm:gap-2 ${viewMode === 'mobile' ? 'mb-2 mt-auto' : 'mb-6 mt-1'}`}>
+                    <span className={`font-data-display text-on-surface ${viewMode === 'mobile' ? 'text-xs' : 'text-lg'}`}>₹{product.price.toLocaleString()}</span>
+                    <span className={`text-on-surface-variant uppercase ${viewMode === 'mobile' ? 'text-[7px]' : 'text-[10px]'}`}>INR / UNIT</span>
                   </div>
-                  <div className="mt-auto grid grid-cols-2 gap-2">
-                    <button className="bg-warning-amber text-harbor-navy font-label-caps text-[11px] py-3 clipped-corner hover:bg-white transition-colors mobile:py-2 mobile:text-[9px]">ADD TO CART</button>
-                    <button className="border border-outline-variant hover:border-on-surface text-on-surface font-label-caps text-[11px] py-3 clipped-corner transition-colors mobile:py-2 mobile:text-[9px]">QUOTE REQ</button>
+                  <div className={`mt-auto grid grid-cols-2 ${viewMode === 'mobile' ? 'gap-1' : 'gap-2'}`}>
+                    <button className={`bg-warning-amber text-harbor-navy font-label-caps clipped-corner hover:bg-white transition-colors ${viewMode === 'mobile' ? 'py-1.5 text-[8px]' : 'py-3 text-[11px]'}`}>ADD</button>
+                    <button className={`border border-outline-variant hover:border-on-surface text-on-surface font-label-caps clipped-corner transition-colors ${viewMode === 'mobile' ? 'py-1.5 text-[8px]' : 'py-3 text-[11px]'}`}>QUOTE</button>
                   </div>
                 </div>
               </div>
