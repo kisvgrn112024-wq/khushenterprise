@@ -102,7 +102,7 @@ export default function ProductShowcase({
               <button className="material-symbols-outlined p-1 text-on-surface-variant hover:text-on-surface">view_list</button>
             </div>
           </div>
-          <div className={`grid ${viewMode === 'mobile' ? 'grid-cols-2 gap-3' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
+          <div className={`grid ${viewMode === 'mobile' ? 'grid-cols-3 gap-1.5' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
             {products.map((product) => (
               <div key={product.id} className="bg-cargo-slate border border-outline-variant hover:border-warning-amber transition-all group overflow-hidden flex flex-col">
                 <div className="relative aspect-square overflow-hidden bg-black">
@@ -118,16 +118,16 @@ export default function ProductShowcase({
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <div className={`flex flex-col flex-grow ${viewMode === 'mobile' ? 'p-3' : 'p-5'}`}>
-                  <span className={`font-label-caps text-on-surface-variant mb-1 ${viewMode === 'mobile' ? 'text-[8px]' : 'text-[10px]'}`}>{product.category?.toUpperCase() || 'GENERAL'}</span>
-                  <h3 className={`font-headline-md group-hover:text-warning-amber transition-colors line-clamp-2 ${viewMode === 'mobile' ? 'text-[11px] mb-1 leading-tight' : 'text-lg mb-2'}`}>{product.title}</h3>
-                  <div className={`flex items-baseline gap-1 sm:gap-2 ${viewMode === 'mobile' ? 'mb-2 mt-auto' : 'mb-6 mt-1'}`}>
-                    <span className={`font-data-display text-on-surface ${viewMode === 'mobile' ? 'text-xs' : 'text-lg'}`}>₹{product.price.toLocaleString()}</span>
-                    <span className={`text-on-surface-variant uppercase ${viewMode === 'mobile' ? 'text-[7px]' : 'text-[10px]'}`}>INR / UNIT</span>
+                <div className={`flex flex-col flex-grow ${viewMode === 'mobile' ? 'p-1.5' : 'p-5'}`}>
+                  <span className={`font-label-caps text-on-surface-variant mb-0.5 ${viewMode === 'mobile' ? 'text-[6px]' : 'text-[10px]'}`}>{product.category?.toUpperCase() || 'GENERAL'}</span>
+                  <h3 className={`font-headline-md group-hover:text-warning-amber transition-colors line-clamp-2 ${viewMode === 'mobile' ? 'text-[8px] mb-0.5 leading-tight' : 'text-lg mb-2'}`}>{product.title}</h3>
+                  <div className={`flex items-baseline gap-1 sm:gap-2 ${viewMode === 'mobile' ? 'mb-1.5 mt-auto' : 'mb-6 mt-1'}`}>
+                    <span className={`font-data-display text-on-surface ${viewMode === 'mobile' ? 'text-[9px]' : 'text-lg'}`}>₹{product.price.toLocaleString()}</span>
+                    <span className={`text-on-surface-variant uppercase ${viewMode === 'mobile' ? 'text-[5px]' : 'text-[10px]'}`}>/UNIT</span>
                   </div>
-                  <div className={`mt-auto grid grid-cols-2 ${viewMode === 'mobile' ? 'gap-1' : 'gap-2'}`}>
-                    <button className={`bg-warning-amber text-harbor-navy font-label-caps clipped-corner hover:bg-white transition-colors ${viewMode === 'mobile' ? 'py-1.5 text-[8px]' : 'py-3 text-[11px]'}`}>ADD</button>
-                    <button className={`border border-outline-variant hover:border-on-surface text-on-surface font-label-caps clipped-corner transition-colors ${viewMode === 'mobile' ? 'py-1.5 text-[8px]' : 'py-3 text-[11px]'}`}>QUOTE</button>
+                  <div className={`mt-auto grid grid-cols-2 ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-2'}`}>
+                    <button className={`bg-warning-amber text-harbor-navy font-label-caps clipped-corner hover:bg-white transition-colors ${viewMode === 'mobile' ? 'py-1 text-[5px]' : 'py-3 text-[11px]'}`}>ADD</button>
+                    <button className={`border border-outline-variant hover:border-on-surface text-on-surface font-label-caps clipped-corner transition-colors ${viewMode === 'mobile' ? 'py-1 text-[5px]' : 'py-3 text-[11px]'}`}>QUOTE</button>
                   </div>
                 </div>
               </div>
