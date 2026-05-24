@@ -128,7 +128,7 @@ export default function Header() {
         {/* Top Row: Logo, Search, Icons */}
         <div className="flex items-center justify-between gap-6 mb-4">
           {/* Logo */}
-          <Link href="/" className={`flex-shrink-0 flex items-center ${viewMode === 'mobile' ? 'gap-1.5 max-w-[120px]' : 'gap-1.5 md:gap-3 max-w-none'}`}>
+          <Link href="/" className={`flex-shrink-0 flex items-center ${viewMode === 'mobile' ? 'gap-1.5 max-w-[120px]' : 'gap-1.5 md:gap-3 max-w-[120px] sm:max-w-none'}`}>
             <img src="/logo.png" alt="KE" className={`object-contain ${viewMode === 'mobile' ? 'w-6 h-6' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9'}`} />
             <div className={`flex items-baseline ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-0.5 md:gap-1.5'}`}>
               <span className={`font-black text-theme tracking-wider ${viewMode === 'mobile' ? 'text-xs' : 'text-xs sm:text-lg md:text-2xl'}`}>KHUSH</span>
@@ -317,7 +317,7 @@ export default function Header() {
         )}
 
         {/* Navigation Links (Desktop & Horizontally Scrollable on Mobile) */}
-        <nav className={`${viewMode === "mobile" ? "flex overflow-x-auto whitespace-nowrap pb-2 hide-scrollbar justify-start" : "hidden md:flex justify-center"} items-center gap-5 sm:gap-8 text-[9px] sm:text-xs font-semibold text-theme uppercase tracking-wider mt-1 px-1`}>
+        <nav className={`${viewMode === "mobile" ? "flex overflow-x-auto whitespace-nowrap pb-2 hide-scrollbar justify-start" : "flex md:justify-center overflow-x-auto md:overflow-visible whitespace-nowrap pb-2 md:pb-0 hide-scrollbar justify-start"} items-center gap-5 sm:gap-8 text-[9px] sm:text-xs font-semibold text-theme uppercase tracking-wider mt-1 px-1`}>
           <Link href="/catalogue" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow text-theme pb-1 flex-shrink-0">Catalogue</Link>
           
           {/* Bulk Orders Dropdown */}

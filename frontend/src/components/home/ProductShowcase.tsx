@@ -102,7 +102,7 @@ export default function ProductShowcase({
               <button className="material-symbols-outlined p-1 text-on-surface-variant hover:text-on-surface">view_list</button>
             </div>
           </div>
-          <div className={`grid ${viewMode === 'mobile' ? 'grid-cols-3 gap-1.5' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
+          <div className={`grid ${viewMode === 'mobile' ? 'grid-cols-3 gap-1.5' : 'grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-1.5 sm:gap-6'}`}>
             {products.map((product) => (
               <div key={product.id} className="bg-cargo-slate border border-outline-variant hover:border-warning-amber transition-all group overflow-hidden flex flex-col">
                 <div className="relative aspect-square overflow-hidden bg-black">
@@ -112,22 +112,22 @@ export default function ProductShowcase({
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 mobile:object-contain"
                   />
                   {product.tag && (
-                    <span className={`absolute top-2 left-2 sm:top-4 sm:left-4 bg-industry-red text-white font-data-display tracking-tighter ${viewMode === 'mobile' ? 'text-[8px] px-1.5 py-0.5' : 'text-[10px] px-2 py-0.5'}`}>
+                    <span className={`absolute top-2 left-2 sm:top-4 sm:left-4 bg-industry-red text-white font-data-display tracking-tighter ${viewMode === 'mobile' ? 'text-[8px] px-1.5 py-0.5' : 'text-[8px] sm:text-[10px] px-1.5 py-0.5 sm:px-2 sm:py-0.5'}`}>
                       {product.tag}
                     </span>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <div className={`flex flex-col flex-grow ${viewMode === 'mobile' ? 'p-1.5' : 'p-5'}`}>
-                  <span className={`font-label-caps text-on-surface-variant mb-0.5 ${viewMode === 'mobile' ? 'text-[6px]' : 'text-[10px]'}`}>{product.category?.toUpperCase() || 'GENERAL'}</span>
-                  <h3 className={`font-headline-md group-hover:text-warning-amber transition-colors line-clamp-2 ${viewMode === 'mobile' ? 'text-[8px] mb-0.5 leading-tight' : 'text-lg mb-2'}`}>{product.title}</h3>
-                  <div className={`flex items-baseline gap-1 sm:gap-2 ${viewMode === 'mobile' ? 'mb-1.5 mt-auto' : 'mb-6 mt-1'}`}>
-                    <span className={`font-data-display text-on-surface ${viewMode === 'mobile' ? 'text-[9px]' : 'text-lg'}`}>₹{product.price.toLocaleString()}</span>
-                    <span className={`text-on-surface-variant uppercase ${viewMode === 'mobile' ? 'text-[5px]' : 'text-[10px]'}`}>/UNIT</span>
+                <div className={`flex flex-col flex-grow ${viewMode === 'mobile' ? 'p-1.5' : 'p-1.5 sm:p-5'}`}>
+                  <span className={`font-label-caps text-on-surface-variant mb-0.5 ${viewMode === 'mobile' ? 'text-[6px]' : 'text-[6px] sm:text-[10px]'}`}>{product.category?.toUpperCase() || 'GENERAL'}</span>
+                  <h3 className={`font-headline-md group-hover:text-warning-amber transition-colors line-clamp-2 ${viewMode === 'mobile' ? 'text-[8px] mb-0.5 leading-tight' : 'text-[8px] sm:text-lg mb-0.5 sm:mb-2 leading-tight sm:leading-normal'}`}>{product.title}</h3>
+                  <div className={`flex items-baseline gap-1 sm:gap-2 ${viewMode === 'mobile' ? 'mb-1.5 mt-auto' : 'mb-1.5 sm:mb-6 mt-auto sm:mt-1'}`}>
+                    <span className={`font-data-display text-on-surface ${viewMode === 'mobile' ? 'text-[9px]' : 'text-[9px] sm:text-lg'}`}>₹{product.price.toLocaleString()}</span>
+                    <span className={`text-on-surface-variant uppercase ${viewMode === 'mobile' ? 'text-[5px]' : 'text-[5px] sm:text-[10px]'}`}>/UNIT</span>
                   </div>
-                  <div className={`mt-auto grid grid-cols-2 ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-2'}`}>
-                    <button className={`bg-warning-amber text-harbor-navy font-label-caps clipped-corner hover:bg-white transition-colors ${viewMode === 'mobile' ? 'py-1 text-[5px]' : 'py-3 text-[11px]'}`}>ADD</button>
-                    <button className={`border border-outline-variant hover:border-on-surface text-on-surface font-label-caps clipped-corner transition-colors ${viewMode === 'mobile' ? 'py-1 text-[5px]' : 'py-3 text-[11px]'}`}>QUOTE</button>
+                  <div className={`mt-auto grid grid-cols-2 ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-0.5 sm:gap-2'}`}>
+                    <button className={`bg-warning-amber text-harbor-navy font-label-caps clipped-corner hover:bg-white transition-colors ${viewMode === 'mobile' ? 'py-1 text-[5px]' : 'py-1 sm:py-3 text-[5px] sm:text-[11px]'}`}>ADD</button>
+                    <button className={`border border-outline-variant hover:border-on-surface text-on-surface font-label-caps clipped-corner transition-colors ${viewMode === 'mobile' ? 'py-1 text-[5px]' : 'py-1 sm:py-3 text-[5px] sm:text-[11px]'}`}>QUOTE</button>
                   </div>
                 </div>
               </div>
