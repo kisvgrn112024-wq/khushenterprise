@@ -128,11 +128,11 @@ export default function Header() {
         {/* Top Row: Logo, Search, Icons */}
         <div className="flex items-center justify-between gap-6 mb-4">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-1.5 md:gap-3 max-w-[120px] sm:max-w-none">
-            <img src="/logo.png" alt="KE" className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain" />
-            <div className="flex items-baseline gap-0.5 md:gap-1.5">
-              <span className="text-xs sm:text-lg md:text-2xl font-black text-theme tracking-wider">KHUSH</span>
-              <span className="text-[8px] sm:text-sm md:text-xl font-bold text-theme tracking-widest mt-1 hidden sm:block">ENTERPRISES</span>
+          <Link href="/" className={`flex-shrink-0 flex items-center ${viewMode === 'mobile' ? 'gap-1.5 max-w-[120px]' : 'gap-1.5 md:gap-3 max-w-none'}`}>
+            <img src="/logo.png" alt="KE" className={`object-contain ${viewMode === 'mobile' ? 'w-6 h-6' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9'}`} />
+            <div className={`flex items-baseline ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-0.5 md:gap-1.5'}`}>
+              <span className={`font-black text-theme tracking-wider ${viewMode === 'mobile' ? 'text-xs' : 'text-xs sm:text-lg md:text-2xl'}`}>KHUSH</span>
+              <span className={`font-bold text-theme tracking-widest mt-1 ${viewMode === 'mobile' ? 'hidden' : 'text-[8px] sm:text-sm md:text-xl hidden sm:block'}`}>ENTERPRISES</span>
             </div>
           </Link>
 
@@ -205,7 +205,8 @@ export default function Header() {
           </div>
 
           {/* Icons & Mobile controls */}
-          <div className="flex items-center gap-1.5 sm:gap-3.5 md:gap-6 text-theme ml-1 flex-shrink-0">
+          {/* Icons & Mobile controls */}
+          <div className={`flex items-center text-theme flex-shrink-0 ${viewMode === 'mobile' ? 'gap-1.5 ml-1' : 'gap-1.5 sm:gap-3.5 md:gap-6 ml-1'}`}>
             {/* Search Icon (Mobile View Only) */}
             <button
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
@@ -214,33 +215,33 @@ export default function Header() {
               }`}
               title="Search"
             >
-              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Search className={viewMode === 'mobile' ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
             </button>
 
             {/* Live Chat link shortcut */}
             <Link href="/my-orders" className="hover:text-[#8bceff] transition-colors relative" title="Consignment Assistant Desk">
-              <BotMessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
+              <BotMessageSquare className={viewMode === 'mobile' ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
             </Link>
             
             <Link href="/wishlist" className="hover:text-theme transition-colors relative">
-              <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${wishlist.length > 0 ? "fill-white text-theme" : ""}`} />
+              <Heart className={`${viewMode === 'mobile' ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} ${wishlist.length > 0 ? "fill-white text-theme" : ""}`} />
               {wishlist.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-brand-yellow text-theme font-bold text-[8px] sm:text-[10px] w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center">{wishlist.length}</span>
+                <span className={`absolute bg-brand-yellow text-theme font-bold rounded-full flex items-center justify-center ${viewMode === 'mobile' ? '-top-1.5 -right-1.5 text-[8px] w-3 h-3' : '-top-1.5 -right-1.5 sm:-top-2 sm:-right-2 text-[8px] sm:text-[10px] w-3 h-3 sm:w-4 sm:h-4'}`}>{wishlist.length}</span>
               )}
             </Link>
             
             <button onClick={() => setIsCartOpen(true)} className="hover:text-theme transition-colors relative cursor-pointer p-0.5">
-               <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+               <ShoppingCart className={viewMode === 'mobile' ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
                {cart.length > 0 && (
-                 <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-brand-yellow text-theme font-bold text-[8px] sm:text-[10px] w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center">{cart.reduce((a,c) => a + c.quantity, 0)}</span>
+                 <span className={`absolute bg-brand-yellow text-theme font-bold rounded-full flex items-center justify-center ${viewMode === 'mobile' ? '-top-1.5 -right-1.5 text-[8px] w-3 h-3' : '-top-1.5 -right-1.5 sm:-top-2 sm:-right-2 text-[8px] sm:text-[10px] w-3 h-3 sm:w-4 sm:h-4'}`}>{cart.reduce((a,c) => a + c.quantity, 0)}</span>
                )}
             </button>
-            <div className="ml-0.5 sm:ml-4 scale-[0.65] sm:scale-100 origin-center"><ThemeSwitcher /></div>
+            <div className={`${viewMode === 'mobile' ? 'ml-0.5 scale-[0.65]' : 'ml-0.5 sm:ml-4 scale-[0.65] sm:scale-100'} origin-center`}><ThemeSwitcher /></div>
             
             <div className="relative group cursor-pointer hover:text-theme">
-              <div className="flex items-center gap-0.5 sm:gap-1">
-                <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                {userSession && <span className="text-[8px] sm:text-[10px] bg-green-500/10 text-green-400 px-1 py-0.5 rounded border border-green-500/20 font-bold max-w-[50px] sm:max-w-[80px] truncate hidden sm:block">{userSession.name}</span>}
+              <div className={`flex items-center ${viewMode === 'mobile' ? 'gap-0.5' : 'gap-0.5 sm:gap-1'}`}>
+                <User className={viewMode === 'mobile' ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
+                {userSession && <span className={`bg-green-500/10 text-green-400 px-1 py-0.5 rounded border border-green-500/20 font-bold truncate ${viewMode === 'mobile' ? 'text-[8px] max-w-[50px] block' : 'text-[8px] sm:text-[10px] max-w-[50px] sm:max-w-[80px] hidden sm:block'}`}>{userSession.name}</span>}
               </div>
               
               {/* Dropdown menu */}
@@ -270,7 +271,7 @@ export default function Header() {
               }`}
               title="Menu"
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-5 sm:h-5" /> : <Menu className="w-5 h-5 sm:w-5 sm:h-5" />}
+              {isMobileMenuOpen ? <X className={viewMode === 'mobile' ? 'w-5 h-5' : 'w-5 h-5 sm:w-5 sm:h-5'} /> : <Menu className={viewMode === 'mobile' ? 'w-5 h-5' : 'w-5 h-5 sm:w-5 sm:h-5'} />}
             </button>
           </div>
         </div>
