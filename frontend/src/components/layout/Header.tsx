@@ -316,9 +316,9 @@ export default function Header() {
           </div>
         )}
 
-        {/* Navigation Links (Desktop, Hidden in Mobile View) */}
-        <nav className={`${viewMode === "mobile" ? "hidden" : "hidden md:flex"} items-center justify-center gap-8 text-xs font-semibold text-theme uppercase tracking-wider`}>
-          <Link href="/catalogue" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow text-theme pb-1">Catalogue</Link>
+        {/* Navigation Links (Desktop & Horizontally Scrollable on Mobile) */}
+        <nav className={`${viewMode === "mobile" ? "flex overflow-x-auto whitespace-nowrap pb-2 hide-scrollbar justify-start" : "hidden md:flex justify-center"} items-center gap-5 sm:gap-8 text-[9px] sm:text-xs font-semibold text-theme uppercase tracking-wider mt-1 px-1`}>
+          <Link href="/catalogue" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow text-theme pb-1 flex-shrink-0">Catalogue</Link>
           
           {/* Bulk Orders Dropdown */}
           <div 
@@ -371,13 +371,13 @@ export default function Header() {
             </div>
           </div>
 
-          <Link href="/products" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Products</Link>
-          <Link href="/reviews" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Reviews</Link>
-          <Link href="/certifications" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Certifications</Link>
-          <Link href="/contact-us" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1">Contact Us</Link>
+          <Link href="/products" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Products</Link>
+          <Link href="/reviews" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Reviews</Link>
+          <Link href="/certifications" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Certifications</Link>
+          <Link href="/contact-us" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Contact Us</Link>
           <Link
             href="/export"
-            className={`relative hover:text-brand-yellow transition-colors border-b-2 pb-1 font-black tracking-wider ${
+            className={`relative hover:text-brand-yellow transition-colors border-b-2 pb-1 font-black tracking-wider flex-shrink-0 ${
               pathname.startsWith("/export")
                 ? "text-brand-yellow border-brand-yellow"
                 : "text-brand-yellow/80 border-brand-yellow/40 hover:border-brand-yellow"
@@ -520,6 +520,16 @@ export default function Header() {
           </div>
         </div>
       )}
+      {/* Custom Scrollbar Hiding CSS */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </header>
   );
 }
