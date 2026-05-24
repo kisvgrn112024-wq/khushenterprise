@@ -128,11 +128,11 @@ export default function Header() {
         {/* Top Row: Logo, Search, Icons */}
         <div className="flex items-center justify-between gap-6 mb-4">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-2 md:gap-3">
-            <img src="/logo.png" alt="KE" className="w-8 h-8 md:w-9 md:h-9 object-contain" />
-            <div className="flex items-baseline gap-1 md:gap-1.5">
-              <span className="text-lg md:text-2xl font-black text-theme tracking-wider">KHUSH</span>
-              <span className="text-sm md:text-xl font-bold text-theme tracking-widest mt-1">ENTERPRISES</span>
+          <Link href="/" className="flex-shrink-0 flex items-center gap-1.5 md:gap-3 max-w-[120px] sm:max-w-none">
+            <img src="/logo.png" alt="KE" className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain" />
+            <div className="flex items-baseline gap-0.5 md:gap-1.5">
+              <span className="text-xs sm:text-lg md:text-2xl font-black text-theme tracking-wider">KHUSH</span>
+              <span className="text-[8px] sm:text-sm md:text-xl font-bold text-theme tracking-widest mt-1 hidden sm:block">ENTERPRISES</span>
             </div>
           </Link>
 
@@ -205,42 +205,42 @@ export default function Header() {
           </div>
 
           {/* Icons & Mobile controls */}
-          <div className="flex items-center gap-3.5 md:gap-6 text-theme ml-2 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-3.5 md:gap-6 text-theme ml-1 flex-shrink-0">
             {/* Search Icon (Mobile View Only) */}
             <button
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              className={`hover:text-[#8bceff] transition-colors p-1 cursor-pointer ${
+              className={`hover:text-[#8bceff] transition-colors p-0.5 cursor-pointer ${
                 viewMode === "mobile" ? "block" : "md:hidden block"
               }`}
               title="Search"
             >
-              <Search size={20} />
+              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             {/* Live Chat link shortcut */}
-            <Link href="/my-orders" className={`hover:text-[#8bceff] transition-colors relative ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`} title="Consignment Assistant Desk">
-              <BotMessageSquare size={20} />
+            <Link href="/my-orders" className="hover:text-[#8bceff] transition-colors relative" title="Consignment Assistant Desk">
+              <BotMessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
             
-            <Link href="/wishlist" className={`hover:text-theme transition-colors relative ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}>
-              <Heart size={20} className={wishlist.length > 0 ? "fill-white text-theme" : ""} />
+            <Link href="/wishlist" className="hover:text-theme transition-colors relative">
+              <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${wishlist.length > 0 ? "fill-white text-theme" : ""}`} />
               {wishlist.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-brand-yellow text-theme font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{wishlist.length}</span>
+                <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-brand-yellow text-theme font-bold text-[8px] sm:text-[10px] w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center">{wishlist.length}</span>
               )}
             </Link>
             
-            <button onClick={() => setIsCartOpen(true)} className="hover:text-theme transition-colors relative cursor-pointer">
-               <ShoppingCart size={20} />
+            <button onClick={() => setIsCartOpen(true)} className="hover:text-theme transition-colors relative cursor-pointer p-0.5">
+               <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                {cart.length > 0 && (
-                 <span className="absolute -top-2 -right-2 bg-brand-yellow text-theme font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{cart.reduce((a,c) => a + c.quantity, 0)}</span>
+                 <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-brand-yellow text-theme font-bold text-[8px] sm:text-[10px] w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center">{cart.reduce((a,c) => a + c.quantity, 0)}</span>
                )}
             </button>
-            <div className={`ml-4 ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}><ThemeSwitcher /></div>
+            <div className="ml-0.5 sm:ml-4 scale-[0.65] sm:scale-100 origin-center"><ThemeSwitcher /></div>
             
-            <div className={`relative group cursor-pointer hover:text-theme ${viewMode === "mobile" ? "hidden" : "hidden md:block"}`}>
-              <div className="flex items-center gap-1">
-                <User size={20} />
-                {userSession && <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20 font-bold max-w-[80px] truncate">{userSession.name}</span>}
+            <div className="relative group cursor-pointer hover:text-theme">
+              <div className="flex items-center gap-0.5 sm:gap-1">
+                <User className="w-4 h-4 sm:w-5 sm:h-5" />
+                {userSession && <span className="text-[8px] sm:text-[10px] bg-green-500/10 text-green-400 px-1 py-0.5 rounded border border-green-500/20 font-bold max-w-[50px] sm:max-w-[80px] truncate hidden sm:block">{userSession.name}</span>}
               </div>
               
               {/* Dropdown menu */}
@@ -265,12 +265,12 @@ export default function Header() {
             {/* Hamburger Button (Mobile View Only) */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`hover:text-[#8bceff] transition-colors p-1 cursor-pointer ${
+              className={`hover:text-[#8bceff] transition-colors p-0.5 cursor-pointer ${
                 viewMode === "mobile" ? "block" : "md:hidden block"
               }`}
               title="Menu"
             >
-              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-5 sm:h-5" /> : <Menu className="w-5 h-5 sm:w-5 sm:h-5" />}
             </button>
           </div>
         </div>
@@ -417,21 +417,21 @@ export default function Header() {
               <div className="flex items-center justify-between">
                 <div className="scale-90 origin-left"><ThemeSwitcher /></div>
                 <Link href="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
-                  <Heart size={16} className={wishlist.length > 0 ? "fill-theme" : ""} /> Wishlist ({wishlist.length})
+                  <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${wishlist.length > 0 ? "fill-theme" : ""}`} /> Wishlist ({wishlist.length})
                 </Link>
               </div>
               
               <Link href="/my-orders" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
-                <BotMessageSquare size={16} /> Assistant Desk
+                <BotMessageSquare className="w-4 h-4 sm:w-5 sm:h-5" /> Assistant Desk
               </Link>
               
               {userSession ? (
                 <div className="flex items-center gap-2 text-xs font-semibold text-theme text-green-500 bg-green-500/10 px-2 py-1 rounded">
-                  <User size={16} /> {userSession.name}
+                  <User className="w-4 h-4 sm:w-5 sm:h-5" /> {userSession.name}
                 </div>
               ) : (
                 <Link href="/account/login" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-semibold text-theme">
-                  <User size={16} /> Login / Register
+                  <User className="w-4 h-4 sm:w-5 sm:h-5" /> Login / Register
                 </Link>
               )}
             </div>
