@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type ViewMode = "desktop" | "mobile";
+type ViewMode = "desktop" | "mobile" | "split";
 
 interface ViewModeContextType {
   viewMode: ViewMode;
@@ -23,13 +23,14 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
     const handleResize = () => {
       const isMobileScreen = window.innerWidth < 1024; // 1024px is standard lg breakpoint for header nav
       
-      if (isProduction) {
-        // In production, always match screen width dynamically
+      const isEmbedded = typeof window !== "undefined" && window.self !== window.top;
+      if (isProduction || isEmbedded) {
+        // In production or when embedded, always match screen width dynamically
         setViewModeState(isMobileScreen ? "mobile" : "desktop");
       } else {
         // In development, allow manual simulation toggle from localStorage if saved
         const savedMode = localStorage.getItem("ke_view_mode") as ViewMode | null;
-        if (savedMode === "desktop" || savedMode === "mobile") {
+        if (savedMode === "desktop" || savedMode === "mobile" || savedMode === "split") {
           setViewModeState(savedMode);
         } else {
           setViewModeState(isMobileScreen ? "mobile" : "desktop");
@@ -57,8 +58,9 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
       document.head.appendChild(meta);
     }
 
-    if (isProduction) {
-      // Production is fully responsive, standard mobile viewport
+    const isEmbedded = typeof window !== "undefined" && window.self !== window.top;
+    if (isProduction || isEmbedded) {
+      // Production or iframe is fully responsive, standard mobile viewport
       meta.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5");
       document.documentElement.classList.remove("forced-desktop", "forced-mobile");
     } else {
@@ -67,10 +69,14 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
         meta.setAttribute("content", "width=1280, initial-scale=0.3, shrink-to-fit=no");
         document.documentElement.classList.add("forced-desktop");
         document.documentElement.classList.remove("forced-mobile");
-      } else {
+      } else if (viewMode === "mobile") {
         meta.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5");
         document.documentElement.classList.add("forced-mobile");
         document.documentElement.classList.remove("forced-desktop");
+      } else {
+        // split mode: standard viewport for parent
+        meta.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5");
+        document.documentElement.classList.remove("forced-desktop", "forced-mobile");
       }
     }
   }, [viewMode, isInitialized, isProduction]);

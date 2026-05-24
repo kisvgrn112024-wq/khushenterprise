@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useViewMode } from "@/context/ViewModeContext";
-import { Monitor, Smartphone } from "lucide-react";
+import { Monitor, Smartphone, Columns } from "lucide-react";
 
 export default function ViewToggleBar() {
   const { viewMode, setViewMode, isInitialized } = useViewMode();
@@ -26,7 +26,7 @@ export default function ViewToggleBar() {
           }`}
         >
           <Monitor size={12} strokeWidth={2.5} />
-          <span>Desktop View</span>
+          <span>Desktop</span>
         </button>
         
         <button
@@ -38,14 +38,26 @@ export default function ViewToggleBar() {
           }`}
         >
           <Smartphone size={12} strokeWidth={2.5} />
-          <span>Mobile View</span>
+          <span>Mobile</span>
+        </button>
+
+        <button
+          onClick={() => setViewMode("split")}
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+            viewMode === "split"
+              ? "bg-theme text-theme shadow-[0_0_10px_rgba(168,85,247,0.3)]"
+              : "hover:text-theme text-theme hover:bg-theme/5"
+          }`}
+        >
+          <Columns size={12} strokeWidth={2.5} />
+          <span>Split View</span>
         </button>
       </div>
 
       <div className="hidden sm:flex items-center gap-2 text-[10px] text-theme uppercase tracking-wider font-bold">
         <span>Active View:</span>
-        <span className={viewMode === "desktop" ? "text-[#8bceff]" : "text-[#fcd34d]"}>
-          {viewMode === "desktop" ? "Desktop (Locked 1280px)" : "Mobile (Responsive)"}
+        <span className={viewMode === "desktop" ? "text-[#8bceff]" : viewMode === "mobile" ? "text-[#fcd34d]" : "text-[#a855f7]"}>
+          {viewMode === "desktop" ? "Desktop (1280px)" : viewMode === "mobile" ? "Mobile (Responsive)" : "Split (Desktop & Mobile)"}
         </span>
       </div>
     </div>
