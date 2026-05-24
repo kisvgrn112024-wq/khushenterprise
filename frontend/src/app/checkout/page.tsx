@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "@/context/StoreContext";
 import { CheckCircle2, ChevronRight, Lock, MapPin, CreditCard, Building2, Smartphone, ShieldCheck, Upload, QrCode, Truck } from "lucide-react";
 import Image from "next/image";
@@ -13,26 +13,119 @@ export default function CheckoutPage() {
   const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [screenshotUploaded, setScreenshotUploaded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "", email: "", phone: "", address: "", city: "", state: "", pincode: "",
   });
+
+  // Verify auth and pre-fill fields
+  useEffect(() => {
+    const savedUser = localStorage.getItem("ke_user");
+    if (!savedUser) {
+      router.push("/account/login?redirect=/checkout");
+      return;
+    }
+    const user = JSON.parse(savedUser);
+    setFormData(prev => ({
+      ...prev,
+      name: user.name || "",
+      email: user.email || "",
+    }));
+  }, [router]);
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     setStep(step + 1);
   };
 
-  const handlePayment = () => {
-    // Simulate payment processing
-    setTimeout(() => {
-      clearCart();
-      router.push("/checkout/success");
-    }, 1500);
-  };
-
   const tax = cartTotal * 0.18; // 18% GST mock
   const shipping = cartTotal > 999 ? 0 : 150;
   const finalTotal = cartTotal + tax + shipping;
+
+  const handlePayment = async () => {
+    setIsSubmitting(true);
+    const orderId = `KE-ORD-${Math.floor(10000 + Math.random() * 90000)}`;
+    const formattedDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    const formattedTime = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    
+    const newOrder = {
+      id: orderId,
+      customer: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      city: formData.city,
+      state: formData.state,
+      pincode: formData.pincode,
+      amount: `₹${finalTotal.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      total: finalTotal,
+      payment: paymentMethod === 'upi' ? "Prepaid UPI" : "Cash on Delivery (COD)",
+      status: "Placed",
+      date: `${formattedDate}, ${formattedTime}`,
+      time: formattedTime,
+      expectedDate: "Expected Delivery: 3-5 business days",
+      courier: "TBD",
+      tracking: "TBD",
+      itemsCount: cart.reduce((acc, item) => acc + item.quantity, 0),
+      items: cart.map(item => ({
+        productId: item.id,
+        title: item.title,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      progress: 0,
+      weight: "TBD",
+      dimensions: "TBD",
+      hsnCode: "HSN 9011 - Optical Microscope Assembly",
+      packingDesc: "Standard shipping box with air cushions."
+    };
+
+    // Try posting to backend API
+    try {
+      const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? `http://${window.location.hostname}:5000/api/orders`
+        : '/api/orders';
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newOrder),
+      });
+
+      if (!response.ok) throw new Error("API post failed");
+    } catch (e) {
+      console.warn("API offline or error, saving locally only.");
+    }
+
+    // Always mirror to customer local storage
+    const savedOrders = localStorage.getItem("ke_orders");
+    const ordersList = savedOrders ? JSON.parse(savedOrders) : [];
+    ordersList.unshift(newOrder);
+    localStorage.setItem("ke_orders", JSON.stringify(ordersList));
+
+    // Also mirror to admin orders in localStorage for instant fallback sync!
+    const adminOrders = localStorage.getItem("ke_admin_orders");
+    const adminOrdersList = adminOrders ? JSON.parse(adminOrders) : [];
+    const adminOrder = {
+      id: newOrder.id,
+      date: formattedDate,
+      time: formattedTime,
+      customer: newOrder.customer,
+      email: newOrder.email,
+      amount: newOrder.amount,
+      status: "Placed",
+      type: "individual"
+    };
+    adminOrdersList.unshift(adminOrder);
+    localStorage.setItem("ke_admin_orders", JSON.stringify(adminOrdersList));
+
+    // Wait 1.5 seconds for nice loader feel
+    setTimeout(() => {
+      clearCart();
+      setIsSubmitting(false);
+      router.push(`/checkout/success?orderId=${orderId}`);
+    }, 1500);
+  };
 
   return (
     <div className="min-h-screen bg-theme text-slate-300">
@@ -63,33 +156,33 @@ export default function CheckoutPage() {
               {step > 1 && <button onClick={() => setStep(1)} className="text-neon-cyan text-sm">Edit</button>}
             </div>
             {step === 1 && (
-              <form onSubmit={handleNext} className="p-6 space-y-4">
+             <form onSubmit={handleNext} className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-slate-400 mb-1">Full Name</label>
-                    <input required type="text" className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
+                    <input required type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
                   </div>
                   <div>
                     <label className="block text-sm text-slate-400 mb-1">Phone Number</label>
-                    <input required type="tel" className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
+                    <input required type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm text-slate-400 mb-1">Complete Address</label>
-                  <input required type="text" className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
+                  <input required type="text" value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm text-slate-400 mb-1">City</label>
-                    <input required type="text" className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
+                    <input required type="text" value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
                   </div>
                   <div>
                     <label className="block text-sm text-slate-400 mb-1">State</label>
-                    <input required type="text" className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
+                    <input required type="text" value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})} className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
                   </div>
                   <div>
                     <label className="block text-sm text-slate-400 mb-1">PIN Code</label>
-                    <input required type="text" className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
+                    <input required type="text" value={formData.pincode} onChange={(e) => setFormData({...formData, pincode: e.target.value})} className="w-full bg-theme/20 border border-slate-700 rounded px-3 py-2 text-theme outline-none focus:border-neon-cyan" />
                   </div>
                 </div>
                 <button type="submit" className="bg-electric-blue hover:bg-blue-600 text-theme font-medium py-3 px-8 rounded mt-4 transition-colors">
@@ -211,10 +304,10 @@ export default function CheckoutPage() {
 
                 <button 
                   onClick={handlePayment} 
-                  disabled={paymentMethod === 'upi' && !screenshotUploaded}
-                  className={`w-full font-bold py-4 rounded-lg mt-6 text-lg transition-colors shadow-[0_0_15px_rgba(0,255,255,0.4)] ${paymentMethod === 'upi' && !screenshotUploaded ? 'bg-theme text-theme cursor-not-allowed shadow-none' : 'bg-neon-cyan hover:bg-theme text-midnight-navy'}`}
+                  disabled={(paymentMethod === 'upi' && !screenshotUploaded) || isSubmitting}
+                  className={`w-full font-bold py-4 rounded-lg mt-6 text-lg transition-colors shadow-[0_0_15px_rgba(0,255,255,0.4)] ${((paymentMethod === 'upi' && !screenshotUploaded) || isSubmitting) ? 'bg-theme text-theme cursor-not-allowed shadow-none' : 'bg-neon-cyan hover:bg-theme text-midnight-navy'}`}
                 >
-                  {paymentMethod === 'upi' ? (screenshotUploaded ? `Confirm Payment of ₹${finalTotal.toLocaleString()}` : "Upload Screenshot to Continue") : `Place Order • ₹${finalTotal.toLocaleString()}`}
+                  {isSubmitting ? "Processing Order..." : (paymentMethod === 'upi' ? (screenshotUploaded ? `Confirm Payment of ₹${finalTotal.toLocaleString()}` : "Upload Screenshot to Continue") : `Place Order • ₹${finalTotal.toLocaleString()}`)}
                 </button>
               </div>
             )}

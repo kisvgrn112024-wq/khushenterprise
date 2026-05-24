@@ -19,6 +19,7 @@ export default function Header() {
   const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [userSession, setUserSession] = useState<any>(null);
+  const [dispatchedOrder, setDispatchedOrder] = useState<any>(null);
   const [isBulkDropdownOpen, setIsBulkDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -30,9 +31,33 @@ export default function Header() {
   useEffect(() => {
     // Read user login status
     const saved = localStorage.getItem("ke_user");
+    let user = null;
     if (saved) {
-      setUserSession(JSON.parse(saved));
+      user = JSON.parse(saved);
+      setUserSession(user);
+    } else {
+      setUserSession(null);
     }
+
+    // Check for dispatched orders
+    const checkDispatched = () => {
+      if (user && user.email) {
+        const savedOrders = localStorage.getItem("ke_orders");
+        if (savedOrders) {
+          const orders = JSON.parse(savedOrders);
+          const found = orders.find((o: any) => o.email === user.email && o.status === "Dispatched");
+          setDispatchedOrder(found || null);
+        } else {
+          setDispatchedOrder(null);
+        }
+      } else {
+        setDispatchedOrder(null);
+      }
+    };
+    checkDispatched();
+
+    window.addEventListener("storage", checkDispatched);
+    return () => window.removeEventListener("storage", checkDispatched);
   }, [pathname]);
 
   // Close profile dropdown on outside click
@@ -137,6 +162,19 @@ export default function Header() {
 
   return (
     <header className="w-full bg-theme border-b border-theme/5 sticky top-0 z-50 overflow-x-hidden">
+      {dispatchedOrder && (
+        <div className="bg-gradient-to-r from-blue-900 to-indigo-950 border-b border-blue-500/20 text-[#8bceff] px-4 py-2 text-[10px] font-bold flex justify-between items-center relative z-50">
+          <div className="flex items-center gap-1.5 mx-auto">
+            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping shrink-0"></span>
+            <span className="truncate max-w-[250px] sm:max-w-none">
+              🚚 Dispatch Alert: Order {dispatchedOrder.id} dispatched via Blue Dart Express (Tracking ID: {dispatchedOrder.tracking})
+            </span>
+            <Link href="/my-orders" className="underline text-white hover:text-brand-yellow font-black ml-1.5 shrink-0">
+              Track →
+            </Link>
+          </div>
+        </div>
+      )}
       <div className="container mx-auto px-4 lg:px-8 py-4">
         {/* Top Row: Logo, Search, Icons */}
         <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-6 mb-4">

@@ -267,3 +267,35 @@ export function writeProductsToFile(products: any[]) {
     console.error('Error writing products to file:', err);
   }
 }
+
+const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
+
+export function initOrdersFileDb() {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(ORDERS_FILE)) {
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify([], null, 2));
+  }
+}
+
+export function readOrdersFromFile(): any[] {
+  initOrdersFileDb();
+  try {
+    const content = fs.readFileSync(ORDERS_FILE, 'utf-8');
+    return JSON.parse(content);
+  } catch (err) {
+    console.error('Error reading orders from file:', err);
+    return [];
+  }
+}
+
+export function writeOrdersToFile(orders: any[]) {
+  initOrdersFileDb();
+  try {
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
+  } catch (err) {
+    console.error('Error writing orders to file:', err);
+  }
+}
+

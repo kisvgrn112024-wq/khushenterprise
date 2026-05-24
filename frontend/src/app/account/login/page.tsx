@@ -90,8 +90,10 @@ export default function LoginRegisterPage() {
         email: email,
         org: "Independent Laboratory"
       }));
-      router.push("/my-orders");
+      const redirect = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("redirect") || "/my-orders" : "/my-orders";
+      router.push(redirect);
     }, 1200);
+
   };
 
   // Google One-Tap/Gmail Mock sequence
@@ -121,8 +123,10 @@ export default function LoginRegisterPage() {
           }));
           setTimeout(() => {
             setIsGoogleModalOpen(false);
-            router.push("/my-orders");
+            const redirect = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("redirect") || "/my-orders" : "/my-orders";
+            router.push(redirect);
           }, 1200);
+
         }, 1000);
       }, 1200);
     }, 1000);

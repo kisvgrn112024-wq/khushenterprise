@@ -133,14 +133,54 @@ function PrintContent() {
   const catIdParam = searchParams.get("catId");
   const decodedFileName = decodeURIComponent(fileParam);
 
+  const typeParam = searchParams.get("type");
+  const orderIdParam = searchParams.get("orderId");
+
   const [catalogue, setCatalogue] = useState<Catalogue | null>(null);
   const [matchingProducts, setMatchingProducts] = useState<any[]>([]);
   const [pages, setPages] = useState<PageLayout[]>([]);
   const [categoryPageMap, setCategoryPageMap] = useState<{ [cat: string]: number }>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [order, setOrder] = useState<any>(null);
 
   useEffect(() => {
     setIsLoading(true);
+
+    if (typeParam === "order-slip" && orderIdParam) {
+      const fetchOrder = async () => {
+        try {
+          const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? `http://${window.location.hostname}:5000/api/orders`
+            : '/api/orders';
+          const res = await fetch(API_URL);
+          if (res.ok) {
+            const orders = await res.json();
+            const found = orders.find((o: any) => o.id === orderIdParam);
+            if (found) {
+              setOrder(found);
+              setIsLoading(false);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn("API offline or error fetching orders.");
+        }
+
+        // Local storage fallback
+        const saved = localStorage.getItem("ke_orders");
+        if (saved) {
+          const orders = JSON.parse(saved);
+          const found = orders.find((o: any) => o.id === orderIdParam);
+          if (found) {
+            setOrder(found);
+          }
+        }
+        setIsLoading(false);
+      };
+      fetchOrder();
+      return;
+    }
+
     // Load catalogue metadata
     const savedCats = localStorage.getItem("ke_catalogues");
     const catalogues: Catalogue[] = savedCats ? JSON.parse(savedCats) : [];
@@ -172,17 +212,17 @@ function PrintContent() {
     setPages(generated.pages);
     setCategoryPageMap(generated.categoryPageMap);
     setIsLoading(false);
-  }, [catIdParam]);
+  }, [catIdParam, typeParam, orderIdParam]);
 
   // Trigger print dialog on load with a tiny delay
   useEffect(() => {
-    if (pages.length > 0) {
+    if (pages.length > 0 || order) {
       const timer = setTimeout(() => {
         window.print();
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [pages]);
+  }, [pages, order]);
 
   const coverTitle = catalogue?.title || "OFFICIAL PRODUCT CATALOGUE";
   const coverSubtitle = catalogue?.description || "Precision apparatus, surgical orthopedic supports, and clinical diagnostics reference matrix.";
@@ -205,6 +245,213 @@ function PrintContent() {
       <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center font-sans">
         <div className="animate-spin rounded-full h-10 w-10 border-4 border-slate-900 border-t-transparent mb-4"></div>
         <p className="text-sm font-bold uppercase tracking-wider">Generating Dynamic Catalog Templates...</p>
+      </div>
+    );
+  }
+
+  if (typeParam === "order-slip") {
+    if (!order) {
+      return (
+        <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center justify-center font-sans p-6">
+          <p className="text-sm font-bold uppercase tracking-wider text-red-500">Order Slip Not Found</p>
+          <button onClick={() => window.close()} className="mt-4 px-4 py-2 bg-slate-900 text-white text-xs font-bold uppercase rounded cursor-pointer">Close Window</button>
+        </div>
+      );
+    }
+
+    const subtotal = order.items?.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) || order.total;
+    const tax = subtotal * 0.18;
+    const shipping = subtotal > 999 ? 0 : 150;
+    const grandTotal = subtotal + tax + shipping;
+
+    return (
+      <div className="print-view-container min-h-screen text-slate-900 font-sans print-body flex flex-col items-center justify-center">
+        {/* Styles Injection */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+          .print-view-container { font-family: 'Inter', sans-serif; }
+          .font-outfit { font-family: 'Outfit', sans-serif; }
+          .font-mono { font-family: 'Fira Code', monospace; }
+          @media screen {
+            .print-body { background-color: #f8fafc; padding: 40px 20px; }
+            .a4-page {
+              width: 210mm;
+              height: 297mm;
+              background: white;
+              box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+              border: 1px solid #e2e8f0;
+              border-radius: 8px;
+              position: relative;
+              box-sizing: border-box;
+              padding: 20mm;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            }
+          }
+          @media print {
+            .print-hidden { display: none !important; }
+            html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+            .print-body { padding: 0 !important; }
+            .a4-page {
+              width: 210mm;
+              height: 297mm;
+              margin: 0 !important;
+              padding: 20mm !important;
+              box-shadow: none !important;
+              border: none !important;
+              box-sizing: border-box;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            }
+          }
+        `}} />
+
+        {/* Print controls */}
+        <div className="print-hidden w-full max-w-[210mm] flex justify-between items-center mb-8 pb-4 border-b border-slate-200">
+           <button onClick={() => window.close()} className="text-xs font-bold text-slate-500 hover:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer">
+             <ArrowLeft size={14} /> Close
+           </button>
+           <button onClick={() => window.print()} className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded shadow-sm flex items-center gap-2 font-bold text-[10px] uppercase tracking-wider transition-colors cursor-pointer">
+             <Printer size={13} /> Print Slip / Save PDF
+           </button>
+        </div>
+
+        {/* Slip Document */}
+        <div className="a4-page relative flex flex-col justify-between">
+          <div>
+            {/* Logo and title */}
+            <div className="flex justify-between items-start border-b-2 border-slate-900 pb-6 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="bg-slate-900 text-white p-2 rounded">
+                  <Beaker size={28} className="stroke-[2.5]" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-black tracking-tight leading-none text-slate-900 font-outfit">KHUSH ENTERPRISES</h1>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 font-bold mt-1 font-outfit">Laboratory Infrastructure & Ortho Aids</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <h2 className="text-lg font-black text-slate-950 tracking-wider uppercase font-outfit">ORDER CONFIRMATION SLIP</h2>
+                <p className="text-xs text-slate-500 font-mono mt-1">ID: {order.id}</p>
+                <p className="text-[10px] text-slate-500 font-mono mt-0.5">{order.date}</p>
+              </div>
+            </div>
+
+            {/* Billing/Shipping details */}
+            <div className="grid grid-cols-2 gap-8 mb-8 text-xs">
+              <div>
+                <h3 className="font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-2 font-outfit">CUSTOMER DETAILS</h3>
+                <p className="font-extrabold text-slate-800 text-sm mb-1">{order.customer}</p>
+                {order.email && <p className="text-slate-600 mb-0.5">Email: {order.email}</p>}
+                {order.phone && <p className="text-slate-600">Phone: {order.phone}</p>}
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-2 font-outfit">SHIPPING ADDRESS</h3>
+                <p className="text-slate-700 leading-relaxed font-medium">
+                  {order.address},<br />
+                  {order.city}, {order.state} - {order.pincode}
+                </p>
+              </div>
+            </div>
+
+            {/* Payment Details */}
+            <div className="bg-slate-50 border border-slate-200 rounded p-4 mb-8 text-xs grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-slate-400 block font-bold uppercase tracking-wider text-[9px] mb-1">PAYMENT METHOD</span>
+                <span className="font-extrabold text-slate-800 text-sm flex items-center gap-1">
+                  {order.payment}
+                </span>
+                {order.payment.includes("UPI") && (
+                  <p className="text-slate-500 text-[10px] mt-1">Paid to: immalhotra57-2@okhdfcbank</p>
+                )}
+                {order.payment.includes("COD") && (
+                  <p className="text-slate-500 text-[10px] mt-1">Please pay the delivery partner at the door.</p>
+                )}
+              </div>
+              <div>
+                <span className="text-slate-400 block font-bold uppercase tracking-wider text-[9px] mb-1">ORDER STATUS</span>
+                <span className="font-black text-emerald-600 text-sm uppercase tracking-wider font-outfit bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                  {order.status === "Placed" ? "CONFIRMED & RECEIVED" : order.status.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            {/* Items Table */}
+            <div className="mb-8">
+              <h3 className="font-bold text-slate-800 uppercase tracking-widest text-[10px] mb-3 border-b border-slate-200 pb-1 font-outfit">ORDER ITEMS</h3>
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-300 text-slate-400 font-bold">
+                    <th className="py-2">Item Description</th>
+                    <th className="py-2 text-center w-16">Qty</th>
+                    <th className="py-2 text-right w-24">Unit Price</th>
+                    <th className="py-2 text-right w-28">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-medium">
+                  {order.items && order.items.length > 0 ? (
+                    order.items.map((item: any, idx: number) => (
+                      <tr key={idx} className="text-slate-800">
+                        <td className="py-3 font-bold">{item.title}</td>
+                        <td className="py-3 text-center">{item.quantity}</td>
+                        <td className="py-3 text-right">₹{item.price.toLocaleString("en-IN")}</td>
+                        <td className="py-3 text-right font-extrabold">₹{(item.price * item.quantity).toLocaleString("en-IN")}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="text-slate-800">
+                      <td className="py-3 font-bold">Scientific Equipment Consignment</td>
+                      <td className="py-3 text-center">1</td>
+                      <td className="py-3 text-right">₹{subtotal.toLocaleString("en-IN")}</td>
+                      <td className="py-3 text-right font-extrabold">₹{subtotal.toLocaleString("en-IN")}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Financial breakdown */}
+            <div className="flex justify-end text-xs">
+              <div className="w-64 space-y-2 font-medium">
+                <div className="flex justify-between text-slate-500">
+                  <span>Subtotal MRP</span>
+                  <span>₹{subtotal.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex justify-between text-slate-500">
+                  <span>Estimated GST (18%)</span>
+                  <span>₹{tax.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex justify-between text-slate-500 pb-2 border-b border-slate-200">
+                  <span>Shipping Fee</span>
+                  <span>{shipping === 0 ? "FREE" : `₹${shipping}`}</span>
+                </div>
+                <div className="flex justify-between text-base font-black text-slate-900 pt-1 font-outfit">
+                  <span>Total Payable</span>
+                  <span>₹{grandTotal.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stamp, seal and signature */}
+          <div className="flex justify-between items-end border-t border-slate-200 pt-8 mt-auto">
+            <div className="text-[10px] text-slate-400 font-mono uppercase tracking-wider">
+              Verification Code: {order.id.replace("KE-", "KE-VERIFY-")}<br />
+              Authorized Digital Signature Matrix
+            </div>
+            <div className="text-center relative">
+              <div className="w-24 h-24 border-2 border-dashed border-blue-500/20 rounded-full flex flex-col items-center justify-center -rotate-12 absolute -top-12 right-4 pointer-events-none opacity-40 select-none bg-white">
+                <span className="text-[8px] font-bold text-blue-500">KHUSH ENTERPRISES</span>
+                <span className="text-[9px] font-black text-blue-600 tracking-wider">VERIFIED</span>
+                <span className="text-[7px] text-blue-500">B2B PROCUREMENT</span>
+              </div>
+              <div className="w-32 h-[1px] bg-slate-350 mx-auto mb-2"></div>
+              <p className="text-[9px] uppercase tracking-widest text-slate-500 font-bold font-outfit">Authorized Signatory</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

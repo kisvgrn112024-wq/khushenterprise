@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Product, getImageUrl } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useStore } from "@/context/StoreContext";
@@ -26,6 +26,8 @@ export default function ProductDetailClient() {
   const [activeTab, setActiveTab] = useState("description");
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  const router = useRouter();
+  
   if (!product) {
     return <div className="min-h-screen flex items-center justify-center text-theme bg-theme">Loading product details...</div>;
   }
@@ -170,6 +172,15 @@ export default function ProductDetailClient() {
             </div>
             
             <button 
+              onClick={() => {
+                addToCart(product, quantity);
+                const user = localStorage.getItem("ke_user");
+                if (user) {
+                  router.push("/checkout");
+                } else {
+                  router.push("/account/login?redirect=/checkout");
+                }
+              }}
               className="w-full bg-brand-yellow hover:bg-yellow-400 text-theme py-4 rounded font-bold text-xs uppercase tracking-wider transition-colors mb-8"
             >
               BUY NOW

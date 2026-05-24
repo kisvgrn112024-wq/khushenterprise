@@ -8,7 +8,15 @@ export default function CheckoutSuccessPage() {
   const [orderId, setOrderId] = useState("");
 
   useEffect(() => {
-    setTimeout(() => setOrderId(`KE-${Math.floor(Math.random() * 100000000)}`), 0);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const queryId = params.get("orderId");
+      if (queryId) {
+        setOrderId(queryId);
+      } else {
+        setOrderId(`KE-ORD-${Math.floor(10000 + Math.random() * 90000)}`);
+      }
+    }
   }, []);
 
   return (
@@ -31,8 +39,11 @@ export default function CheckoutSuccessPage() {
               <Package size={18} /> Track My Order
             </button>
           </Link>
-          <button className="w-full bg-theme/5 hover:bg-theme/10 text-theme py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors">
-            <FileText size={18} /> Download Invoice
+          <button 
+            onClick={() => window.open(`/print?type=order-slip&orderId=${orderId}`, '_blank')}
+            className="w-full bg-theme/5 hover:bg-theme/10 text-theme py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+          >
+            <FileText size={18} /> Download Confirmation Slip
           </button>
           <Link href="/" className="block mt-4 text-sm text-slate-400 hover:text-theme transition-colors">
             Continue Shopping <ArrowRight size={14} className="inline ml-1" />

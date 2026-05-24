@@ -8,81 +8,121 @@ export default function OrderManagement() {
   const [activeTab, setActiveTab] = useState("All Orders");
   const { startDownload } = useDownload();
   
-  const initialOrders = [
-    {
-      id: "#ORD-8901",
-      date: "Oct 24, 2023",
-      time: "14:32",
-      customer: "BioTech Solutions Inc.",
-      email: "contact@biotech.com",
-      amount: "$4,250.00",
-      status: "Processing",
-      type: "company"
-    },
-    {
-      id: "#ORD-8895",
-      date: "Oct 23, 2023",
-      time: "09:15",
-      customer: "Dr. Emily Chen (University Lab)",
-      email: "echen@university.edu",
-      amount: "$12,800.50",
-      status: "Shipped",
-      type: "individual"
-    },
-    {
-      id: "#ORD-8872",
-      date: "Oct 20, 2023",
-      time: "16:45",
-      customer: "National Research Facility",
-      email: "procurement@nrf.gov",
-      amount: "$35,000.00",
-      status: "Delivered",
-      type: "company"
-    },
-    {
-      id: "#ORD-8850",
-      date: "Oct 18, 2023",
-      time: "11:20",
-      customer: "Independent Clinics LLC",
-      email: "orders@indclinics.com",
-      amount: "$850.00",
-      status: "Cancelled",
-      type: "company"
-    },
-    {
-      id: "#ORD-8841",
-      date: "Oct 15, 2023",
-      time: "10:05",
-      customer: "St. Jude High School",
-      email: "science.dept@stjude.edu",
-      amount: "$2,100.00",
-      status: "Delivered",
-      type: "company"
-    }
-  ];
+  const initialOrders: any[] = [];
 
-  const [orders, setOrders] = useState<typeof initialOrders>([]);
+  const [orders, setOrders] = useState<any[]>([]);
 
-  // Load from localStorage or fallback
+  // Load from localStorage or database
   useEffect(() => {
-    const saved = localStorage.getItem("ke_admin_orders");
-    if (saved) {
-      setOrders(JSON.parse(saved));
-    } else {
-      setOrders(initialOrders);
-      localStorage.setItem("ke_admin_orders", JSON.stringify(initialOrders));
-    }
+    const fetchOrders = async () => {
+      // First load local storage
+      let localOrders = [];
+      const saved = localStorage.getItem("ke_admin_orders");
+      if (saved) {
+        localOrders = JSON.parse(saved);
+        setOrders(localOrders);
+      } else {
+        setOrders([]);
+        localStorage.setItem("ke_admin_orders", JSON.stringify([]));
+      }
+
+      // Try fetching from backend API
+      try {
+        const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? `http://${window.location.hostname}:5000/api/orders`
+          : '/api/orders';
+        const res = await fetch(API_URL);
+        if (res.ok) {
+          const data = await res.json();
+          // Transform to admin order shape
+          const adminOrders = data.map((o: any) => ({
+            id: o.id,
+            date: o.date.split(",")[0],
+            time: o.time,
+            customer: o.customer,
+            email: o.email,
+            amount: o.amount,
+            status: o.status,
+            type: o.payment.includes("UPI") ? "individual" : "company"
+          }));
+          setOrders(adminOrders);
+          localStorage.setItem("ke_admin_orders", JSON.stringify(adminOrders));
+        }
+      } catch (err) {
+        console.warn("API offline or error fetching orders in admin portal.");
+      }
+    };
+    fetchOrders();
   }, []);
 
   const filteredOrders = orders.filter(order => 
     activeTab === "All Orders" ? true : order.status === activeTab
   );
 
-  const handleStatusChange = (id: string, newStatus: string) => {
-    const updated = orders.map(order => order.id === id ? { ...order, status: newStatus } : order);
-    setOrders(updated);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("ke_admin_orders", JSON.stringify(updated));
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    // Generate tracking details if dispatched
+    let payload: any = { status: newStatus };
+    if (newStatus === "Dispatched") {
+      payload.courier = "Blue Dart Express";
+      payload.tracking = `987654${Math.floor(10000000 + Math.random() * 90000000)}`;
+      payload.expectedDate = `Expected Delivery: ${new Date(Date.now() + 3*24*60*60*1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      payload.weight = "8.25 kg";
+      payload.dimensions = "45cm x 35cm x 50cm";
+      payload.hsnCode = "HSN 9011 - Optical Microscope Assembly";
+      payload.packingDesc = "Heavy-duty Borosilicate Double-walled Styropack with shock absorption pads.";
+    }
+
+    try {
+      const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? `http://${window.location.hostname}:5000/api/orders/${id}`
+        : `/api/orders/${id}`;
+      const res = await fetch(API_URL, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        console.log("Order status updated successfully in DB");
+      }
+    } catch (e) {
+      console.warn("Offline: updated locally only");
+    }
+
+    // Always mirror to localStorage ke_admin_orders
+    const updatedAdmin = orders.map(order => order.id === id ? { ...order, status: newStatus } : order);
+    setOrders(updatedAdmin);
+    localStorage.setItem("ke_admin_orders", JSON.stringify(updatedAdmin));
+
+    // Mirror to customer-facing localStorage key "ke_orders"
+    const savedCustomer = localStorage.getItem("ke_orders");
+    if (savedCustomer) {
+      const customerOrders = JSON.parse(savedCustomer);
+      const updatedCustomer = customerOrders.map((o: any) => {
+        if (o.id === id) {
+          let updatedItem = { 
+            ...o, 
+            status: newStatus,
+            progress: newStatus === "Placed" ? 0 : newStatus === "Confirmed" ? 1 : newStatus === "Packed" ? 2 : newStatus === "Dispatched" ? 3 : newStatus === "Delivered" ? 4 : o.progress
+          };
+          if (newStatus === "Dispatched") {
+            updatedItem.courier = "Blue Dart Express";
+            updatedItem.tracking = payload.tracking;
+            updatedItem.expectedDate = payload.expectedDate;
+            updatedItem.weight = payload.weight;
+            updatedItem.dimensions = payload.dimensions;
+            updatedItem.hsnCode = payload.hsnCode;
+            updatedItem.packingDesc = payload.packingDesc;
+          } else if (newStatus === "Delivered") {
+            updatedItem.expectedDate = `Delivered on ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+          }
+          return updatedItem;
+        }
+        return o;
+      });
+      localStorage.setItem("ke_orders", JSON.stringify(updatedCustomer));
+      
+      // Dispatch a storage event to alert other tabs of change!
+      window.dispatchEvent(new Event("storage"));
     }
   };
 
@@ -168,24 +208,34 @@ export default function OrderManagement() {
                 </td>
                 <td className="p-5 font-bold text-theme">{order.amount}</td>
                 <td className="p-5">
-                  {order.status === 'Processing' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-brand-yellow/20 px-3 py-1 rounded-full text-brand-yellow uppercase">
-                      <Clock size={10} /> {order.status}
+                  {order.status === 'Placed' && (
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-yellow-500/20 px-3 py-1 rounded-full text-yellow-500 uppercase">
+                      <Clock size={10} /> Placed
                     </span>
                   )}
-                  {order.status === 'Shipped' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-theme/20 px-3 py-1 rounded-full text-[#8bceff] uppercase">
-                      <Truck size={10} /> {order.status}
+                  {order.status === 'Confirmed' && (
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-teal-500/20 px-3 py-1 rounded-full text-teal-400 uppercase">
+                      <CheckCircle2 size={10} /> Confirmed
+                    </span>
+                  )}
+                  {order.status === 'Packed' && (
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-blue-500/20 px-3 py-1 rounded-full text-[#8bceff] uppercase">
+                      <Clock size={10} /> Packed
+                    </span>
+                  )}
+                  {order.status === 'Dispatched' && (
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-sky-400/20 px-3 py-1 rounded-full text-sky-400 uppercase">
+                      <Truck size={10} /> Dispatched
                     </span>
                   )}
                   {order.status === 'Delivered' && (
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-green-400/20 px-3 py-1 rounded-full text-green-400 uppercase">
-                      <CheckCircle2 size={10} /> {order.status}
+                      <CheckCircle2 size={10} /> Delivered
                     </span>
                   )}
                   {order.status === 'Cancelled' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-theme/20 px-3 py-1 rounded-full text-[#ff4d4d] uppercase">
-                      <XCircle size={10} /> {order.status}
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest bg-theme border border-red-500/20 px-3 py-1 rounded-full text-red-500 uppercase">
+                      <XCircle size={10} /> Cancelled
                     </span>
                   )}
                 </td>
@@ -195,8 +245,10 @@ export default function OrderManagement() {
                     onChange={(e) => handleStatusChange(order.id, e.target.value)}
                     className="bg-theme border border-theme/5 text-theme text-xs py-1.5 px-2 rounded outline-none cursor-pointer hover:bg-theme/5 transition-colors appearance-none text-center"
                   >
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
+                    <option value="Placed">Placed</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Packed">Packed</option>
+                    <option value="Dispatched">Dispatched</option>
                     <option value="Delivered">Delivered</option>
                     <option value="Cancelled">Cancelled</option>
                   </select>

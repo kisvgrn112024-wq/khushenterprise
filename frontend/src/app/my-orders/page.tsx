@@ -8,7 +8,7 @@ interface Order {
   date: string;
   total: number;
   payment: string;
-  status: "Placed" | "Processing" | "Dispatched" | "Delivered";
+  status: string;
   expectedDate: string;
   courier: string;
   tracking: string;
@@ -18,58 +18,11 @@ interface Order {
   dimensions: string;
   hsnCode: string;
   packingDesc: string;
+  email?: string;
+  customer?: string;
 }
 
-const DEFAULT_ORDERS: Order[] = [
-  {
-    id: "KE-ORD-88741",
-    date: "14 May 2026, 02:15 PM",
-    total: 38400,
-    payment: "B2B Credit Line (30 Days)",
-    status: "Dispatched",
-    expectedDate: "Expected Delivery: 19 May 2026",
-    courier: "Blue Dart Aviation Express",
-    tracking: "98765432109876",
-    itemsCount: 3,
-    progress: 3,
-    weight: "8.25 kg",
-    dimensions: "45cm x 35cm x 50cm",
-    hsnCode: "HSN 9011 - Optical Microscope Assembly",
-    packingDesc: "Heavy-duty Borosilicate Double-walled Styropack with shock absorption pads."
-  },
-  {
-    id: "KE-ORD-88690",
-    date: "12 May 2026, 10:30 AM",
-    total: 12500,
-    payment: "UPI / QR Code",
-    status: "Delivered",
-    expectedDate: "Delivered on 15 May 2026",
-    courier: "Delhivery Surface",
-    tracking: "DLV1234567890",
-    itemsCount: 1,
-    progress: 4,
-    weight: "3.10 kg",
-    dimensions: "30cm x 30cm x 35cm",
-    hsnCode: "HSN 7017 - Laboratory Glassware",
-    packingDesc: "Standard bubble wrap casing with foam peanuts."
-  },
-  {
-    id: "KE-ORD-88755",
-    date: "17 May 2026, 11:20 AM",
-    total: 9400,
-    payment: "Cash On Delivery (COD)",
-    status: "Processing",
-    expectedDate: "Undergoing quality inspection",
-    courier: "TBD",
-    tracking: "TBD",
-    itemsCount: 2,
-    progress: 1,
-    weight: "2.50 kg",
-    dimensions: "25cm x 20cm x 30cm",
-    hsnCode: "HSN 9027 - Physical Analysis Instruments",
-    packingDesc: "Electrostatic discharge safe poly-lining."
-  }
-];
+const DEFAULT_ORDERS: Order[] = [];
 
 export default function MyOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -83,21 +36,81 @@ export default function MyOrdersPage() {
   const steps = ["Placed", "Confirmed", "Packed", "Dispatched", "Delivered"];
 
   useEffect(() => {
-    // Load orders
-    const savedOrders = localStorage.getItem("ke_orders");
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders));
-    } else {
-      setOrders(DEFAULT_ORDERS);
-      localStorage.setItem("ke_orders", JSON.stringify(DEFAULT_ORDERS));
+    // Load active session profile first
+    const savedUser = localStorage.getItem("ke_user");
+    let user: any = null;
+    if (savedUser) {
+      user = JSON.parse(savedUser);
+      setCurrentUser(user);
     }
 
-    // Load active session profile
-    const savedUser = localStorage.getItem("ke_user");
-    if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
-    }
+    const loadOrders = async () => {
+      // First load local storage as quick render
+      let localOrders: Order[] = [];
+      const savedOrders = localStorage.getItem("ke_orders");
+      if (savedOrders) {
+        localOrders = JSON.parse(savedOrders);
+      } else {
+        localStorage.setItem("ke_orders", JSON.stringify(DEFAULT_ORDERS));
+      }
+      
+      // Filter orders by customer email if user is present, to make it "different for everyone"
+      if (user && user.email) {
+        localOrders = localOrders.filter(o => o.email === user.email);
+      }
+      setOrders(localOrders);
+
+      try {
+        const emailQuery = user && user.email ? `?email=${user.email}` : "";
+        const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? `http://${window.location.hostname}:5000/api/orders${emailQuery}`
+          : `/api/orders${emailQuery}`;
+          
+        const res = await fetch(API_URL);
+        if (res.ok) {
+          const data = await res.json();
+          // Filter if not filtered by backend
+          const filtered = user && user.email ? data.filter((o: any) => o.email === user.email) : data;
+          setOrders(filtered);
+          // Mirror back to local storage
+          localStorage.setItem("ke_orders", JSON.stringify(data));
+        }
+      } catch (err) {
+        console.warn("API offline or error fetching orders on my-orders page.");
+      }
+    };
+
+    loadOrders();
   }, []);
+
+  // Sync / load chat messages scoped by customer
+  useEffect(() => {
+    if (!currentUser) return;
+    
+    const chatKey = `ke_chat_messages_${currentUser.email}`;
+    const savedChat = localStorage.getItem(chatKey);
+    let messages = savedChat ? JSON.parse(savedChat) : [
+      { sender: "bot", text: `Welcome to Khush Enterprises Dispatch Desk! How can we assist you today, ${currentUser.name}?` }
+    ];
+
+    // Check for any dispatched order
+    const dispatched = orders.filter(o => o.status === "Dispatched");
+    let chatUpdated = false;
+
+    dispatched.forEach(order => {
+      const alertText = `🚚 DISPATCH ALERT: Your order ${order.id} has been dispatched via ${order.courier} (Tracking ID: ${order.tracking}). You can download your confirmation slip using the button next to the order.`;
+      const alreadySent = messages.some((m: any) => m.text.includes(order.id) && m.text.includes("DISPATCH ALERT"));
+      if (!alreadySent) {
+        messages.push({ sender: "bot", text: alertText });
+        chatUpdated = true;
+      }
+    });
+
+    if (chatUpdated) {
+      localStorage.setItem(chatKey, JSON.stringify(messages));
+    }
+    setChatMessages(messages);
+  }, [orders, currentUser]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -108,7 +121,13 @@ export default function MyOrdersPage() {
   const handleSendMessage = (text: string) => {
     if (!text.trim()) return;
     const newMsg = { sender: "user" as const, text };
-    setChatMessages(prev => [...prev, newMsg]);
+    const updatedMessages = [...chatMessages, newMsg];
+    setChatMessages(updatedMessages);
+    
+    if (currentUser) {
+      localStorage.setItem(`ke_chat_messages_${currentUser.email}`, JSON.stringify(updatedMessages));
+    }
+    
     setChatInput("");
 
     // Simulated Bot Responses
@@ -116,16 +135,25 @@ export default function MyOrdersPage() {
       let reply = "I've recorded your query. A dispatch executive will reach out to you shortly.";
       const query = text.toLowerCase();
       
-      if (query.includes("invoice") || query.includes("hsn")) {
-        reply = "Certainly! I have generated your digital B2B Tax Invoice matching your HSN declarations. You can download it directly using the 'Download Invoice' button next to your order details.";
+      if (query.includes("invoice") || query.includes("slip") || query.includes("download")) {
+        reply = "Certainly! You can download your official Order Confirmation Slip by clicking the 'Download Confirmation Slip' button next to your order details.";
       } else if (query.includes("tracking") || query.includes("where")) {
-        const activeTracking = orders.find(o => o.status === "Dispatched")?.tracking || "98765432109876";
-        reply = `Consignment consignment tracking code for your active order is ${activeTracking}. Shipped via Blue Dart Aviation. Live tracking is updating now.`;
+        const activeDispatched = orders.find(o => o.status === "Dispatched");
+        if (activeDispatched) {
+          reply = `Your consignment ${activeDispatched.id} is dispatched via ${activeDispatched.courier} with tracking number ${activeDispatched.tracking}.`;
+        } else {
+          reply = "You don't have any active dispatched consignments at the moment. Once your order status changes to Dispatched, tracking details will appear here.";
+        }
       } else if (query.includes("credit") || query.includes("limit")) {
-        reply = `Your B2B account profile is verified under contract terms. Credit line limit: ₹1,50,000. Balance remaining: ₹1,11,600. Net payment terms: 30 days.`;
+        reply = `Your B2B account profile is verified under contract terms. Credit line limit: ₹1,50,000. Balance remaining: ₹1,50,000. Net payment terms: 30 days.`;
       }
 
-      setChatMessages(prev => [...prev, { sender: "bot" as const, text: reply }]);
+      const replyMsg = { sender: "bot" as const, text: reply };
+      const finalMessages = [...updatedMessages, replyMsg];
+      setChatMessages(finalMessages);
+      if (currentUser) {
+        localStorage.setItem(`ke_chat_messages_${currentUser.email}`, JSON.stringify(finalMessages));
+      }
     }, 800);
   };
 
@@ -275,8 +303,11 @@ export default function MyOrdersPage() {
                     Consignment items count: {order.itemsCount}
                   </div>
                   <div className="flex gap-3">
-                    <button className="px-4 py-1.5 bg-theme hover:bg-theme/5 border border-theme/5 rounded text-xs font-bold transition-colors">
-                      Download HSN Invoice
+                    <button 
+                      onClick={() => window.open(`/print?type=order-slip&orderId=${order.id}`, '_blank')}
+                      className="px-4 py-1.5 bg-theme hover:bg-theme/5 border border-theme/5 rounded text-xs font-bold transition-colors"
+                    >
+                      Download Confirmation Slip
                     </button>
                     {order.status === "Delivered" && (
                       <button className="px-4 py-1.5 bg-theme/10 hover:bg-theme/20 border border-theme/20 text-[#8bceff] rounded text-xs font-bold transition-colors">

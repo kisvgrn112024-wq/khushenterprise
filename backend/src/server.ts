@@ -8,7 +8,9 @@ import path from 'path';
 import fs from 'fs';
 import connectDB from './config/db';
 import productRoutes from './routes/productRoutes';
+import orderRoutes from './routes/orderRoutes';
 import { upload } from './config/multer';
+
 
 dotenv.config();
 
@@ -65,6 +67,8 @@ app.post('/api/upload', upload.single('image'), async (req: Request, res: Respon
 
 // API Routes
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+
 
 // --- Resolve Frontend Path ---
 // Try multiple strategies to find the frontend build
