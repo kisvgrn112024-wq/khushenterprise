@@ -384,21 +384,11 @@ export default function Header() {
             </div>
           </div>
 
-          <Link href="/products" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Products</Link>
-          <Link href="/reviews" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Reviews</Link>
-          <Link href="/certifications" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Certifications</Link>
-          <Link href="/contact-us" className="hover:text-theme transition-colors border-b-2 border-transparent hover:border-brand-yellow pb-1 flex-shrink-0">Contact Us</Link>
-          <Link
-            href="/export"
-            className={`relative hover:text-brand-yellow transition-colors border-b-2 pb-1 font-black tracking-wider flex-shrink-0 ${
-              pathname.startsWith("/export")
-                ? "text-brand-yellow border-brand-yellow"
-                : "text-brand-yellow/80 border-brand-yellow/40 hover:border-brand-yellow"
-            }`}
-          >
-            Export Centre
-            <span className="absolute -top-2 -right-3 bg-brand-yellow text-theme text-[7px] font-black px-1 py-0.5 rounded-sm leading-none uppercase">New</span>
-          </Link>
+          <Link href="/products" className="hover:text-theme py-2.5 border-b border-theme/5">Products</Link>
+          <Link href="/reviews" className="hover:text-theme py-2.5 border-b border-theme/5">Reviews</Link>
+          <Link href="/certifications" className="hover:text-theme py-2.5 border-b border-theme/5">Certifications</Link>
+          <Link href="/catalogue" className="hover:text-theme py-2.5 border-b border-theme/5">Catalogue</Link>
+          <Link href="/export" className="hover:text-theme py-2.5 border-b border-theme/5">Export Centre</Link>
         </nav>
       </div>
 
@@ -463,7 +453,7 @@ export default function Header() {
               )}
             </div>
 
-            <nav className="flex flex-col gap-3 text-xs font-semibold uppercase tracking-wider text-theme">
+            <nav className="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-wider text-theme">
               <div className="text-[10px] font-bold text-theme/50 uppercase tracking-widest mb-1">Navigation</div>
               <Link 
                 href="/catalogue" 
