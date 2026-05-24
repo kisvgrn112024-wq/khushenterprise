@@ -403,7 +403,7 @@ export default function Header() {
 
           {/* Drawer content */}
           <div className="relative w-64 max-w-xs bg-theme border-l border-theme/5 h-full p-6 flex flex-col z-50 shadow-2xl overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-theme/5 mb-6">
+            <div className="flex items-center justify-between pb-4 border-b border-theme/5 mb-4">
               <div className="flex items-center gap-2">
                 <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
                 <span className="text-xs font-black text-theme tracking-widest uppercase">Menu</span>
@@ -414,6 +414,69 @@ export default function Header() {
               >
                 <X size={20} />
               </button>
+            </div>
+
+            {/* ── Smart Search Bar (full featured, inside drawer) ── */}
+            <div className="mb-4">
+              <form
+                onSubmit={(e) => { handleSearchSubmit(e); setIsMobileMenuOpen(false); }}
+                className="flex items-center bg-theme rounded overflow-hidden h-10 border border-theme/10 focus-within:border-theme/30 transition-all px-3"
+              >
+                <input
+                  type="text"
+                  placeholder={isListening ? "Listening…" : "Search equipment…"}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  className={`flex-1 bg-transparent text-sm text-theme placeholder-gray-400 outline-none w-full ${isListening ? "text-red-400 font-bold" : ""}`}
+                  disabled={isListening}
+                />
+                <div className="flex items-center gap-2 ml-1 flex-shrink-0">
+                  {/* Voice search */}
+                  <button
+                    type="button"
+                    onClick={startSpeechRecognition}
+                    className={`transition-colors p-1 rounded hover:bg-theme/5 ${isListening ? "text-red-500 animate-pulse" : "text-theme hover:text-theme"}`}
+                    title="Search by voice"
+                  >
+                    <Mic size={15} />
+                  </button>
+                  {/* Camera / Visual search */}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-theme hover:text-theme p-1 rounded hover:bg-theme/5"
+                    title="Visual search"
+                  >
+                    {isAiAnalyzing ? <Loader2 size={15} className="animate-spin text-[#8bceff]" /> : <Camera size={15} />}
+                  </button>
+                  <div className="w-[1px] h-4 bg-theme/10" />
+                  <button type="submit" className="text-theme hover:text-theme p-1">
+                    <Search size={15} />
+                  </button>
+                </div>
+              </form>
+
+              {/* Live search dropdown inside drawer */}
+              {isSearchFocused && searchResults.length > 0 && (
+                <div className="mt-1 w-full bg-theme border border-theme/10 rounded shadow-xl overflow-hidden z-50">
+                  {searchResults.map(product => (
+                    <Link
+                      key={product.id}
+                      href={`/products?q=${encodeURIComponent(product.title)}`}
+                      onClick={() => { setIsSearchFocused(false); setIsMobileMenuOpen(false); }}
+                      className="flex items-center gap-2 p-2.5 hover:bg-theme border-b border-theme/5 last:border-0"
+                    >
+                      <Search size={12} className="text-theme shrink-0" />
+                      <div>
+                        <div className="text-theme text-xs font-medium line-clamp-1">{product.title}</div>
+                        <div className="text-theme text-[10px] font-semibold">₹{product.price.toLocaleString("en-IN")}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Mobile User, Theme & Utilities */}
@@ -453,8 +516,8 @@ export default function Header() {
               )}
             </div>
 
-            <nav className="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-wider text-theme">
-              <div className="text-[10px] font-bold text-theme/50 uppercase tracking-widest mb-1">Navigation</div>
+            <nav className="flex flex-col gap-0 text-xs font-semibold uppercase tracking-wider text-theme">
+              <div className="text-[10px] font-bold text-theme/50 uppercase tracking-widest mb-2 col-span-2">Navigation</div>
               <Link 
                 href="/catalogue" 
                 onClick={() => setIsMobileMenuOpen(false)}
