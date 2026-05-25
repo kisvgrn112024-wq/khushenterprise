@@ -1,0 +1,8 @@
+- [ ] Verify global CSS overflow fixes (globals.css)
+- [ ] Verify ProductShowcase mobile tweaks
+- [ ] Add responsive-table wrapper to all admin tables
+- [ ] Adjust typography mobile classes in layout components
+- [ ] Ensure Header hamburger works on mobile
+- [ ] Add mobile drawer for admin sidebar
+- [ ] Run build & export
+- [ ] Deploy updated `out/` to Hostinger

@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-neon-cyan: #00ffff;
+  --color-electric-blue: #1A73E8;
+  --color-midnight-navy: #050b14;
+  --color-dark-blue: #0a1930;
+  --color-brand-yellow: #fcd34d; /* Brand yellow from design */
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-bg: rgba(10, 25, 48, 0.6);
+  --color-glass-bg-light: rgba(255, 255, 255, 0.1);
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+[data-theme='dark'] {
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --accent: #fcd34d;
+}
+[data-theme='light'] {
+  --background: #ffffff;
+  --foreground: #111111;
+  --accent: #fcd34d;
+}
+[data-theme='blue'] {
+  --background: #eef2ff;
+  --foreground: #1e3a8a;
+  --accent: #fcd34d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #f5f5f5;
+  }
+}
+
+/* Theme utility classes */
+.bg-theme { background-color: var(--background) !important; }
+.text-theme { color: var(--foreground) !important; }
+.border-theme { border-color: var(--accent) !important; }
+  html, body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), sans-serif;
+    overflow-x: hidden;
+    max-width: 100vw;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+@utility glass {
+  background: var(--color-glass-bg-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+}
+
+@utility glass-dark {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+}
+
+/* ------- 1️⃣b  Generic responsive table wrapper (mobile) ------- */
+.responsive-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@utility text-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+@utility box-glow {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+/* =======================================================
+   MOBILE VIEW TOGGLE ENGINE GLOBAL RULES (FOR SIMULATOR)
+   ======================================================= */
+
+/* Horizontal Table Scrolling */
+.forced-mobile .overflow-hidden:has(table), 
+.forced-mobile .bg-\[\#161616\]:has(table),
+.forced-mobile .bg-\[\#1a1a1a\]:has(table),
+.forced-mobile div:has(> table) {
+  overflow-x: auto !important;
+  scrollbar-width: thin;
+}
+
+.forced-mobile table {
+  min-width: 650px !important;
+}
+
+/* Stack all dashboard cards and grids in mobile simulator */
+.forced-mobile .grid-cols-2,
+.forced-mobile .grid-cols-3,
+.forced-mobile .grid-cols-4,
+.forced-mobile .grid-cols-5,
+.forced-mobile .md\:grid-cols-2,
+.forced-mobile .md\:grid-cols-3,
+.forced-mobile .md\:grid-cols-4,
+.forced-mobile .lg\:grid-cols-3,
+.forced-mobile .lg\:grid-cols-4,
+.forced-mobile .lg\:grid-cols-12,
+.forced-mobile .xl\:grid-cols-3,
+.forced-mobile .xl\:grid-cols-4 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+/* Fix paddings and text sizes */
+.forced-mobile .p-6,
+.forced-mobile .p-8,
+.forced-mobile .md\:p-8 {
+  padding: 1rem !important;
+}
+
+.forced-mobile .py-16,
+.forced-mobile .py-24,
+.forced-mobile .lg\:py-24 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.forced-mobile .text-4xl,
+.forced-mobile .text-5xl,
+.forced-mobile .text-6xl,
+.forced-mobile .md\:text-5xl,
+.forced-mobile .lg\:text-6xl {
+  font-size: 1.8rem !important;
+  line-height: 2.2rem !important;
+}
+
+.forced-mobile .text-3xl {
+  font-size: 1.4rem !important;
+}
+
+.forced-mobile .text-2xl {
+  font-size: 1.15rem !important;
+}

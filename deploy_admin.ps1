@@ -173,4 +173,4 @@ Write-Host "   🎉 DEPLOYMENT COMPLETE! All files synced successfully." -Foregr
 Write-Host "   No files were deleted, and your uploads folder is safe." -ForegroundColor Green
 Write-Host "===================================================" -ForegroundColor Green
 Write-Host ""
-Read-Host "Press Enter to close..."
+# Read-Host "Press Enter to close..."

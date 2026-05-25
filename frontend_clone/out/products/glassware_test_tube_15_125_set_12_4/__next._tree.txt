@@ -1,0 +1,2 @@
+:HL["/_next/static/chunks/0h_gq.ui2qafa.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"products","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"glassware_test_tube_15_125_set_12_4","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"VfhHqnFME2saZ1mBUDqqQ"}
