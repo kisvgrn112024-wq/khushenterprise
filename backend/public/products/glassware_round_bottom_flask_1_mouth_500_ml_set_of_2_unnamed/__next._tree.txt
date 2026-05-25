@@ -1,2 +1,2 @@
-:HL["/_next/static/chunks/07ym7jlq~f3fl.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"products","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"glassware_round_bottom_flask_1_mouth_500_ml_set_of_2_unnamed","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"P0lh8QH481mKAoYHVvGs3"}
+:HL["/_next/static/chunks/114bji.zpwryh.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"products","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"glassware_round_bottom_flask_1_mouth_500_ml_set_of_2_unnamed","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"WZ7RnZWeBvbvBJywil8LS"}
