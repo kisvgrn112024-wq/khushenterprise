@@ -12,6 +12,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { getImageUrl } from "@/lib/products";
 import { useStore } from "@/context/StoreContext";
 import ProductShowcase from '@/components/home/ProductShowcase';
+import BannerCarousel from "@/components/home/BannerCarousel";
 import { useViewMode } from "@/context/ViewModeContext";
 
 const IconMap: Record<string, React.ElementType> = {
@@ -153,6 +154,9 @@ export default function Home() {
 
         </div>
       </section>
+
+      {/* Banner Carousel Section */}
+      <BannerCarousel />
 
       {/* Product Showcase Section */}
       <ProductShowcase

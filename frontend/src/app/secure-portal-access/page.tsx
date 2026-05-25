@@ -25,7 +25,7 @@ export default function SecureAdminPortalLogin() {
       const isEmailPasswordValid = email === "admin@khushenterprises.com" && password === "admin123";
 
       if (isPasswordOnlyValid || isEmailPasswordValid) {
-        sessionStorage.setItem("ke_admin_auth", "true");
+        localStorage.setItem("ke_admin_auth", JSON.stringify({ authenticated: true, timestamp: Date.now() }));
         router.push("/admin-portal-ke/products");
       } else {
         setError("Access Denied: Invalid credentials.");

@@ -27,6 +27,25 @@ export default function ProductDetailClient() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const router = useRouter();
+
+  // Recommendations logic (same category first, up to 8 items, backfilled by other active items)
+  const recommendations = (() => {
+    if (!product || allProducts.length === 0) return [];
+    const activeProducts = allProducts.filter(p => p.product_status === 'active' && p.id !== product.id);
+    const sameCategory = activeProducts.filter(p => p.category === product.category);
+    let combined = [...sameCategory];
+    if (combined.length < 8) {
+      const otherCats = activeProducts.filter(p => p.category !== product.category);
+      const combinedIds = new Set(combined.map(p => p.id));
+      for (const item of otherCats) {
+        if (combined.length >= 8) break;
+        if (!combinedIds.has(item.id)) {
+          combined.push(item);
+        }
+      }
+    }
+    return combined.slice(0, 8);
+  })();
   
   if (!product) {
     return <div className="min-h-screen flex items-center justify-center text-theme bg-theme">Loading product details...</div>;
@@ -263,18 +282,18 @@ export default function ProductDetailClient() {
              <Link href="/products" className="text-electric-blue text-[10px] font-bold uppercase tracking-wider hover:text-theme transition-colors">VIEW ALL</Link>
            </div>
            
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-             {allProducts.filter(p => p.id !== product.id).slice(0, 4).map(rp => {
+           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+             {recommendations.map(rp => {
                 const rpImageUrl = rp.images && rp.images.length > 0 
                   ? rp.images[0] 
                   : `/design/images/${rp.id}.jpeg`;
 
                 return (
-                  <div key={rp.id} className="bg-theme border border-theme/10 group flex flex-col relative">
-                    <div className="absolute top-4 right-4 z-10">
-                      <Heart size={16} className="text-theme hover:text-theme cursor-pointer" />
+                  <div key={rp.id} className="bg-theme border border-theme/10 group flex flex-col relative rounded-xl overflow-hidden">
+                    <div className="absolute top-3 right-3 z-10">
+                      <Heart size={14} className="text-theme hover:text-theme cursor-pointer" />
                     </div>
-                    <Link href={`/products/${rp.id}`} className="h-48 flex items-center justify-center p-4 bg-gradient-to-b from-[#1a1a1a] to-[#111111] relative overflow-hidden cursor-pointer">
+                    <Link href={`/products/${rp.id}`} className="h-36 flex items-center justify-center p-3 bg-gradient-to-b from-[#1a1a1a] to-[#111111] relative overflow-hidden cursor-pointer">
                       <img 
                         src={getImageUrl(rpImageUrl)} 
                         alt={rp.title} 
@@ -287,20 +306,20 @@ export default function ProductDetailClient() {
                         }}
                       />
                     </Link>
-                    <div className="p-6 border-t border-theme/5 flex flex-col flex-1">
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="text-[10px] text-theme font-bold uppercase tracking-wider">{rp.category || "EQUIPMENT"}</div>
+                    <div className="p-3.5 border-t border-theme/5 flex flex-col flex-1">
+                      <div className="flex justify-between items-center mb-1.5">
+                        <div className="text-[9px] text-theme font-bold uppercase tracking-wider">{rp.category || "EQUIPMENT"}</div>
                         <div className="flex items-center gap-1 bg-theme px-1.5 py-0.5 rounded border border-theme/5">
                           <span className="text-[8px] font-bold text-theme">Brand: </span>
                           <span className="text-[9px] font-black text-theme tracking-widest">{rp.brand || "KE"}</span>
                         </div>
                       </div>
-                      <Link href={`/products/${rp.id}`} className="text-theme text-sm font-bold leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-electric-blue transition-colors cursor-pointer">
+                      <Link href={`/products/${rp.id}`} className="text-theme text-xs sm:text-sm font-bold leading-snug mb-2 line-clamp-2 flex-1 group-hover:text-electric-blue transition-colors cursor-pointer">
                         {rp.title}
                       </Link>
                       
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="text-brand-yellow font-bold">₹{rp.price.toLocaleString()}</div>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="text-brand-yellow text-xs sm:text-sm font-bold">₹{rp.price.toLocaleString()}</div>
                         <div className="flex items-center gap-1 text-[10px] text-theme font-bold">
                           <Star size={10} className="text-brand-yellow" fill="currentColor" /> {rp.rating}
                         </div>
@@ -308,7 +327,7 @@ export default function ProductDetailClient() {
                       
                       <button 
                         onClick={() => addToCart(rp, 1)}
-                        className="w-full bg-theme border border-theme/10 hover:border-electric-blue hover:text-electric-blue text-theme text-[10px] font-bold py-3 uppercase tracking-wider transition-colors"
+                        className="w-full bg-theme border border-theme/10 hover:border-electric-blue hover:text-electric-blue text-theme text-[9px] font-bold py-2 uppercase tracking-wider transition-colors"
                       >
                         ADD TO CART
                       </button>

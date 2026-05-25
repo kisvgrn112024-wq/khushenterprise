@@ -34,62 +34,6 @@ export type Product = {
 // Simulated Database (Synced from backend/data/products.json)
 const productsDB: Product[] = [
   {
-    "id": "p1",
-    "title": "Professional Binocular Microscope",
-    "description": "High-precision compound microscope with dual eyepieces and multiple objective lenses. Ideal for cellular analysis.",
-    "price": 12500,
-    "originalPrice": 15000,
-    "rating": 4.9,
-    "reviews": 142,
-    "icon": "Microscope",
-    "tag": "BEST SELLER",
-    "discount": "16% OFF",
-    "stock": 24,
-    "bulkPrice": 10000,
-    "moq": 5,
-    "category": "Biology Lab",
-    "brand": "Khush Enterprises",
-    "sku": "KE-MIC-01",
-    "product_status": "active",
-    "edited_by_admin": true
-  },
-  {
-    "id": "p2",
-    "title": "Precision Analytical Balance",
-    "description": "Digital weighing scale enclosed in a glass draft shield for high-accuracy mass measurement.",
-    "price": 18000,
-    "originalPrice": 20000,
-    "rating": 4.8,
-    "reviews": 89,
-    "icon": "Scale",
-    "tag": "NEW",
-    "discount": "10% OFF",
-    "stock": 15,
-    "category": "Precision Instruments",
-    "brand": "Khush Enterprises",
-    "sku": "KE-BAL-02",
-    "product_status": "active",
-    "edited_by_admin": true
-  },
-  {
-    "id": "p3",
-    "title": "Adjustable Volume Pipettes",
-    "description": "Set of ergonomic micro-pipettes mounted on a carousel stand for precise liquid handling.",
-    "price": 4200,
-    "originalPrice": 5000,
-    "rating": 4.7,
-    "reviews": 210,
-    "icon": "Pipette",
-    "tag": null,
-    "discount": "16% OFF",
-    "stock": 50,
-    "category": "General Lab",
-    "brand": "Khush Enterprises",
-    "sku": "KE-PIP-03",
-    "product_status": "active",
-    "edited_by_admin": true
-  },
-  {
     "id": "p4",
     "title": "Safety Goggles",
     "description": "Wrap-around clear protective eyewear designed to shield against chemical splashes.",
@@ -106,42 +50,6 @@ const productsDB: Product[] = [
     "category": "General Lab",
     "brand": "Khush Enterprises",
     "sku": "KE-GOG-04",
-    "product_status": "active",
-    "edited_by_admin": true
-  },
-  {
-    "id": "p5",
-    "title": "Erlenmeyer Flask Set",
-    "description": "Assortment of borosilicate glass conical flasks, perfect for mixing and heating chemical solutions.",
-    "price": 850,
-    "originalPrice": 1000,
-    "rating": 4.8,
-    "reviews": 155,
-    "icon": "FlaskConical",
-    "tag": "BEST SELLER",
-    "discount": "15% OFF",
-    "stock": 80,
-    "category": "Chemistry Lab",
-    "brand": "Khush Enterprises",
-    "sku": "KE-FLA-05",
-    "product_status": "active",
-    "edited_by_admin": true
-  },
-  {
-    "id": "p6",
-    "title": "Bunsen Burner System",
-    "description": "Heavy-duty gas burner with adjustable flame control and sturdy tripod base.",
-    "price": 1200,
-    "originalPrice": 1500,
-    "rating": 4.7,
-    "reviews": 98,
-    "icon": "Flame",
-    "tag": null,
-    "discount": "20% OFF",
-    "stock": 45,
-    "category": "Chemistry Lab",
-    "brand": "Khush Enterprises",
-    "sku": "KE-BUN-06",
     "product_status": "active",
     "edited_by_admin": true
   },
@@ -237,25 +145,6 @@ const productsDB: Product[] = [
     "brand": "Welltrust",
     "sku": "WT-EC-05",
     "moq": 2,
-    "product_status": "active",
-    "edited_by_admin": true
-  },
-  {
-    "id": "wt6",
-    "title": "Welltrust Deluxe Folding Walker",
-    "description": "Lightweight, sturdy aluminum walking assistant featuring a simple one-button folding mechanism, comfortable hand grips, and durable gliding wheels.",
-    "price": 1850,
-    "originalPrice": 2400,
-    "rating": 4.9,
-    "reviews": 55,
-    "icon": "ShieldCheck",
-    "tag": "DELUXE",
-    "discount": "22% OFF",
-    "stock": 40,
-    "category": "Surgical & Ortho Aids",
-    "brand": "Welltrust",
-    "sku": "WT-DFW-06",
-    "moq": 1,
     "product_status": "active",
     "edited_by_admin": true
   },
@@ -6114,25 +6003,28 @@ const productsDB: Product[] = [
 ];
 
 export const getProducts = (): Product[] => {
+  const purgedIds = ['p1', 'p2', 'p3', 'p5', 'p6', 'wt6'];
   if (typeof window !== 'undefined') {
     const saved = localStorage.getItem('ke_products');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return parsed.filter(p => !purgedIds.includes(p.id));
         }
       } catch (e) {
         // parsing error, fallback to DB
       }
     }
   }
-  return [...productsDB];
+  return productsDB.filter(p => !purgedIds.includes(p.id));
 };
 
 const saveProducts = (products: Product[]) => {
+  const purgedIds = ['p1', 'p2', 'p3', 'p5', 'p6', 'wt6'];
   if (typeof window !== 'undefined') {
-    localStorage.setItem('ke_products', JSON.stringify(products));
+    const filtered = products.filter(p => !purgedIds.includes(p.id));
+    localStorage.setItem('ke_products', JSON.stringify(filtered));
     window.dispatchEvent(new Event('products-updated'));
   }
 };
@@ -6169,22 +6061,22 @@ export const addProductsBulk = (products: Product[]) => {
 // Initialize localStorage: merge DB products into existing localStorage
 // preserving any admin edits, just adding any brand-new products from DB
 if (typeof window !== 'undefined') {
+  const purgedIds = ['p1', 'p2', 'p3', 'p5', 'p6', 'wt6'];
   const saved = localStorage.getItem('ke_products');
   if (!saved) {
     // First load - seed from DB
-    localStorage.setItem('ke_products', JSON.stringify(productsDB));
+    localStorage.setItem('ke_products', JSON.stringify(productsDB.filter(p => !purgedIds.includes(p.id))));
   } else {
     try {
       const parsed: Product[] = JSON.parse(saved);
+      const cleaned = parsed.filter(p => !purgedIds.includes(p.id));
       // Find DB products not yet in localStorage and add them
-      const savedIds = new Set(parsed.map(p => p.id));
-      const newFromDB = productsDB.filter(p => !savedIds.has(p.id));
-      if (newFromDB.length > 0) {
-        localStorage.setItem('ke_products', JSON.stringify([...parsed, ...newFromDB]));
-      }
+      const savedIds = new Set(cleaned.map(p => p.id));
+      const newFromDB = productsDB.filter(p => !savedIds.has(p.id) && !purgedIds.includes(p.id));
+      localStorage.setItem('ke_products', JSON.stringify([...cleaned, ...newFromDB]));
     } catch (e) {
       // Corrupt data - re-seed from DB
-      localStorage.setItem('ke_products', JSON.stringify(productsDB));
+      localStorage.setItem('ke_products', JSON.stringify(productsDB.filter(p => !purgedIds.includes(p.id))));
     }
   }
 }

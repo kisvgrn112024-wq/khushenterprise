@@ -69,6 +69,10 @@ export default function CatalogueManagement() {
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [stockCount, setStockCount] = useState(150);
 
+  // Additional states for search and uploads
+  const [isUploading, setIsUploading] = useState(false);
+  const [prodSearch, setProdSearch] = useState("");
+
   useEffect(() => {
     // Load products
     const savedProducts = localStorage.getItem("ke_products");
@@ -114,6 +118,7 @@ export default function CatalogueManagement() {
     setSelectedCategory("Physics Apparatus");
     setSelectedProductIds([]);
     setStockCount(120);
+    setProdSearch("");
     setIsModalOpen(true);
   };
 
@@ -128,6 +133,7 @@ export default function CatalogueManagement() {
     setSelectedCategory(c.category || "Physics Apparatus");
     setSelectedProductIds(c.selectedProductIds || []);
     setStockCount(c.stockCount);
+    setProdSearch("");
     setIsModalOpen(true);
   };
 
@@ -188,16 +194,54 @@ export default function CatalogueManagement() {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        alert("Unsupported file format! Please upload PNG, JPG, or WEBP.");
+        return;
+      }
+
+      setIsUploading(true);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        try {
+          const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+            ? `http://${window.location.hostname}:5000/api/upload` 
+            : '/api/upload';
+
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              image: base64String,
+              name: file.name,
+              type: file.type
+            })
+          });
+          const data = await res.json();
+          if (data.url) {
+            setImage(data.url);
+          } else {
+            setImage(base64String); // fallback
+          }
+        } catch (err) {
+          console.warn("API upload failed. Saving base64 directly.");
+          setImage(base64String);
+        } finally {
+          setIsUploading(false);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const filteredCurationProducts = products.filter(p => 
+    p.title.toLowerCase().includes(prodSearch.toLowerCase()) || 
+    (p.sku && p.sku.toLowerCase().includes(prodSearch.toLowerCase()))
+  );
 
   return (
     <div className="max-w-6xl mx-auto pb-12 relative text-slate-300">
@@ -246,14 +290,26 @@ export default function CatalogueManagement() {
                     className="w-full bg-theme border border-theme/5 rounded px-3 py-2.5 text-theme text-sm outline-none focus:border-theme" 
                   />
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Cover Banner Asset</label>
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-xs text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
-                  />
+                
+                <div className="flex items-center gap-2">
+                  <div className="flex-1">
+                    <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Cover Image</label>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-xs text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
+                    />
+                  </div>
+                  <div className="w-16 h-16 rounded border border-theme/10 overflow-hidden flex-shrink-0 bg-theme/5 relative mt-4">
+                    {isUploading ? (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40"><span className="text-[8px] animate-pulse">Uploading...</span></div>
+                    ) : image ? (
+                      <img src={getImageUrl(image)} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[8px] text-slate-600">No Cover</div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -288,19 +344,46 @@ export default function CatalogueManagement() {
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-[9px] font-bold text-theme uppercase tracking-widest mb-1.5">Manual Items Curation (Checklist)</label>
-                    <div className="max-h-32 overflow-y-auto space-y-2 border border-theme/5 p-2 rounded bg-theme">
-                      {products.map((p) => (
-                        <label key={p.id} className="flex items-center gap-2 text-[11px] text-theme hover:text-theme cursor-pointer">
+                    <div className="flex justify-between items-center mb-1.5">
+                      <label className="block text-[9px] font-bold text-theme uppercase tracking-widest">Manual Items Curation</label>
+                      <span className="bg-[#8bceff]/10 text-[#8bceff] border border-[#8bceff]/20 text-[9px] px-1.5 py-0.5 rounded font-black">{selectedProductIds.length} Selected</span>
+                    </div>
+                    
+                    <div className="mb-2">
+                      <input 
+                        type="text" 
+                        placeholder="Search products by title or SKU..." 
+                        value={prodSearch}
+                        onChange={e => setProdSearch(e.target.value)}
+                        className="w-full bg-theme border border-theme/5 rounded px-2 py-1 text-xs text-theme outline-none focus:border-theme" 
+                      />
+                    </div>
+
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 border border-theme/5 p-2 rounded bg-theme">
+                      {filteredCurationProducts.map((p) => (
+                        <label key={p.id} className="flex items-center gap-2.5 text-[11px] text-theme hover:text-theme cursor-pointer p-1 rounded hover:bg-theme/5 transition-colors">
                           <input 
                             type="checkbox" 
                             checked={selectedProductIds.includes(p.id)}
                             onChange={() => handleProductCheckbox(p.id)}
                             className="rounded border-theme/10 text-[#8bceff] focus:ring-0 bg-transparent"
                           />
-                          <span>{p.title} <span className="text-theme">({p.sku})</span></span>
+                          <div className="w-8 h-8 rounded bg-theme/10 overflow-hidden flex items-center justify-center border border-theme/10 shrink-0">
+                            {(p.imageUrl || (p.images && p.images[0])) ? (
+                              <img src={getImageUrl(p.imageUrl || (p.images && p.images[0]))} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-[8px] font-bold text-slate-500">N/A</span>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-theme font-medium truncate text-xs">{p.title}</div>
+                            <div className="text-[9px] text-slate-400 font-mono">{p.sku || p.id}</div>
+                          </div>
                         </label>
                       ))}
+                      {filteredCurationProducts.length === 0 && (
+                        <div className="text-center py-4 text-xs text-slate-500">No products found.</div>
+                      )}
                     </div>
                   </div>
                 )}

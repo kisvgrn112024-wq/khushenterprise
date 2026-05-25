@@ -1,47 +1,101 @@
 "use client";
 
-import { Search, Filter, Download, Users, Zap, Eye, Settings as SettingsIcon } from "lucide-react";
-import { useState } from "react";
-import { useDownload } from "@/components/admin/DownloadToast";
+import { Search } from "lucide-react";
+import { useState, useEffect } from "react";
+
+const MOCK_CUSTOMERS = [
+  { id: "CUST-48291", email: "rahul.mehta@instsci.edu", phone: "+91 98765 43210", ordersCount: 14, lastOrderDate: "24 May 2026" },
+  { id: "CUST-10394", email: "a.sharma@biolabs.in", phone: "+91 87654 32109", ordersCount: 3, lastOrderDate: "22 May 2026" },
+  { id: "CUST-98274", email: "v.khanna@qclabs.com", phone: "+91 76543 21098", ordersCount: 42, lastOrderDate: "25 May 2026" },
+];
+
+const generateCustId = (email: string) => {
+  if (!email) return "CUST-UNKNOWN";
+  let hash = 0;
+  for (let i = 0; i < email.length; i++) {
+    hash = email.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const code = Math.abs(hash % 90000) + 10000;
+  return `CUST-${code}`;
+};
 
 export default function CustomerManagement() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { startDownload } = useDownload();
+  const [customers, setCustomers] = useState<any[]>([]);
 
-  const allCustomers = [
-    {
-      initials: "RM", color: "bg-theme text-[#8bceff]",
-      name: "Dr. Rahul Mehta", email: "rahul.mehta@instsci.edu",
-      orders: "14 Orders", lifetime: "₹4,28,000 Lifetime",
-      status: "In Stock / Active", statusColor: "text-[#8bceff]",
-      active: "2 hours ago"
-    },
-    {
-      initials: "AS", color: "bg-theme text-brand-yellow",
-      name: "Ananya Sharma", email: "a.sharma@biolabs.in",
-      orders: "3 Orders", lifetime: "₹82,500 Lifetime",
-      status: "On Hold", statusColor: "text-brand-yellow",
-      active: "3 days ago"
-    },
-    {
-      initials: "VK", color: "bg-theme text-[#8bceff]",
-      name: "Vikram Khanna", email: "v.khanna@qclabs.com",
-      orders: "42 Orders", lifetime: "₹12,40,000 Lifetime",
-      status: "Elite Member", statusColor: "text-[#8bceff]",
-      active: "15 mins ago"
-    },
-    {
-      initials: "PJ", color: "bg-theme text-[#ff4d4d]",
-      name: "Priya Jaiswal", email: "priya.j@meditech.org",
-      orders: "0 Orders", lifetime: "₹0 Lifetime",
-      status: "Deactivated", statusColor: "text-[#ff4d4d]",
-      active: "2 months ago"
+  useEffect(() => {
+    // Load customer data from orders
+    const savedOrders = localStorage.getItem("ke_orders");
+    let ordersList: any[] = [];
+    if (savedOrders) {
+      try {
+        ordersList = JSON.parse(savedOrders);
+      } catch (e) {
+        console.error(e);
+      }
     }
-  ];
 
-  const customers = allCustomers.filter(c => 
-    c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    c.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const savedAdminOrders = localStorage.getItem("ke_admin_orders");
+    let adminOrdersList: any[] = [];
+    if (savedAdminOrders) {
+      try {
+        adminOrdersList = JSON.parse(savedAdminOrders);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Merge orders to avoid duplicates
+    const allOrdersMap = new Map();
+    ordersList.forEach(o => allOrdersMap.set(o.id, o));
+    adminOrdersList.forEach(o => {
+      if (!allOrdersMap.has(o.id)) {
+        allOrdersMap.set(o.id, {
+          id: o.id,
+          customer: o.customer,
+          email: o.email,
+          phone: o.phone || "N/A",
+          date: o.date,
+        });
+      }
+    });
+
+    const mergedOrders = Array.from(allOrdersMap.values());
+
+    const customerMap = new Map();
+    mergedOrders.forEach(order => {
+      const email = order.email?.toLowerCase().trim() || "unknown@khush.com";
+      const phone = order.phone || "N/A";
+      const orderDate = order.date ? order.date.split(",")[0] : "TBD";
+
+      if (customerMap.has(email)) {
+        const existing = customerMap.get(email);
+        existing.ordersCount += 1;
+        if (orderDate && orderDate !== "TBD") {
+          existing.lastOrderDate = orderDate;
+        }
+      } else {
+        customerMap.set(email, {
+          id: generateCustId(email),
+          email: email,
+          phone: phone,
+          ordersCount: 1,
+          lastOrderDate: orderDate
+        });
+      }
+    });
+
+    if (customerMap.size === 0) {
+      setCustomers(MOCK_CUSTOMERS);
+    } else {
+      setCustomers(Array.from(customerMap.values()));
+    }
+  }, []);
+
+  const filteredCustomers = customers.filter(c => 
+    c.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.phone.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -50,15 +104,15 @@ export default function CustomerManagement() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-theme mb-1">Customer Management</h1>
-          <p className="text-theme text-sm">Review detailed user metrics and administrative controls.</p>
+          <h1 className="text-3xl font-bold text-theme mb-1">Customer Registry</h1>
+          <p className="text-theme text-sm">Overview of customers authorized to place orders.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme" />
             <input 
               type="text" 
-              placeholder="Search customers..." 
+              placeholder="Search registry..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-theme border border-theme/5 focus:border-theme/20 text-xs text-theme pl-8 pr-4 py-2.5 rounded w-64 outline-none transition-colors" 
@@ -67,130 +121,54 @@ export default function CustomerManagement() {
         </div>
       </div>
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        
-        {/* Stat 1 */}
-        <div className="bg-theme border border-theme/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between h-36">
-          <div className="flex items-start justify-between relative z-10">
-            <div className="w-10 h-10 rounded bg-theme border border-theme/20 flex items-center justify-center text-[#8bceff]">
-              <Users size={18} />
-            </div>
-            <span className="text-[10px] font-bold text-[#8bceff] tracking-widest">+12% this month</span>
-          </div>
-          <div className="relative z-10">
-            <div className="text-[10px] font-bold text-theme uppercase tracking-widest mb-1">Total Customers</div>
-            <div className="text-4xl font-bold text-theme">2,840</div>
-          </div>
-        </div>
-
-        {/* Stat 2 */}
-        <div className="bg-theme border border-theme/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between h-36">
-          <div className="flex items-start justify-between relative z-10">
-            <div className="w-10 h-10 rounded bg-theme border border-brand-yellow/20 flex items-center justify-center text-brand-yellow">
-              <Zap size={18} />
-            </div>
-            <span className="text-[10px] font-bold text-brand-yellow tracking-widest">Active Now: 432</span>
-          </div>
-          <div className="relative z-10">
-            <div className="text-[10px] font-bold text-theme uppercase tracking-widest mb-1">Active Accounts</div>
-            <div className="text-4xl font-bold text-theme">1,950</div>
-          </div>
-        </div>
-
-        {/* Stat 3 */}
-        <div className="bg-theme border border-theme/5 rounded-xl p-6 relative overflow-hidden flex flex-col justify-between h-36">
-          {/* Map background placeholder */}
-          <div className="absolute inset-0 opacity-10 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-cover bg-center"></div>
-          
-          <div className="relative z-10">
-            <div className="text-[10px] font-bold text-theme uppercase tracking-widest mb-1">Geographic Reach</div>
-            <div className="text-xl font-bold text-theme mb-1">Top Region: Mumbai, IN</div>
-          </div>
-          
-          <div className="relative z-10 flex gap-4 mt-auto">
-            <div className="flex items-center gap-1.5 text-xs text-theme">
-               <div className="w-2 h-2 rounded-full bg-theme"></div> Domestic (65%)
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-theme">
-               <div className="w-2 h-2 rounded-full bg-brand-yellow"></div> International (35%)
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
       {/* Customer Registry Table */}
       <div className="bg-theme border border-theme/5 rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-theme/5 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-theme">Customer Registry</h2>
-          <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 bg-theme border border-theme/5 hover:bg-theme/5 text-theme text-xs px-4 py-2 rounded transition-colors font-bold uppercase tracking-widest">
-              <Filter size={14} /> Filter
-            </button>
-            <button 
-              onClick={() => startDownload("Customer_Registry.csv", "5.8 MB", "CSV File")}
-              className="flex items-center gap-2 bg-theme border border-theme/5 hover:bg-theme/5 text-theme text-xs px-4 py-2 rounded transition-colors font-bold uppercase tracking-widest"
-            >
-              <Download size={14} /> Export CSV
-            </button>
-          </div>
+        <div className="p-6 border-b border-theme/5">
+          <h2 className="text-xl font-bold text-theme">Authorized Customer IDs</h2>
         </div>
         
         <table className="w-full text-left text-sm">
           <thead className="bg-theme text-[10px] font-bold text-theme uppercase tracking-wider border-b border-theme/5">
             <tr>
-              <th className="p-5">Customer Profile</th>
-              <th className="p-5">Purchase History</th>
-              <th className="p-5">Account Status</th>
-              <th className="p-5">Last Active</th>
-              <th className="p-5 text-center">Actions</th>
+              <th className="p-5">Customer ID</th>
+              <th className="p-5">Email Address</th>
+              <th className="p-5">Phone Number</th>
+              <th className="p-5 text-center">Orders Placed</th>
+              <th className="p-5 text-right">Last Order Date</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {customers.map((c, idx) => (
+            {filteredCustomers.map((c, idx) => (
               <tr key={idx} className="hover:bg-theme/[0.02] transition-colors">
-                <td className="p-5 flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded font-bold flex items-center justify-center shrink-0 ${c.color}`}>
-                    {c.initials}
-                  </div>
-                  <div>
-                    <div className="text-theme font-medium mb-1">{c.name}</div>
-                    <div className="text-xs text-theme">{c.email}</div>
-                  </div>
-                </td>
                 <td className="p-5">
-                  <div className="text-theme mb-1">{c.orders}</div>
-                  <div className="text-xs text-[#8bceff]">{c.lifetime}</div>
+                  <span className="font-mono text-xs font-bold text-[#8bceff]">{c.id}</span>
                 </td>
-                <td className="p-5">
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${c.statusColor}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${c.statusColor.replace('text-', 'bg-')}`}></div> {c.status}
-                  </span>
+                <td className="p-5 text-theme text-xs font-mono">
+                  {c.email}
                 </td>
-                <td className="p-5 text-theme text-xs">
-                  {c.active}
+                <td className="p-5 text-theme text-xs font-mono">
+                  {c.phone}
                 </td>
-                <td className="p-5 text-center">
-                  <div className="flex items-center justify-center gap-3">
-                    <button className="text-theme hover:text-theme transition-colors"><Eye size={16} /></button>
-                    <button className="text-theme hover:text-theme transition-colors"><SettingsIcon size={16} /></button>
-                  </div>
+                <td className="p-5 text-center text-theme font-medium">
+                  {c.ordersCount}
+                </td>
+                <td className="p-5 text-right text-theme text-xs">
+                  {c.lastOrderDate}
                 </td>
               </tr>
             ))}
+            {filteredCustomers.length === 0 && (
+              <tr>
+                <td colSpan={5} className="p-8 text-center text-theme text-sm">
+                  No registered customers found matching search query.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         
         <div className="p-4 border-t border-theme/5 flex justify-between items-center text-xs text-theme">
-          <div>Showing 1 to {customers.length} of 2,840 results</div>
-          <div className="flex gap-1">
-            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors">{'<'}</button>
-            <button className="w-6 h-6 flex items-center justify-center bg-theme text-[#8bceff] border border-theme/20 rounded font-bold">1</button>
-            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors border border-transparent">2</button>
-            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors border border-transparent">3</button>
-            <button className="w-6 h-6 flex items-center justify-center hover:text-theme transition-colors">{'>'}</button>
-          </div>
+          <div>Showing {filteredCustomers.length} customer records</div>
         </div>
       </div>
       

@@ -31,10 +31,24 @@ export default function AdminPortalLayout({ children }: { children: React.ReactN
     }
 
     // Basic Client-Side Auth Check
-    const authStatus = sessionStorage.getItem("ke_admin_auth");
-    if (authStatus === "true") {
+    const authStatus = localStorage.getItem("ke_admin_auth");
+    let isValid = false;
+    if (authStatus) {
+      try {
+        const parsed = JSON.parse(authStatus);
+        const expiry = 7 * 24 * 60 * 60 * 1000; // 7 days session
+        if (parsed.authenticated && (Date.now() - parsed.timestamp < expiry)) {
+          isValid = true;
+        }
+      } catch (e) {
+        // invalid session format
+      }
+    }
+
+    if (isValid) {
       setIsAuthenticated(true);
     } else {
+      localStorage.removeItem("ke_admin_auth");
       setIsAuthenticated(false);
       // Redirect unauthenticated admin access to secure login page
       router.replace("/secure-portal-access");

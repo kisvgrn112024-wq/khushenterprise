@@ -19,12 +19,47 @@ export default function OrderManagement() {
       let localOrders = [];
       const saved = localStorage.getItem("ke_admin_orders");
       if (saved) {
-        localOrders = JSON.parse(saved);
-        setOrders(localOrders);
-      } else {
-        setOrders([]);
-        localStorage.setItem("ke_admin_orders", JSON.stringify([]));
+        try {
+          localOrders = JSON.parse(saved);
+        } catch (e) {
+          localOrders = [];
+        }
       }
+
+      // Read customer placed orders from ke_orders
+      let customerOrders = [];
+      const savedCustomer = localStorage.getItem("ke_orders");
+      if (savedCustomer) {
+        try {
+          customerOrders = JSON.parse(savedCustomer);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // Merge customerOrders into localOrders
+      const localMap = new Map(localOrders.map((o: any) => [o.id, o]));
+      let mergedAny = false;
+      customerOrders.forEach((co: any) => {
+        if (!localMap.has(co.id)) {
+          const datePart = co.date ? co.date.split(",")[0] : "TBD";
+          localMap.set(co.id, {
+            id: co.id,
+            date: datePart,
+            time: co.time || "TBD",
+            customer: co.customer,
+            email: co.email,
+            amount: co.amount,
+            status: co.status || "Placed",
+            type: co.payment?.includes("UPI") ? "individual" : "company"
+          });
+          mergedAny = true;
+        }
+      });
+
+      const finalLocalOrders = Array.from(localMap.values());
+      setOrders(finalLocalOrders);
+      localStorage.setItem("ke_admin_orders", JSON.stringify(finalLocalOrders));
 
       // Try fetching from backend API
       try {
@@ -34,19 +69,25 @@ export default function OrderManagement() {
         const res = await fetch(API_URL);
         if (res.ok) {
           const data = await res.json();
-          // Transform to admin order shape
-          const adminOrders = data.map((o: any) => ({
-            id: o.id,
-            date: o.date.split(",")[0],
-            time: o.time,
-            customer: o.customer,
-            email: o.email,
-            amount: o.amount,
-            status: o.status,
-            type: o.payment.includes("UPI") ? "individual" : "company"
-          }));
-          setOrders(adminOrders);
-          localStorage.setItem("ke_admin_orders", JSON.stringify(adminOrders));
+          // Transform to admin order shape and merge
+          const serverMap = new Map(finalLocalOrders.map((o: any) => [o.id, o]));
+          data.forEach((o: any) => {
+            if (!serverMap.has(o.id)) {
+              serverMap.set(o.id, {
+                id: o.id,
+                date: o.date.split(",")[0],
+                time: o.time,
+                customer: o.customer,
+                email: o.email,
+                amount: o.amount,
+                status: o.status,
+                type: o.payment?.includes("UPI") ? "individual" : "company"
+              });
+            }
+          });
+          const mergedWithServer = Array.from(serverMap.values());
+          setOrders(mergedWithServer);
+          localStorage.setItem("ke_admin_orders", JSON.stringify(mergedWithServer));
         }
       } catch (err) {
         console.warn("API offline or error fetching orders in admin portal.");

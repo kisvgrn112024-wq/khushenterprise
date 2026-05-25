@@ -300,15 +300,11 @@ export default function Header() {
                 {!userSession ? (
                   <>
                     <Link href="/account/login" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Login / Register</Link>
-                    <div className="h-[1px] bg-theme/5 my-1"></div>
-                    <Link href="/secure-portal-access" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Admin Portal</Link>
                   </>
                 ) : (
                   <>
                     <div className="px-2 py-1.5 text-[10px] font-bold text-theme uppercase border-b border-theme/5 mb-1">{userSession.org}</div>
                     <Link href="/my-orders" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Consignment Status</Link>
-                    <div className="h-[1px] bg-theme/5 my-1"></div>
-                    <Link href="/secure-portal-access" onClick={() => setIsProfileDropdownOpen(false)} className="block p-2 text-sm text-theme hover:bg-theme hover:text-theme rounded font-medium">Admin Portal</Link>
                   </>
                 )}
               </div>
@@ -618,13 +614,7 @@ export default function Header() {
                 Contact Us
               </Link>
 
-              <Link 
-                href="/secure-portal-access" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="hover:text-theme py-2.5 border-b border-theme/5 block text-theme font-medium"
-              >
-                Admin Portal
-              </Link>
+
 
               <Link 
                 href="/export" 

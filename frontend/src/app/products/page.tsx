@@ -174,7 +174,7 @@ function ProductsContent() {
                  <h3 className="text-xl font-bold text-theme mb-2">No Products Found</h3>
                </div>
             ) : (
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                  {filteredProducts.map((product) => (
                    <div key={product.id} className="bg-theme border border-theme/10 rounded-xl overflow-hidden flex flex-col group relative">
                      
@@ -186,12 +186,12 @@ function ProductsContent() {
                          </span>
                        )}
                        <button onClick={() => generateAIManual(product.title)} title="Download AI Manual" className="bg-theme text-[#8bceff] border border-theme/20 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full hover:bg-theme hover:text-theme transition-colors flex items-center gap-1 mt-1 shadow-md">
-                         <FileText size={10} /> AI Manual
+                         <FileText size={10} /> AI
                        </button>
                      </div>
 
                      {/* Image Area */}
-                     <Link href={`/products/${product.id}`} className="h-48 bg-theme flex items-center justify-center p-6 border-b border-theme/5 relative overflow-hidden cursor-pointer">
+                     <Link href={`/products/${product.id}`} className="h-36 bg-theme flex items-center justify-center p-4 border-b border-theme/5 relative overflow-hidden cursor-pointer">
                         {product.images && product.images.length > 0 ? (
                           <img 
                             src={getImageUrl(product.images[0])} 
@@ -216,42 +216,42 @@ function ProductsContent() {
                             />
                             {(() => {
                               const IconComp = IconMap[product.icon] || Package;
-                              return <IconComp size={48} className="text-theme hidden absolute" />;
+                              return <IconComp size={36} className="text-theme hidden absolute" />;
                             })()}
                           </>
                         )}
                      </Link>
 
                      {/* Details */}
-                     <div className="p-5 flex-1 flex flex-col">
+                     <div className="p-3.5 flex-1 flex flex-col">
                        <div className="flex justify-between items-center mb-1">
-                         <div className="text-[10px] font-bold text-theme uppercase tracking-widest">{product.category || "GENERAL LAB"}</div>
+                         <div className="text-[9px] font-bold text-theme uppercase tracking-widest">{product.category || "GENERAL LAB"}</div>
                          <div className="flex items-center gap-1 bg-theme px-1.5 py-0.5 rounded border border-theme/5">
                            <span className="text-[8px] font-bold text-theme">Brand: </span>
                            <span className="text-[9px] font-black text-theme tracking-widest">{product.brand || "KE"}</span>
                          </div>
                        </div>
-                       <Link href={`/products/${product.id}`} className="text-theme font-bold text-sm mb-3 flex-1 hover:text-electric-blue transition-colors cursor-pointer">
+                       <Link href={`/products/${product.id}`} className="text-theme font-bold text-xs sm:text-sm mb-2 flex-1 hover:text-electric-blue transition-colors cursor-pointer line-clamp-2">
                          {product.title}
                        </Link>
                        
-                       <div className="flex items-center justify-between mb-4">
-                         <span className="text-lg font-bold text-brand-yellow">₹{product.price.toLocaleString()}</span>
+                       <div className="flex items-center justify-between mb-3">
+                         <span className="text-sm sm:text-base font-bold text-brand-yellow">₹{product.price.toLocaleString()}</span>
                          <div className="flex items-center gap-1">
-                           <Star size={12} className="text-brand-yellow fill-brand-yellow" />
+                           <Star size={10} className="text-brand-yellow fill-brand-yellow" />
                            <span className="text-xs font-bold text-theme">{product.rating || "4.8"}</span>
                          </div>
                        </div>
 
-                       <div className="grid grid-cols-2 gap-2 mt-auto">
-                         <Link href={`/products/${product.id}`} className="border border-theme/20 hover:bg-theme/5 text-theme text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors text-center cursor-pointer">
+                       <div className="grid grid-cols-2 gap-1.5 mt-auto">
+                         <Link href={`/products/${product.id}`} className="border border-theme/20 hover:bg-theme/5 text-theme text-[10px] font-bold uppercase tracking-widest py-1.5 rounded transition-colors text-center cursor-pointer">
                            Details
                          </Link>
                          <button 
                            onClick={() => addToCart(product, 1)}
-                           className="bg-brand-yellow hover:bg-theme text-theme text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                           className="bg-brand-yellow hover:bg-theme text-theme text-[10px] font-bold uppercase tracking-widest py-1.5 rounded transition-colors flex items-center justify-center gap-1 cursor-pointer"
                          >
-                           <ShoppingCart size={14} /> Add
+                           <ShoppingCart size={12} /> Add
                          </button>
                        </div>
                      </div>
