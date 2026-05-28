@@ -24,7 +24,7 @@ export default function AddProductPage() {
     const savedCats = localStorage.getItem("ke_categories");
     if (savedCats) {
       const parsed = JSON.parse(savedCats);
-      const catNames = parsed.map((c: any) => c.name);
+      const catNames = parsed.map((c: any) => typeof c === 'string' ? c : c.name);
       setCategories(catNames);
       if (catNames.length > 0) setCategory(catNames[0]);
     } else {

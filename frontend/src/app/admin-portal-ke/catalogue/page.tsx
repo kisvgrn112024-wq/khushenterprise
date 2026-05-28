@@ -87,7 +87,8 @@ export default function CatalogueManagement() {
     // Load categories
     const savedCats = localStorage.getItem("ke_categories");
     if (savedCats) {
-      setCategories(JSON.parse(savedCats));
+      const parsed = JSON.parse(savedCats);
+      setCategories(parsed.map((c: any) => typeof c === 'string' ? c : c.name));
     } else {
       setCategories(["Physics Apparatus", "Chemical Supplies", "Biological Optics", "General Tech"]);
     }
