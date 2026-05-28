@@ -25,6 +25,46 @@ export default function CategoriesPage() {
   const [newDesc, setNewDesc] = useState("");
   const [newVisible, setNewVisible] = useState(true);
   const [isWiping, setIsWiping] = useState(false);
+  const [newImage, setNewImage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [catalogueDesc, setCatalogueDesc] = useState("");
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setIsUploading(true);
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        try {
+          const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+            ? `http://${window.location.hostname}:5000/api/upload` 
+            : '/api/upload';
+
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              image: base64String,
+              name: file.name,
+              type: file.type
+            })
+          });
+          const data = await res.json();
+          if (data.url) {
+            setNewImage(data.url);
+          } else {
+            setNewImage(base64String);
+          }
+        } catch (err) {
+          setNewImage(base64String);
+        } finally {
+          setIsUploading(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Load categories and products on mount
   useEffect(() => {
@@ -66,10 +106,31 @@ export default function CategoriesPage() {
       { name: newName.trim(), description: newDesc.trim(), visible: newVisible }
     ];
     saveCats(updated);
+
+    // Create corresponding dynamic catalogue entry
+    const savedCatalogues = localStorage.getItem("ke_catalogues");
+    const cataloguesList = savedCatalogues ? JSON.parse(savedCatalogues) : [];
+    const newCatEntry = {
+      id: `cat_${Date.now()}`,
+      title: newName.trim(),
+      department: newName.trim(),
+      description: catalogueDesc.trim() || newDesc.trim() || "Dynamic Catalogue for " + newName.trim(),
+      image: newImage || "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&q=80&w=600",
+      version: "V1.0",
+      autoSync: true,
+      category: newName.trim(),
+      selectedProductIds: [],
+      stockCount: 150,
+      fileName: `${newName.trim().toLowerCase().replace(/ /g, "-")}-guide.pdf`
+    };
+    localStorage.setItem("ke_catalogues", JSON.stringify([...cataloguesList, newCatEntry]));
+
     setNewName("");
     setNewDesc("");
+    setCatalogueDesc("");
+    setNewImage("");
     setNewVisible(true);
-    alert("New category registered successfully!");
+    alert("New category and dynamic catalogue registered successfully!");
   };
 
   const handleDeleteCategory = (name: string) => {
@@ -213,13 +274,35 @@ export default function CategoriesPage() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Description (Optional)</label>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Description (Internal Optional)</label>
                 <textarea 
                   value={newDesc} 
                   onChange={e => setNewDesc(e.target.value)}
                   placeholder="Summarize the products in this collection..."
-                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-theme text-xs outline-none focus:border-theme h-20 resize-none transition-colors"
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-theme text-xs outline-none focus:border-theme h-12 resize-none transition-colors"
                 />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Catalogue Description <span className="text-red-500">*</span></label>
+                <textarea 
+                  value={catalogueDesc} 
+                  onChange={e => setCatalogueDesc(e.target.value)}
+                  placeholder="Details for the public catalogue..."
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-theme text-xs outline-none focus:border-theme h-16 resize-none transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-theme uppercase tracking-widest mb-1.5">Catalogue Cover Image</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="w-full bg-theme border border-theme/5 rounded px-3 py-2 text-xs text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
+                />
+                {isUploading && <p className="text-[10px] text-theme mt-1">Uploading...</p>}
+                {newImage && <img src={newImage} alt="Preview" className="mt-2 w-16 h-16 object-cover rounded border border-theme/10" />}
               </div>
 
               <div className="flex items-center justify-between p-3 bg-theme rounded border border-theme/5">
