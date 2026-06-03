@@ -29,6 +29,7 @@ export type Product = {
   isB2BVisible?: boolean;
   b2bCategory?: string;
   createdAt?: string;
+  hsnCode?: string;
 };
 
 // Simulated Database (Synced from backend/data/products.json)
