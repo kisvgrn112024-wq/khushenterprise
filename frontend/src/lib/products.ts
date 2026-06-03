@@ -6018,7 +6018,7 @@ const productsDB: Product[] = [
     "hsnCode": "9027",
     "sku": "KEF01",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-1220ic1b7",
@@ -6038,7 +6038,7 @@ const productsDB: Product[] = [
     "hsnCode": "9028",
     "sku": "KEF02",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-enpux4i2d",
@@ -6058,7 +6058,7 @@ const productsDB: Product[] = [
     "hsnCode": "9029",
     "sku": "KEF03",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-tszhpkfol",
@@ -6078,7 +6078,7 @@ const productsDB: Product[] = [
     "hsnCode": "9030",
     "sku": "KEF04",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-75opqzhew",
@@ -6098,7 +6098,7 @@ const productsDB: Product[] = [
     "hsnCode": "9031",
     "sku": "KEF05",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-vw01n7640",
@@ -6118,7 +6118,7 @@ const productsDB: Product[] = [
     "hsnCode": "9032",
     "sku": "KEF06",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-ik2wkgo7g",
@@ -6138,7 +6138,7 @@ const productsDB: Product[] = [
     "hsnCode": "9033",
     "sku": "KEF07",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-lodzpjcdm",
@@ -6158,7 +6158,7 @@ const productsDB: Product[] = [
     "hsnCode": "9034",
     "sku": "KEF08",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-r9iq2xd02",
@@ -6178,7 +6178,7 @@ const productsDB: Product[] = [
     "hsnCode": "9035",
     "sku": "KEF09",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741242-xpyfx2elu",
@@ -6198,7 +6198,7 @@ const productsDB: Product[] = [
     "hsnCode": "9036",
     "sku": "KEF10",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-pl5hld6ia",
@@ -6218,7 +6218,7 @@ const productsDB: Product[] = [
     "hsnCode": "9037",
     "sku": "KEF11",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-usgno599c",
@@ -6238,7 +6238,7 @@ const productsDB: Product[] = [
     "hsnCode": "9038",
     "sku": "KEF12",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-rg7l0seoc",
@@ -6258,7 +6258,7 @@ const productsDB: Product[] = [
     "hsnCode": "9039",
     "sku": "KEF13",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ipln3i773",
@@ -6278,7 +6278,7 @@ const productsDB: Product[] = [
     "hsnCode": "9040",
     "sku": "KEF14",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-y9l4bz1et",
@@ -6298,7 +6298,7 @@ const productsDB: Product[] = [
     "hsnCode": "9041",
     "sku": "KEF15",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-24xmq3qet",
@@ -6318,7 +6318,7 @@ const productsDB: Product[] = [
     "hsnCode": "9042",
     "sku": "KEF16",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-9z59zp0lk",
@@ -6338,7 +6338,7 @@ const productsDB: Product[] = [
     "hsnCode": "9043",
     "sku": "KEF17",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ahubsfmkp",
@@ -6358,7 +6358,7 @@ const productsDB: Product[] = [
     "hsnCode": "9044",
     "sku": "KEF18",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-kvif3nyoe",
@@ -6378,7 +6378,7 @@ const productsDB: Product[] = [
     "hsnCode": "9045",
     "sku": "KEF19",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-j7nbngyvs",
@@ -6398,7 +6398,7 @@ const productsDB: Product[] = [
     "hsnCode": "9046",
     "sku": "KEF20",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-6ith2nyvd",
@@ -6418,7 +6418,7 @@ const productsDB: Product[] = [
     "hsnCode": "9047",
     "sku": "KEF21",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-oyy6hhhhn",
@@ -6438,7 +6438,7 @@ const productsDB: Product[] = [
     "hsnCode": "9048",
     "sku": "KEF22",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-tvx2u0gfb",
@@ -6458,7 +6458,7 @@ const productsDB: Product[] = [
     "hsnCode": "9049",
     "sku": "KEF23",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-kh4bdowgp",
@@ -6478,7 +6478,7 @@ const productsDB: Product[] = [
     "hsnCode": "9050",
     "sku": "KEF24",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ci0ibitbn",
@@ -6498,7 +6498,7 @@ const productsDB: Product[] = [
     "hsnCode": "9051",
     "sku": "KEF25",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-nyl5flgpe",
@@ -6518,7 +6518,7 @@ const productsDB: Product[] = [
     "hsnCode": "9052",
     "sku": "KEF26",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-4xahxf6ro",
@@ -6538,7 +6538,7 @@ const productsDB: Product[] = [
     "hsnCode": "9053",
     "sku": "KEF27",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ivsbh37aj",
@@ -6558,7 +6558,7 @@ const productsDB: Product[] = [
     "hsnCode": "9054",
     "sku": "KEF28",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-2vyy2cugm",
@@ -6578,7 +6578,7 @@ const productsDB: Product[] = [
     "hsnCode": "9055",
     "sku": "KEF29",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-joypij5x2",
@@ -6598,7 +6598,7 @@ const productsDB: Product[] = [
     "hsnCode": "9056",
     "sku": "KEF30",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-g1zyviusu",
@@ -6618,7 +6618,7 @@ const productsDB: Product[] = [
     "hsnCode": "9057",
     "sku": "KEF31",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-k154zf09r",
@@ -6638,7 +6638,7 @@ const productsDB: Product[] = [
     "hsnCode": "9058",
     "sku": "KEF32",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-argvt90ff",
@@ -6658,7 +6658,7 @@ const productsDB: Product[] = [
     "hsnCode": "9059",
     "sku": "KEF33",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-jay0zso64",
@@ -6678,7 +6678,7 @@ const productsDB: Product[] = [
     "hsnCode": "9060",
     "sku": "KEF34",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-tfqskwu3j",
@@ -6698,7 +6698,7 @@ const productsDB: Product[] = [
     "hsnCode": "9061",
     "sku": "KEF35",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-vroedjnav",
@@ -6718,7 +6718,7 @@ const productsDB: Product[] = [
     "hsnCode": "9062",
     "sku": "KEF36",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-xm0da20ol",
@@ -6738,7 +6738,7 @@ const productsDB: Product[] = [
     "hsnCode": "9063",
     "sku": "KEF37",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-wfe0rgt3s",
@@ -6758,7 +6758,7 @@ const productsDB: Product[] = [
     "hsnCode": "9064",
     "sku": "KEF38",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-uy3sajpr8",
@@ -6778,7 +6778,7 @@ const productsDB: Product[] = [
     "hsnCode": "9065",
     "sku": "KEF39",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-99c002fl2",
@@ -6798,7 +6798,7 @@ const productsDB: Product[] = [
     "hsnCode": "9066",
     "sku": "KEF40",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-l2a92h9p2",
@@ -6818,7 +6818,7 @@ const productsDB: Product[] = [
     "hsnCode": "9067",
     "sku": "KEF41",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-9quc90tuo",
@@ -6838,7 +6838,7 @@ const productsDB: Product[] = [
     "hsnCode": "9068",
     "sku": "KEF42",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ud5w50u5k",
@@ -6858,7 +6858,7 @@ const productsDB: Product[] = [
     "hsnCode": "9069",
     "sku": "KEF43",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-xgyu0i38a",
@@ -6878,7 +6878,7 @@ const productsDB: Product[] = [
     "hsnCode": "9070",
     "sku": "KEF44",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-q64oa9242",
@@ -6898,7 +6898,7 @@ const productsDB: Product[] = [
     "hsnCode": "9071",
     "sku": "KEF45",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-qx7nn2it6",
@@ -6918,7 +6918,7 @@ const productsDB: Product[] = [
     "hsnCode": "9072",
     "sku": "KEF46",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-8kvcub96x",
@@ -6938,7 +6938,7 @@ const productsDB: Product[] = [
     "hsnCode": "9073",
     "sku": "KEF47",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-bujwvfcxw",
@@ -6958,7 +6958,7 @@ const productsDB: Product[] = [
     "hsnCode": "9074",
     "sku": "KEF48",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ne46uwrjd",
@@ -6978,7 +6978,7 @@ const productsDB: Product[] = [
     "hsnCode": "9075",
     "sku": "KEF49",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-i308fafbe",
@@ -6998,7 +6998,7 @@ const productsDB: Product[] = [
     "hsnCode": "9076",
     "sku": "KEF50",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-l494jcm1w",
@@ -7018,7 +7018,7 @@ const productsDB: Product[] = [
     "hsnCode": "9077",
     "sku": "KEF51",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-ptka0al03",
@@ -7038,7 +7038,7 @@ const productsDB: Product[] = [
     "hsnCode": "9078",
     "sku": "KEF52",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-g7hm5146n",
@@ -7058,7 +7058,7 @@ const productsDB: Product[] = [
     "hsnCode": "9079",
     "sku": "KEF53",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-37wljlllx",
@@ -7078,7 +7078,7 @@ const productsDB: Product[] = [
     "hsnCode": "9080",
     "sku": "KEF54",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   },
   {
     "id": "prod-1780497741243-wwgda3qbs",
@@ -7098,7 +7098,7 @@ const productsDB: Product[] = [
     "hsnCode": "9081",
     "sku": "KEF55",
     "brand": "Khush Enterprises",
-    "imageUrl": null
+    "imageUrl": ""
   }
 ];
 
