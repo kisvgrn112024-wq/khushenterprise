@@ -19,6 +19,11 @@ export default function AddProductPage() {
   const [stock, setStock] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [bulkPrice, setBulkPrice] = useState("");
+  const [moq, setMoq] = useState("");
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   useEffect(() => {
     const savedCats = localStorage.getItem("ke_categories");
@@ -71,6 +76,59 @@ export default function AddProductPage() {
     }
   };
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setIsUploadingVideo(true);
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        try {
+          const API_URL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+            ? `http://${window.location.hostname}:5000/api/upload` 
+            : '/api/upload';
+
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              image: base64String, // The backend handles base64 uniformly
+              name: file.name,
+              type: file.type
+            })
+          });
+          const data = await res.json();
+          if (data.url) {
+            setVideoUrl(data.url);
+          } else {
+            setVideoUrl(base64String);
+          }
+        } catch (err) {
+          setVideoUrl(base64String);
+        } finally {
+          setIsUploadingVideo(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const generateAIDescription = () => {
+    if (!title) {
+      alert("Please enter a product name first!");
+      return;
+    }
+    setIsGeneratingAI(true);
+    // Simulate AI generation process locally
+    setTimeout(() => {
+      const catText = category ? category.toLowerCase() : "laboratory";
+      const generated = `The ${title} is a premium-grade laboratory instrument designed specifically for advanced ${catText} applications. Featuring robust construction, superior reliability, and industry-leading precision, it is the ideal choice for modern research facilities and educational institutions. This product guarantees exceptional performance and long-lasting durability under rigorous conditions.`;
+      setDescription(generated);
+      setIsGeneratingAI(false);
+    }, 800);
+  };
+
+
   const handleSaveProduct = async () => {
     if (!title || !price || !category) {
       alert("Please fill in the required fields (Title, Price, Category).");
@@ -86,8 +144,11 @@ export default function AddProductPage() {
       sku: sku || `KE-${Date.now().toString().slice(-4)}`,
       brand: brand || "Khush Enterprises",
       stock: parseInt(stock) || 0,
+      bulkPrice: bulkPrice ? parseFloat(bulkPrice) : undefined,
+      moq: moq ? parseInt(moq) : undefined,
       imageUrl: imageUrl,
       images: imageUrl ? [imageUrl] : [],
+      video: videoUrl || null,
       is_placeholder: false,
       edited_by_admin: true,
       product_status: "active",
@@ -186,6 +247,29 @@ export default function AddProductPage() {
 
           <div className="grid grid-cols-2 gap-6">
             <div>
+              <label className="block text-sm font-bold text-theme mb-2">Bulk Price (Optional)</label>
+              <input 
+                type="number" 
+                value={bulkPrice}
+                onChange={e => setBulkPrice(e.target.value)}
+                placeholder="Wholesale price per unit"
+                className="w-full bg-theme border border-theme/10 rounded-lg px-4 py-3 text-theme outline-none focus:border-theme"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-theme mb-2">Bulk Quantity (MOQ)</label>
+              <input 
+                type="number" 
+                value={moq}
+                onChange={e => setMoq(e.target.value)}
+                placeholder="Minimum order quantity"
+                className="w-full bg-theme border border-theme/10 rounded-lg px-4 py-3 text-theme outline-none focus:border-theme"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div>
               <label className="block text-sm font-bold text-theme mb-2">SKU / Model Number</label>
               <input 
                 type="text" 
@@ -208,7 +292,16 @@ export default function AddProductPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-theme mb-2">Description</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-bold text-theme">Description</label>
+              <button 
+                onClick={generateAIDescription}
+                disabled={isGeneratingAI || !title}
+                className="flex items-center gap-1.5 text-xs font-bold bg-[#8bceff]/20 text-[#6ab3f0] hover:bg-[#8bceff]/30 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
+              >
+                <span>✨</span> {isGeneratingAI ? "Generating..." : "Auto-Generate with AI"}
+              </button>
+            </div>
             <textarea 
               value={description}
               onChange={e => setDescription(e.target.value)}
@@ -218,16 +311,29 @@ export default function AddProductPage() {
             ></textarea>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-theme mb-2">Product Image</label>
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="w-full bg-theme border border-theme/10 rounded-lg px-4 py-3 text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
-            />
-            {isUploading && <p className="text-sm text-theme mt-2">Uploading...</p>}
-            {imageUrl && <img src={imageUrl} alt="Preview" className="mt-4 w-32 h-32 object-cover rounded border border-theme/10" />}
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-bold text-theme mb-2">Product Image (PNG Only)</label>
+              <input 
+                type="file" 
+                accept="image/png"
+                onChange={handleImageUpload}
+                className="w-full bg-theme border border-theme/10 rounded-lg px-4 py-3 text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
+              />
+              {isUploading && <p className="text-sm text-theme mt-2">Uploading...</p>}
+              {imageUrl && <img src={imageUrl} alt="Preview" className="mt-4 w-32 h-32 object-cover rounded border border-theme/10" />}
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-theme mb-2">Product Video (Optional)</label>
+              <input 
+                type="file" 
+                accept="video/*"
+                onChange={handleVideoUpload}
+                className="w-full bg-theme border border-theme/10 rounded-lg px-4 py-3 text-theme outline-none file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-theme/10 file:text-theme cursor-pointer" 
+              />
+              {isUploadingVideo && <p className="text-sm text-theme mt-2">Uploading video...</p>}
+              {videoUrl && <div className="mt-4 text-xs text-green-500 bg-green-500/10 px-3 py-2 rounded">Video attached successfully!</div>}
+            </div>
           </div>
 
           <div className="flex gap-4 pt-4">

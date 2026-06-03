@@ -157,13 +157,7 @@ foreach ($item in $filesToUpload) {
         Write-Host "SUCCESS" -ForegroundColor Green
     } else {
         Write-Host "FAILED (Exit Code: $($process.ExitCode))" -ForegroundColor Red
-        Write-Host "  Please verify connection credentials or server folder write permissions." -ForegroundColor Yellow
-        $choice = Read-Host "Do you want to continue uploading remaining files? (y/n)"
-        if ($choice -ne "y") {
-            Write-Host "Deployment aborted." -ForegroundColor Red
-            Read-Host "Press Enter to exit..."
-            exit 1
-        }
+        Write-Host "  Auto-continuing to next file..." -ForegroundColor Yellow
     }
 }
 
