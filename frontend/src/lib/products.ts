@@ -7104,6 +7104,7 @@ const productsDB: Product[] = [
 ];
 
 
+
 export const getProducts = (): Product[] => {
   const purgedIds = ['p1', 'p2', 'p3', 'p5', 'p6', 'wt6'];
   if (typeof window !== 'undefined') {
