@@ -1,2 +1,2 @@
-:HL["/_next/static/chunks/114bji.zpwryh.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"admin-portal-ke","param":null,"prefetchHints":0,"slots":{"children":{"name":"b2b","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"WZ7RnZWeBvbvBJywil8LS"}
+:HL["/_next/static/chunks/0v0p52gapt_2l.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"admin-portal-ke","param":null,"prefetchHints":0,"slots":{"children":{"name":"b2b","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"9R1f-QOSGlx6PhU1P8F3_"}

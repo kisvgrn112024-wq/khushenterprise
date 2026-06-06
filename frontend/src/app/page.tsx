@@ -128,12 +128,12 @@ export default function Home() {
             <div className="flex flex-wrap gap-4 pt-4">
               <Link href="/products">
                 <button className="bg-theme hover:bg-theme text-theme px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider transition-all transform active:scale-95 shadow-[0_0_20px_rgba(139,206,255,0.2)] cursor-pointer">
-                  Join My Products
+                  Explore Products
                 </button>
               </Link>
               <a href="/catalogue" className="inline-block">
                 <button className="bg-transparent text-theme hover:text-theme px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider transition-all border border-theme/10 hover:border-theme/30 cursor-pointer">
-                  ★ Template Equipment
+                  Download Catalogue
                 </button>
               </a>
             </div>
@@ -198,8 +198,8 @@ export default function Home() {
                 <Globe size={20} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-theme">1000+</h3>
-                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Delivery Enterprises</p>
+                <h3 className="text-base font-bold text-theme">5000+</h3>
+                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Institutions Supplied</p>
               </div>
             </div>
 
@@ -208,8 +208,8 @@ export default function Home() {
                 <Globe size={20} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-theme">26 m.m.</h3>
-                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Delivery Enterprises</p>
+                <h3 className="text-base font-bold text-theme">25 Years</h3>
+                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Industry Expertise</p>
               </div>
             </div>
 
@@ -219,7 +219,7 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="text-base font-bold text-theme">Pan-India</h3>
-                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Pel Proibes/Erpy</p>
+                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Reliable Delivery</p>
               </div>
             </div>
 
@@ -228,8 +228,8 @@ export default function Home() {
                 <Headphones size={20} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-theme">Esprm Suppon.</h3>
-                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">No Prous Entripises</p>
+                <h3 className="text-base font-bold text-theme">Expert Support</h3>
+                <p className="text-[10px] text-theme font-bold tracking-widest uppercase">Technical Assistance</p>
               </div>
             </div>
 

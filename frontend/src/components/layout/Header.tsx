@@ -421,8 +421,7 @@ export default function Header() {
           <Link href="/products" className="hover:text-theme py-2.5 border-b border-theme/5">Products</Link>
           <Link href="/reviews" className="hover:text-theme py-2.5 border-b border-theme/5">Reviews</Link>
           <Link href="/certifications" className="hover:text-theme py-2.5 border-b border-theme/5">Certifications</Link>
-          <Link href="/catalogue" className="hover:text-theme py-2.5 border-b border-theme/5">Catalogue</Link>
-          <Link href="/export" className="hover:text-theme py-2.5 border-b border-theme/5">Export Centre</Link>
+          <Link href="/contact-us" className="hover:text-theme py-2.5 border-b border-theme/5">Contact Us</Link>
         </nav>
       </div>
 
