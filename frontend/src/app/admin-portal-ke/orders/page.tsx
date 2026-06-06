@@ -96,9 +96,12 @@ export default function OrderManagement() {
     fetchOrders();
   }, []);
 
-  const filteredOrders = orders.filter(order => 
-    activeTab === "All Orders" ? true : order.status === activeTab
-  );
+  const filteredOrders = orders.filter(order => {
+    if (activeTab === "All Orders") return true;
+    if (activeTab === "Processing") return ["Placed", "Confirmed", "Packed"].includes(order.status);
+    if (activeTab === "Shipped") return order.status === "Dispatched";
+    return order.status === activeTab;
+  });
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     // Generate tracking details if dispatched
