@@ -75,7 +75,7 @@ export default function OrderManagement() {
             if (!serverMap.has(o.id)) {
               serverMap.set(o.id, {
                 id: o.id,
-                date: o.date.split(",")[0],
+                date: o.date ? o.date.split(",")[0] : "TBD",
                 time: o.time,
                 customer: o.customer,
                 email: o.email,
@@ -221,8 +221,8 @@ export default function OrderManagement() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-theme border border-theme/5 rounded-lg overflow-hidden">
-        <table className="w-full text-left text-sm">
+      <div className="bg-theme border border-theme/5 rounded-lg overflow-x-auto">
+        <table className="w-full text-left text-sm min-w-[800px]">
           <thead className="bg-theme text-[10px] font-bold text-theme uppercase tracking-wider border-b border-theme/5">
             <tr>
               <th className="p-5">Order ID</th>
